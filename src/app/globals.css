@@ -31,3 +31,10 @@ body {
     text-wrap: balance;
   }
 }
+
+body {
+  background: none;
+  background-color: hsl(207, 7%, 10%);
+  color: white;
+}
+

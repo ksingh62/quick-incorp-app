@@ -1,0 +1,24 @@
+
+.landing-page-container {
+    padding-top: 4rem;
+    width: 90%;
+    max-width: 1400px;
+    margin: auto;
+    display: flex;
+  }
+  
+  .landing-page-heading {
+    font-size: 3rem;
+    font-weight: 700;
+    width: 16ch;
+    line-height: 1.2em;
+  }
+  
+  .landing-page-para-1 {
+    margin-top: 2rem;
+    width: 40ch;
+  }
+  .landing-page-para-2 {
+    margin-top: 2rem;
+    width: 30ch;
+  }
