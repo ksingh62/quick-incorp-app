@@ -5,7 +5,7 @@ import { useUserAuth } from "../_utils/auth-context";
 import { useEffect } from "react";
 import { useRouter } from 'next/navigation';
 
-function page() {
+function Page() {
   const { user } = useUserAuth();
 
   const router = useRouter();
