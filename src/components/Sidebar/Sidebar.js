@@ -15,7 +15,7 @@ export default function Sidebar() {
         <div className="sidebar-options">
           <div className="sidebar-option ">
             <img src="/icon-board.svg" alt="" />
-            <Link href='/prototype/register'>Register a Company</Link>
+            <Link href='/prototype/form'>Register a Company</Link>
           </div>
 
           <div className="sidebar-option active-sidebar-option">
