@@ -11,7 +11,9 @@ export default function Navbar() {
     <>
       <nav className="nav-bar">
         <div>Solutions</div>
-        <div>Pricing</div>
+        <div>
+          <Link href={"/prototype/pricing"}>Pricing</Link>
+        </div>
         <div>Library</div>
         <div>About Us</div>
         <div>
