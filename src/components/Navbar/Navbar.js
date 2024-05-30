@@ -12,8 +12,12 @@ export default function Navbar() {
       <nav className="nav-bar">
         <div>Solutions</div>
         <div>Pricing</div>
-        <div>Library</div>
-        <div>About Us</div>
+        <div>
+           <Link href={"/prototype/library"}>Library</Link>
+         </div>
+         <div>
+           <Link href={"/prototype/about"}>About us</Link>
+         </div>
         <div>
           <Link href={"/prototype/faq"}>FAQs</Link>
         </div>
