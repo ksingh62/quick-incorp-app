@@ -1,5 +1,3 @@
-/* src/app/prototype/about/page.css */
-
 .about-background {
     background: url('/public/bg.svg') no-repeat center center fixed;
     background-size: cover;
@@ -20,6 +18,14 @@
   }
   
   .about-container h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    color: #ffffff; /* Light text color */
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .about-container h2 {
     font-size: 3em;
     margin-bottom: 20px;
     color: #ffffff; /* Light text color */
@@ -55,7 +61,7 @@
   }
   
   .team-member:hover {
-    transform: translateY(-10px);
+    transform: translateY(-30px);
   }
   
   .team-member img {

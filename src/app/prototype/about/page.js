@@ -10,7 +10,7 @@ const AboutPage = () => {
         <p>Welcome to our company!</p>
         <p>We are dedicated to helping businesses thrive in Canada. Our mission is to provide top-notch services to entrepreneurs and business owners, ensuring a smooth and successful journey from start to finish.</p>
         <p>Our team consists of experienced professionals in various fields, including legal, financial, and business consulting. We are passionate about what we do and are committed to delivering the best results for our clients.</p>
-        <h2>Our Founders</h2>
+        <h2>Meet the Team</h2>
         <div className="team">
           <div className="team-member">
             <Image src="/pic-3.jpg" alt="Ammar" width={150} height={150} />

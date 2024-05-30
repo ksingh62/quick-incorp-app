@@ -19,7 +19,7 @@ const tutorials = [
 
 const caseStudies = [
   { id: 1, title: 'Success Story: Tech Startup in Toronto', description: 'How a tech startup successfully launched and scaled in Toronto.' },
-  { id: 2, title: 'Case Study: E-commerce Business in Vancouver', description: 'A detailed case study of an e-commerce business thriving in Vancouver.' },
+  { id: 2, title: 'Case Study: E-commerce Business in Calgary', description: 'A detailed case study of an e-commerce business thriving in Calgary.' },
 ];
 
 const LibraryPage = () => {
