@@ -1,11 +1,15 @@
-import React from 'react';
-import FAQ from './faq';
+'use client'
+import React from "react";
+import FAQ from "./faq";
+import Layout from "@/components/Layout";
 
 const Page = () => {
   return (
-    <div>
-      <FAQ />
-    </div>
+    <Layout>
+      <div>
+        <FAQ />
+      </div>
+    </Layout>
   );
 };
 

@@ -1,9 +1,12 @@
+'use client'
 import React from 'react';
 import Image from 'next/image';
 import './page.css';
+import Layout from '@/components/Layout';
 
 const AboutPage = () => {
   return (
+    <Layout>
     <div className="about-background">
       <div className="about-container">
         <h1>About Us</h1>
@@ -31,6 +34,7 @@ const AboutPage = () => {
         </div>
       </div>
     </div>
+    </Layout>
   );
 };
 
