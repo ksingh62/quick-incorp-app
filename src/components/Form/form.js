@@ -1,7 +1,7 @@
 "use client";
 
 import { db } from "@/app/prototype/_utils/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, doc, setDoc, getDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FormDataSchema } from "@/lib/form-schema";
@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios"; // For sending email via API
 import { useRouter } from "next/navigation";
+import { useUserAuth } from "@/app/prototype/_utils/auth-context";
 
 const steps = [
   {
@@ -28,8 +29,37 @@ export default function Form() {
   const [previousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   const router = useRouter();
+  const { user } = useUserAuth();
   const delta = currentStep - previousStep;
+
+  useEffect(() => {
+    if (isSubmitted) {
+      setTimeout(() => {
+        router.push("/prototype/homepage");
+      }, 3000);
+    }
+  }, [isSubmitted, router]);
+
+  useEffect(() => {
+    if (user) {
+      checkFormSubmission();
+    }
+  }, [user]);
+
+  const checkFormSubmission = async () => {
+    try {
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setHasSubmitted(true);
+      }
+    } catch (error) {
+      console.error("Error checking form submission: ", error);
+    }
+  };
 
   const {
     register,
@@ -42,18 +72,12 @@ export default function Form() {
     resolver: zodResolver(FormDataSchema),
   });
 
-  useEffect(() => {
-    if (isSubmitted) {
-      setTimeout(() => {
-        router.push("/prototype/homepage");
-      }, 3000);
-    }
-  }, [isSubmitted, router]);
-
   const addDataToFirestore = async (data) => {
     try {
-      const docRef = await addDoc(collection(db, "users"), data);
-      console.log("Document written " + docRef);
+      await setDoc(doc(db, "users", user.uid), {
+        ...data,
+        userId: user.uid,
+      });
       return true;
     } catch (error) {
       console.error("Error " + error);
@@ -74,7 +98,6 @@ export default function Form() {
   };
 
   const processForm = async (data) => {
-    console.log(data);
     const success = await addDataToFirestore(data);
     if (success) {
       await sendEmail(data);
@@ -104,6 +127,19 @@ export default function Form() {
       setCurrentStep((step) => step - 1);
     }
   };
+
+  if (hasSubmitted) {
+    return (
+      <section className="absolute inset-0 flex flex-col justify-center items-center p-24 bg-gray-900 text-gray-100">
+        <h2 className="text-base font-semibold leading-7 text-gray-100">
+          You have already filled the form.
+        </h2>
+        <p className="mt-1 text-sm leading-6 text-gray-400">
+          We are processing your application.
+        </p>
+      </section>
+    );
+  }
 
   return (
     <section className="absolute inset-0 flex flex-col justify-between p-24 bg-gray-900 text-gray-100">
@@ -371,9 +407,6 @@ export default function Form() {
             </h2>
             <p className="mt-1 text-sm leading-6 text-gray-400">
               Thank you for your submission.
-            </p>
-            <p className="mt-4 text-sm leading-6 text-gray-400">
-              Form submitted, rerouting to homepage...
             </p>
           </>
         )}
