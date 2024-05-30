@@ -2,12 +2,13 @@
 
 import { db } from "@/app/prototype/_utils/firebase";
 import { collection, addDoc } from "firebase/firestore";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FormDataSchema } from "@/lib/form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios"; // For sending email via API
+import { useRouter } from "next/navigation";
 
 const steps = [
   {
@@ -26,6 +27,8 @@ const steps = [
 export default function Form() {
   const [previousStep, setPreviousStep] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const router = useRouter();
   const delta = currentStep - previousStep;
 
   const {
@@ -38,6 +41,14 @@ export default function Form() {
   } = useForm({
     resolver: zodResolver(FormDataSchema),
   });
+
+  useEffect(() => {
+    if (isSubmitted) {
+      setTimeout(() => {
+        router.push("/prototype/homepage");
+      }, 3000);
+    }
+  }, [isSubmitted, router]);
 
   const addDataToFirestore = async (data) => {
     try {
@@ -68,6 +79,7 @@ export default function Form() {
     if (success) {
       await sendEmail(data);
       reset();
+      setIsSubmitted(true);
     }
   };
 
@@ -359,6 +371,9 @@ export default function Form() {
             </h2>
             <p className="mt-1 text-sm leading-6 text-gray-400">
               Thank you for your submission.
+            </p>
+            <p className="mt-4 text-sm leading-6 text-gray-400">
+              Form submitted, rerouting to homepage...
             </p>
           </>
         )}
