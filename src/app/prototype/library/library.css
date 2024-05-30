@@ -1,0 +1,72 @@
+.library-container {
+    padding: 20px;
+  }
+  
+  .library-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  
+  .library-description {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
+  
+  .library-search input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 1em;
+  }
+  
+  .library-section {
+    margin-bottom: 20px;
+  }
+  
+  .library-section h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .library-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .library-section ul li {
+    padding: 5px 0;
+  }
+  
+  .library-section ul li a {
+    color: #0070f3;
+    text-decoration: none;
+  }
+  
+  .library-section ul li a:hover {
+    text-decoration: underline;
+  }
+  
+  .library-resources {
+    margin-bottom: 20px;
+  }
+  
+  .library-resources h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  
+  .library-resources ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .library-resources ul li {
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+  }
+  
+  .library-resources ul li h3 {
+    margin: 0 0 5px 0;
+  }
+  
