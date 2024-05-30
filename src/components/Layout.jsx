@@ -8,7 +8,7 @@ export default function Layout({ children }) {
       <div>
       <Navbar />
         
-          {children} {/* This will be the area where your main content renders */}
+          {children} {/* This will be the area where main content renders */}
        
       </div>
       <style jsx>{`
