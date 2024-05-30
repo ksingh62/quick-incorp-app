@@ -1,4 +1,3 @@
-// /src/app/prototype/pricing/page.js
 import React from "react";
 import Layout from "../../../components/Layout";
 import "./pricing.css";
