@@ -1,5 +1,8 @@
 "use client";
 
+import { db } from "@/app/prototype/_utils/firebase";
+import { collection, addDoc } from "firebase/firestore";
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 
@@ -37,8 +40,20 @@ export default function Form() {
         resolver: zodResolver(FormDataSchema),
     });
 
+    const addDataToFirestore = async (data) => {
+        try {
+            const docRef = await addDoc(collection(db, "users"), data);
+            console.log("Document written " + docRef);
+            return true;
+        } catch (error) {
+            console.error("Error " + error);
+            return false;
+        }
+    }
+
     const processForm = (data) => {
         console.log(data);
+        addDataToFirestore(data);
         reset();
     };
 
