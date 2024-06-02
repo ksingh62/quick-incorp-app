@@ -142,6 +142,93 @@ export default function Form() {
         </label>
       </FormControl>
 
+      {/* Business Address */}
+      <div>
+        <label>
+          Address
+          <input
+            className="text-black"
+            type="text"
+            {...register("address", {
+              required: {
+                value: "true",
+                message: "Address is Required",
+              },
+            })}
+          />
+        </label>
+        <p>{errors.address?.message}</p>
+      </div>
+
+      <div>
+        <label>
+          City
+          <input
+            className="text-black"
+            type="text"
+            {...register("city", {
+              required: {
+                value: "true",
+                message: "City is Required",
+              },
+            })}
+          />
+        </label>
+        <p>{errors.city?.message}</p>
+      </div>
+
+      <FormControl fullWidth>
+        <label>
+          Choose your Province
+          <Select
+            defaultValue=""
+            {...register("province", {
+              required: {
+                value: "true",
+                message: "Province is required",
+              },
+            })}
+          >
+            {[
+              { province: "Alberta", abbr: "AB" },
+              { province: "British Columbia", abbr: "BC" },
+              { province: "Manitoba", abbr: "MB" },
+              { province: "New Brunswick", abbr: "NB" },
+              { province: "Newfoundland and Labrador", abbr: "NL" },
+              { province: "Northwest Territories", abbr: "NT" },
+              { province: "Nova Scotia", abbr: "NS" },
+              { province: "Nunavut", abbr: "NU" },
+              { province: "Ontario", abbr: "ON" },
+              { province: "Prince Edward Island", abbr: "PE" },
+              { province: "Quebec", abbr: "QC" },
+              { province: "Saskatchewan", abbr: "SK" },
+              { province: "Yukon", abbr: "YT" },
+            ].map((province, index) => (
+              <MenuItem key={index} value={province.abbr}>
+                {province.province}
+              </MenuItem>
+            ))}
+          </Select>
+        </label>
+      </FormControl>
+
+      <div>
+        <label>
+          Postal Code
+          <input
+            className="text-black"
+            type="text"
+            {...register("postalCode", {
+              required: {
+                value: "true",
+                message: "Postal Code is Required",
+              },
+            })}
+          />
+        </label>
+        <p>{errors.postalCode?.message}</p>
+      </div>
+
       <button type="submit">Submit</button>
     </form>
   );
@@ -162,7 +249,6 @@ Business Address
 -Address
 -City
 -Province
--Country
 -Postal Code
 
 Plans
