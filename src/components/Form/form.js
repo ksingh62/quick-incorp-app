@@ -92,7 +92,15 @@ export default function Form() {
       <FormControl fullWidth>
         <label>
           Choose your type of incorporation
-          <Select defaultValue="" {...register("corpType")}>
+          <Select
+            defaultValue=""
+            {...register("corpType", {
+              required: {
+                value: "true",
+                message: "Incorporation type is required",
+              },
+            })}
+          >
             <MenuItem value={"federal"}>Federal</MenuItem>
             <MenuItem value={"provincial"}>Provincial</MenuItem>
           </Select>
@@ -102,7 +110,15 @@ export default function Form() {
       <FormControl fullWidth>
         <label>
           Choose your Province
-          <Select defaultValue="" {...register("province")}>
+          <Select
+            defaultValue=""
+            {...register("province", {
+              required: {
+                value: "true",
+                message: "Province is required",
+              },
+            })}
+          >
             {[
               { province: "Alberta", abbr: "AB" },
               { province: "British Columbia", abbr: "BC" },
