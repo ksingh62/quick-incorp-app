@@ -1,145 +1,81 @@
-"use client";
-
-import { db } from "@/app/prototype/_utils/firebase";
-import { collection, doc, setDoc, getDoc } from "firebase/firestore";
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { FormDataSchema } from "@/lib/form-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios"; // For sending email via API
-import { useRouter } from "next/navigation";
-import { useUserAuth } from "@/app/prototype/_utils/auth-context";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 const steps = [
   {
     id: "Step 1",
-    name: "Personal Information",
-    fields: ["firstName", "lastName", "email"],
+    name: "Personal Details",
+    fields: ["firstName", "lastName", "phoneNumber"],
   },
   {
     id: "Step 2",
-    name: "Address",
-    fields: ["country", "state", "city", "street", "zip"],
+    name: "Corporation Details",
+    fields: ["corporationName", "corpType", "corpProvince"],
   },
-  { id: "Step 3", name: "Complete" },
+  {
+    id: "Step 3",
+    name: "Business Address",
+    fields: ["address", "city", "province", "postalCode"],
+  },
+  {
+    id: "Step 4",
+    name: "Plans",
+    fields: [],
+  },
+  { id: "Step 5", name: "Payment", fields: [] },
+  { id: "Step 6", name: "Complete", fields: [] },
+];
+
+const provinces = [
+  { province: "Alberta", abbr: "AB" },
+  { province: "British Columbia", abbr: "BC" },
+  { province: "Manitoba", abbr: "MB" },
+  { province: "New Brunswick", abbr: "NB" },
+  { province: "Newfoundland and Labrador", abbr: "NL" },
+  { province: "Northwest Territories", abbr: "NT" },
+  { province: "Nova Scotia", abbr: "NS" },
+  { province: "Nunavut", abbr: "NU" },
+  { province: "Ontario", abbr: "ON" },
+  { province: "Prince Edward Island", abbr: "PE" },
+  { province: "Quebec", abbr: "QC" },
+  { province: "Saskatchewan", abbr: "SK" },
+  { province: "Yukon", abbr: "YT" },
 ];
 
 export default function Form() {
-  const [previousStep, setPreviousStep] = useState(0);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [hasSubmitted, setHasSubmitted] = useState(false);
-  const router = useRouter();
-  const { user } = useUserAuth();
-  const delta = currentStep - previousStep;
-
-  useEffect(() => {
-    if (isSubmitted) {
-      setTimeout(() => {
-        router.push("/prototype/homepage");
-      }, 3000);
-    }
-  }, [isSubmitted, router]);
-
-  useEffect(() => {
-    if (user) {
-      checkFormSubmission();
-    }
-  }, [user]);
-
-  const checkFormSubmission = async () => {
-    try {
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        setHasSubmitted(true);
-      }
-    } catch (error) {
-      console.error("Error checking form submission: ", error);
-    }
-  };
-
   const {
     register,
     handleSubmit,
-    watch,
-    reset,
-    trigger,
     formState: { errors },
+    trigger,
   } = useForm({
-    resolver: zodResolver(FormDataSchema),
+    mode: "onChange",
   });
 
-  const addDataToFirestore = async (data) => {
-    try {
-      await setDoc(doc(db, "users", user.uid), {
-        ...data,
-        userId: user.uid,
-      });
-      return true;
-    } catch (error) {
-      console.error("Error " + error);
-      return false;
-    }
-  };
-
-  const sendEmail = async (data) => {
-    try {
-      const response = await axios.post("/api/sendEmail", data);
-      console.log("Email sent successfully:", response.data);
-    } catch (error) {
-      console.error(
-        "Error sending email:",
-        error.response ? error.response.data : error.message
-      );
-    }
-  };
-
-  const processForm = async (data) => {
-    const success = await addDataToFirestore(data);
-    if (success) {
-      await sendEmail(data);
-      reset();
-      setIsSubmitted(true);
-    }
-  };
-
-  const next = async () => {
-    const fields = steps[currentStep].fields;
-    const output = await trigger(fields, { shouldFocus: true });
-
-    if (!output) return;
-
-    if (currentStep < steps.length - 1) {
-      if (currentStep === steps.length - 2) {
-        await handleSubmit(processForm)();
-      }
-      setPreviousStep(currentStep);
-      setCurrentStep((step) => step + 1);
-    }
-  };
+  const [currentStep, setCurrentStep] = useState(0);
 
   const prev = () => {
     if (currentStep > 0) {
-      setPreviousStep(currentStep);
       setCurrentStep((step) => step - 1);
     }
   };
 
-  if (hasSubmitted) {
-    return (
-      <section className="absolute inset-0 flex flex-col justify-center items-center p-24 bg-gray-900 text-gray-100">
-        <h2 className="text-base font-semibold leading-7 text-gray-100">
-          You have already filled the form.
-        </h2>
-        <p className="mt-1 text-sm leading-6 text-gray-400">
-          We are processing your application.
-        </p>
-      </section>
-    );
-  }
+  const next = async () => {
+    const currentStepFields = steps[currentStep].fields;
+    const isDataValid = await trigger(currentStepFields);
+
+    if (!isDataValid) return;
+
+    if (currentStep < steps.length - 1) {
+      if (currentStep === steps.length - 2) {
+        const onSubmit = (data) => {
+          console.log(data);
+        };
+        await handleSubmit(onSubmit)();
+      }
+      setCurrentStep((step) => step + 1);
+    }
+  };
 
   return (
     <section className="absolute inset-0 flex flex-col justify-between p-24 bg-gray-900 text-gray-100">
@@ -177,21 +113,10 @@ export default function Form() {
           ))}
         </ol>
       </nav>
-
-      {/* Form */}
-      <form className="mt-12 py-12" onSubmit={handleSubmit(processForm)}>
+      <form>
+        {/* Personal Details */}
         {currentStep === 0 && (
-          <motion.div
-            initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-          >
-            <h2 className="text-base font-semibold leading-7 text-gray-100">
-              Personal Information
-            </h2>
-            <p className="mt-1 text-sm leading-6 text-gray-400">
-              Provide your personal details.
-            </p>
+          <>
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-3">
                 <label
@@ -204,8 +129,12 @@ export default function Form() {
                   <input
                     type="text"
                     id="firstName"
-                    {...register("firstName")}
-                    autoComplete="given-name"
+                    {...register("firstName", {
+                      required: {
+                        value: "true",
+                        message: "First Name is Required",
+                      },
+                    })}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
                   />
                   {errors.firstName?.message && (
@@ -215,7 +144,9 @@ export default function Form() {
                   )}
                 </div>
               </div>
+            </div>
 
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-3">
                 <label
                   htmlFor="lastName"
@@ -227,8 +158,12 @@ export default function Form() {
                   <input
                     type="text"
                     id="lastName"
-                    {...register("lastName")}
-                    autoComplete="family-name"
+                    {...register("lastName", {
+                      required: {
+                        value: "true",
+                        message: "Last Name is Required",
+                      },
+                    })}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
                   />
                   {errors.lastName?.message && (
@@ -238,97 +173,169 @@ export default function Form() {
                   )}
                 </div>
               </div>
+            </div>
 
-              <div className="sm:col-span-4">
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-3">
                 <label
-                  htmlFor="email"
+                  htmlFor="phoneNumber"
                   className="block text-sm font-medium leading-6 text-gray-100"
                 >
-                  Email address
+                  Phone Number
                 </label>
                 <div className="mt-2">
                   <input
-                    id="email"
-                    type="email"
-                    {...register("email")}
-                    autoComplete="email"
+                    type="tel"
+                    id="phoneNumber"
+                    {...register("phoneNumber")}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
                   />
-                  {errors.email?.message && (
+                  {errors.phoneNumber?.message && (
                     <p className="mt-2 text-sm text-red-400">
-                      {errors.email.message}
+                      {errors.phoneNumber.message}
                     </p>
                   )}
                 </div>
               </div>
             </div>
-          </motion.div>
+          </>
         )}
 
+        {/* Corporation Details */}
         {currentStep === 1 && (
-          <motion.div
-            initial={{ x: delta >= 0 ? "50%" : "-50%", opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-          >
-            <h2 className="text-base font-semibold leading-7 text-gray-100">
-              Address
-            </h2>
-            <p className="mt-1 text-sm leading-6 text-gray-400">
-              Address where you can receive mail.
-            </p>
-
+          <>
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-3">
                 <label
-                  htmlFor="country"
+                  htmlFor="corporationName"
                   className="block text-sm font-medium leading-6 text-gray-100"
                 >
-                  Country
-                </label>
-                <div className="mt-2">
-                  <select
-                    id="country"
-                    {...register("country")}
-                    autoComplete="country-name"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                  >
-                    <option>United States</option>
-                    <option>Canada</option>
-                    <option>Mexico</option>
-                  </select>
-                  {errors.country?.message && (
-                    <p className="mt-2 text-sm text-red-400">
-                      {errors.country.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="col-span-full">
-                <label
-                  htmlFor="street"
-                  className="block text-sm font-medium leading-6 text-gray-100"
-                >
-                  Street address
+                  Corporation name
                 </label>
                 <div className="mt-2">
                   <input
                     type="text"
-                    id="street"
-                    {...register("street")}
-                    autoComplete="street-address"
+                    id="corporationName"
+                    {...register("corporationName", {
+                      required: {
+                        value: "true",
+                        message: "Corporation Name is Required",
+                      },
+                    })}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
                   />
-                  {errors.street?.message && (
+                  {errors.corporationName?.message && (
                     <p className="mt-2 text-sm text-red-400">
-                      {errors.street.message}
+                      {errors.corporationName.message}
                     </p>
                   )}
                 </div>
               </div>
+            </div>
 
-              <div className="sm:col-span-2 sm:col-start-1">
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor="corpType"
+                  className="block text-sm font-medium leading-6 text-gray-100"
+                >
+                  Incorporation Type
+                </label>
+                <div className="mt-2">
+                  <select
+                    id="corpType"
+                    {...register("corpType", {
+                      required: {
+                        value: "true",
+                        message: "Incorporation type is required",
+                      },
+                    })}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  >
+                    <option value={""}></option>
+                    <option value={"federal"}>Federal</option>
+                    <option value={"provincial"}>Provincial</option>
+                  </select>
+                  {errors.corpType?.message && (
+                    <p className="mt-2 text-sm text-red-400">
+                      {errors.corpType?.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor="corpProvince"
+                  className="block text-sm font-medium leading-6 text-gray-100"
+                >
+                  Corporation Province
+                </label>
+                <div className="mt-2">
+                  <select
+                    id="corpProvince"
+                    {...register("corpProvince", {
+                      required: {
+                        value: true,
+                        message: "Corporation Province is required",
+                      },
+                    })}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  >
+                    <option value=""></option>
+                    {provinces.map((province, index) => (
+                      <option key={index} value={province.abbr}>
+                        {province.province}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.corpProvince?.message && (
+                    <p className="mt-2 text-sm text-red-400">
+                      {errors.corpProvince?.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Business Address */}
+        {currentStep === 2 && (
+          <>
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor="address"
+                  className="block text-sm font-medium leading-6 text-gray-100"
+                >
+                  Address
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    id="address"
+                    {...register("address", {
+                      required: {
+                        value: "true",
+                        message: "Address is Required",
+                      },
+                    })}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
+                  />
+                  {errors.address?.message && (
+                    <p className="mt-2 text-sm text-red-400">
+                      {errors.address.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-3">
                 <label
                   htmlFor="city"
                   className="block text-sm font-medium leading-6 text-gray-100"
@@ -339,8 +346,12 @@ export default function Form() {
                   <input
                     type="text"
                     id="city"
-                    {...register("city")}
-                    autoComplete="address-level2"
+                    {...register("city", {
+                      required: {
+                        value: "true",
+                        message: "City is Required",
+                      },
+                    })}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
                   />
                   {errors.city?.message && (
@@ -350,66 +361,77 @@ export default function Form() {
                   )}
                 </div>
               </div>
+            </div>
 
-              <div className="sm:col-span-2">
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-3">
                 <label
-                  htmlFor="state"
+                  htmlFor="province"
                   className="block text-sm font-medium leading-6 text-gray-100"
                 >
-                  State / Province
+                  Province
                 </label>
                 <div className="mt-2">
-                  <input
-                    type="text"
-                    id="state"
-                    {...register("state")}
-                    autoComplete="address-level1"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
-                  />
-                  {errors.state?.message && (
+                  <select
+                    id="province"
+                    {...register("province", {
+                      required: {
+                        value: true,
+                        message: "Province is required",
+                      },
+                    })}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  >
+                    <option value=""></option>
+                    {provinces.map((province, index) => (
+                      <option key={index} value={province.abbr}>
+                        {province.province}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.province?.message && (
                     <p className="mt-2 text-sm text-red-400">
-                      {errors.state.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="sm:col-span-2">
-                <label
-                  htmlFor="zip"
-                  className="block text-sm font-medium leading-6 text-gray-100"
-                >
-                  ZIP / Postal code
-                </label>
-                <div className="mt-2">
-                  <input
-                    type="text"
-                    id="zip"
-                    {...register("zip")}
-                    autoComplete="postal-code"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
-                  />
-                  {errors.zip?.message && (
-                    <p className="mt-2 text-sm text-red-400">
-                      {errors.zip.message}
+                      {errors.province?.message}
                     </p>
                   )}
                 </div>
               </div>
             </div>
-          </motion.div>
-        )}
 
-        {currentStep === 2 && (
-          <>
-            <h2 className="text-base font-semibold leading-7 text-gray-100">
-              Complete
-            </h2>
-            <p className="mt-1 text-sm leading-6 text-gray-400">
-              Thank you for your submission.
-            </p>
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor="postalCode"
+                  className="block text-sm font-medium leading-6 text-gray-100"
+                >
+                  Postal Code
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    id="postalCode"
+                    {...register("postalCode", {
+                      required: {
+                        value: "true",
+                        message: "Postal Code is Required",
+                      },
+                    })}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
+                  />
+                  {errors.postalCode?.message && (
+                    <p className="mt-2 text-sm text-red-400">
+                      {errors.postalCode.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
           </>
         )}
+
+        {currentStep === 3 && <p>Plans</p>}
+        {currentStep === 4 && <p>Payment</p>}
+        {currentStep === 5 && <p>Thank you</p>}
       </form>
 
       {/* Navigation */}
@@ -462,3 +484,24 @@ export default function Form() {
     </section>
   );
 }
+
+/* 
+Personal Details
+-First Name
+-Last Name
+-Phone Number
+
+Corporation Details
+-Name of Corporation
+-Choose your type of incorporation
+-Choose your province
+
+Business Address
+-Address
+-City
+-Province
+-Postal Code
+
+Plans
+Payment
+*/
