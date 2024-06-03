@@ -84,72 +84,117 @@ export default function Form() {
       </nav>
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Personal Details */}
-        <div>
-          <label>
-            First Name
-            <input
-              className="text-black"
-              type="text"
-              {...register("firstName", {
-                required: {
-                  value: "true",
-                  message: "First Name is Required",
-                },
-              })}
-            />
-          </label>
-          <p>{errors.firstName?.message}</p>
+
+        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="firstName"
+              className="block text-sm font-medium leading-6 text-gray-100"
+            >
+              First name
+            </label>
+            <div className="mt-2">
+              <input
+                type="text"
+                id="firstName"
+                {...register("firstName", {
+                  required: {
+                    value: "true",
+                    message: "First Name is Required",
+                  },
+                })}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
+              />
+              {errors.firstName?.message && (
+                <p className="mt-2 text-sm text-red-400">
+                  {errors.firstName.message}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
 
-        <div>
-          <label>
-            Last Name
-            <input
-              className="text-black"
-              type="text"
-              {...register("lastName", {
-                required: {
-                  value: "true",
-                  message: "Last Name is Required",
-                },
-              })}
-            />
-            <p>{errors.lastName?.message}</p>
-          </label>
+        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="lastName"
+              className="block text-sm font-medium leading-6 text-gray-100"
+            >
+              Last name
+            </label>
+            <div className="mt-2">
+              <input
+                type="text"
+                id="lastName"
+                {...register("lastName", {
+                  required: {
+                    value: "true",
+                    message: "Last Name is Required",
+                  },
+                })}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
+              />
+              {errors.lastName?.message && (
+                <p className="mt-2 text-sm text-red-400">
+                  {errors.lastName.message}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
 
-        <div>
-          <label>
-            Phone Number
-            <input
-              className="text-black"
-              type="tel"
-              {...register("phoneNumber")}
-            />
-          </label>
+        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="phoneNumber"
+              className="block text-sm font-medium leading-6 text-gray-100"
+            >
+              Phone Number
+            </label>
+            <div className="mt-2">
+              <input
+                type="tel"
+                id="phoneNumber"
+                {...register("phoneNumber")}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
+              />
+              {errors.phoneNumber?.message && (
+                <p className="mt-2 text-sm text-red-400">
+                  {errors.phoneNumber.message}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Corporation Details */}
-        <div>
-          <label>
-            Corporation Name
-            <input
-              className="text-black"
-              type="text"
-              {...register("corporationName", {
-                required: {
-                  value: true,
-                  message: "Corporation Name is required.",
-                },
-                minLength: {
-                  value: 5,
-                  message:
-                    "Corporation Name should at least be 5 characters long.",
-                },
-              })}
-            />
-          </label>
-          <p>{errors.corporationName?.message}</p>
+        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="corporationName"
+              className="block text-sm font-medium leading-6 text-gray-100"
+            >
+              Corporation name
+            </label>
+            <div className="mt-2">
+              <input
+                type="text"
+                id="corporationName"
+                {...register("corporationName", {
+                  required: {
+                    value: "true",
+                    message: "Corporation Name is Required",
+                  },
+                })}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
+              />
+              {errors.corporationName?.message && (
+                <p className="mt-2 text-sm text-red-400">
+                  {errors.corporationName.message}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -184,27 +229,6 @@ export default function Form() {
           </div>
         </div>
 
-        {/* <FormControl fullWidth>
-          <label>
-            Choose your Province
-            <Select
-              defaultValue=""
-              {...register("province", {
-                required: {
-                  value: "true",
-                  message: "Province is required",
-                },
-              })}
-            >
-              {provinces.map((province, index) => (
-                <MenuItem key={index} value={province.abbr}>
-                  {province.province}
-                </MenuItem>
-              ))}
-            </Select>
-          </label>
-        </FormControl> */}
-
         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div className="sm:col-span-3">
             <label
@@ -215,7 +239,7 @@ export default function Form() {
             </label>
             <div className="mt-2">
               <select
-                id="province"
+                id="corpProvince"
                 {...register("corpProvince", {
                   required: {
                     value: true,
@@ -241,38 +265,62 @@ export default function Form() {
         </div>
 
         {/* Business Address */}
-        <div>
-          <label>
-            Address
-            <input
-              className="text-black"
-              type="text"
-              {...register("address", {
-                required: {
-                  value: "true",
-                  message: "Address is Required",
-                },
-              })}
-            />
-          </label>
-          <p>{errors.address?.message}</p>
+        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="address"
+              className="block text-sm font-medium leading-6 text-gray-100"
+            >
+              Address
+            </label>
+            <div className="mt-2">
+              <input
+                type="text"
+                id="address"
+                {...register("address", {
+                  required: {
+                    value: "true",
+                    message: "Address is Required",
+                  },
+                })}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
+              />
+              {errors.address?.message && (
+                <p className="mt-2 text-sm text-red-400">
+                  {errors.address.message}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
 
-        <div>
-          <label>
-            City
-            <input
-              className="text-black"
-              type="text"
-              {...register("city", {
-                required: {
-                  value: "true",
-                  message: "City is Required",
-                },
-              })}
-            />
-          </label>
-          <p>{errors.city?.message}</p>
+        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="city"
+              className="block text-sm font-medium leading-6 text-gray-100"
+            >
+              City
+            </label>
+            <div className="mt-2">
+              <input
+                type="text"
+                id="city"
+                {...register("city", {
+                  required: {
+                    value: "true",
+                    message: "City is Required",
+                  },
+                })}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
+              />
+              {errors.city?.message && (
+                <p className="mt-2 text-sm text-red-400">
+                  {errors.city.message}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -310,21 +358,33 @@ export default function Form() {
           </div>
         </div>
 
-        <div>
-          <label>
-            Postal Code
-            <input
-              className="text-black"
-              type="text"
-              {...register("postalCode", {
-                required: {
-                  value: "true",
-                  message: "Postal Code is Required",
-                },
-              })}
-            />
-          </label>
-          <p>{errors.postalCode?.message}</p>
+        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="postalCode"
+              className="block text-sm font-medium leading-6 text-gray-100"
+            >
+              Postal Code
+            </label>
+            <div className="mt-2">
+              <input
+                type="text"
+                id="postalCode"
+                {...register("postalCode", {
+                  required: {
+                    value: "true",
+                    message: "Postal Code is Required",
+                  },
+                })}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
+              />
+              {errors.postalCode?.message && (
+                <p className="mt-2 text-sm text-red-400">
+                  {errors.postalCode.message}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
 
         <button type="submit">Submit</button>
