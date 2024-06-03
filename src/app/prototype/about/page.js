@@ -41,7 +41,15 @@ const AboutUs = () => {
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-semibold mb-6 text-center">About Us</h2>
           <p className="text-lg mb-8 text-center">
+          Welcome to our company!
           </p>
+          <p className="text-lg mb-8 text-center">
+          We are dedicated to helping businesses thrive in Canada. Our mission is to provide top-notch services to entrepreneurs and business owners, ensuring a smooth and successful journey from start to finish.
+          </p> 
+          <p className="text-lg mb-8 text-center">
+          Our team consists of experienced professionals in various fields, including legal, financial, and business consulting. We are passionate about what we do and are committed to delivering the best results for our clients.
+          </p>
+          
           <div className="team">
             <h3 className="text-2xl font-semibold mb-6 text-center">Meet Our Team</h3>
             <div className="flex flex-wrap justify-center">
