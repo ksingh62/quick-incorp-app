@@ -1,4 +1,5 @@
 'use client'
+import Layout from '@/components/Layout';
 import React, { useState } from 'react';
 
 const teamMembers = [
@@ -36,6 +37,7 @@ const AboutUs = () => {
   };
 
   return (
+    <Layout>
     
       <section className="about-section bg-gray-900 text-gray-100 py-12">
         <div className="container mx-auto px-6">
@@ -83,6 +85,7 @@ const AboutUs = () => {
           </div>
         </div>
       </section>
+      </Layout>
   );
 };
 
