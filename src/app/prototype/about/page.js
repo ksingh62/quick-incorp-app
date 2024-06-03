@@ -4,27 +4,27 @@ import React, { useState } from 'react';
 const teamMembers = [
   {
     name: 'Ammar Khan',
-    title: 'CEO & Founder',
+    title: 'Front End Developer',
     imgSrc: '/pic-3.jpg',
-    description: ''
+    description: 'Ammar Khan is a skilled front end developer specializing in creating user-friendly interfaces with HTML, CSS, JavaScript, and React. His attention to detail and passion for innovation ensure our websites are both visually appealing and highly functional.'
   },
   {
     name: 'Kapilmeet Singh',
-    title: 'Chief Operating Officer',
+    title: 'Backend Developer',
     imgSrc: '/pic-2.jpg',
-    description: ''
+    description: 'Kapilmeet is an expert backend developer with proficiency in Node.js, Express, and MongoDB. His strong problem-solving skills and dedication to building robust, scalable systems ensure our applications run smoothly and efficiently. His technical expertise and commitment to excellence make him an indispensable part of our team.'
   },
   {
     name: 'Sahib Aulakh',
-    title: 'Chief Technology Officer',
+    title: 'Backend Developer',
     imgSrc: '/pic-1.jpg',
-    description: ''
+    description: 'Sahib is a highly skilled backend developer with expertise in Node.js, Express, and MongoDB. His focus on building secure, scalable, and efficient systems ensures our applications perform flawlessly. His dedication to quality and innovative solutions makes him a vital member of our team.'
   },
   {
     name: 'Vansh Malhotra',
-    title: 'Chief Technology Officer',
+    title: 'Front End Developer',
     imgSrc: '/pic-4.jpg',
-    description: ''
+    description: 'Vansh is a proficient front end developer with a talent for creating intuitive and engaging user interfaces using HTML, CSS, JavaScript, and React. His creativity and meticulous approach ensure that our websites not only look great but also provide an exceptional user experience.'
   },
 ];
 
