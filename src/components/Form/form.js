@@ -15,6 +15,22 @@ const steps = [
   { id: "Step 6", name: "Complete" },
 ];
 
+const provinces = [
+  { province: "Alberta", abbr: "AB" },
+  { province: "British Columbia", abbr: "BC" },
+  { province: "Manitoba", abbr: "MB" },
+  { province: "New Brunswick", abbr: "NB" },
+  { province: "Newfoundland and Labrador", abbr: "NL" },
+  { province: "Northwest Territories", abbr: "NT" },
+  { province: "Nova Scotia", abbr: "NS" },
+  { province: "Nunavut", abbr: "NU" },
+  { province: "Ontario", abbr: "ON" },
+  { province: "Prince Edward Island", abbr: "PE" },
+  { province: "Quebec", abbr: "QC" },
+  { province: "Saskatchewan", abbr: "SK" },
+  { province: "Yukon", abbr: "YT" },
+];
+
 export default function Form() {
   const {
     register,
@@ -136,25 +152,39 @@ export default function Form() {
           <p>{errors.corporationName?.message}</p>
         </div>
 
-        <FormControl fullWidth>
-          <label>
-            Choose your type of incorporation
-            <Select
-              defaultValue=""
-              {...register("corpType", {
-                required: {
-                  value: "true",
-                  message: "Incorporation type is required",
-                },
-              })}
+        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="corpType"
+              className="block text-sm font-medium leading-6 text-gray-100"
             >
-              <MenuItem value={"federal"}>Federal</MenuItem>
-              <MenuItem value={"provincial"}>Provincial</MenuItem>
-            </Select>
-          </label>
-        </FormControl>
+              Incorporation Type
+            </label>
+            <div className="mt-2">
+              <select
+                id="corpType"
+                {...register("corpType", {
+                  required: {
+                    value: "true",
+                    message: "Incorporation type is required",
+                  },
+                })}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6"
+              >
+                <option value={""}></option>
+                <option value={"federal"}>Federal</option>
+                <option value={"provincial"}>Provincial</option>
+              </select>
+              {errors.corpType?.message && (
+                <p className="mt-2 text-sm text-red-400">
+                  {errors.corpType?.message}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
 
-        <FormControl fullWidth>
+        {/* <FormControl fullWidth>
           <label>
             Choose your Province
             <Select
@@ -166,28 +196,49 @@ export default function Form() {
                 },
               })}
             >
-              {[
-                { province: "Alberta", abbr: "AB" },
-                { province: "British Columbia", abbr: "BC" },
-                { province: "Manitoba", abbr: "MB" },
-                { province: "New Brunswick", abbr: "NB" },
-                { province: "Newfoundland and Labrador", abbr: "NL" },
-                { province: "Northwest Territories", abbr: "NT" },
-                { province: "Nova Scotia", abbr: "NS" },
-                { province: "Nunavut", abbr: "NU" },
-                { province: "Ontario", abbr: "ON" },
-                { province: "Prince Edward Island", abbr: "PE" },
-                { province: "Quebec", abbr: "QC" },
-                { province: "Saskatchewan", abbr: "SK" },
-                { province: "Yukon", abbr: "YT" },
-              ].map((province, index) => (
+              {provinces.map((province, index) => (
                 <MenuItem key={index} value={province.abbr}>
                   {province.province}
                 </MenuItem>
               ))}
             </Select>
           </label>
-        </FormControl>
+        </FormControl> */}
+
+        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="corpProvince"
+              className="block text-sm font-medium leading-6 text-gray-100"
+            >
+              Corporation Province
+            </label>
+            <div className="mt-2">
+              <select
+                id="province"
+                {...register("corpProvince", {
+                  required: {
+                    value: true,
+                    message: "Corporation Province is required",
+                  },
+                })}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6"
+              >
+                <option value=""></option>
+                {provinces.map((province, index) => (
+                  <option key={index} value={province.abbr}>
+                    {province.province}
+                  </option>
+                ))}
+              </select>
+              {errors.corpProvince?.message && (
+                <p className="mt-2 text-sm text-red-400">
+                  {errors.corpProvince?.message}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
 
         {/* Business Address */}
         <div>
@@ -224,40 +275,40 @@ export default function Form() {
           <p>{errors.city?.message}</p>
         </div>
 
-        <FormControl fullWidth>
-          <label>
-            Choose your Province
-            <Select
-              defaultValue=""
-              {...register("province", {
-                required: {
-                  value: "true",
-                  message: "Province is required",
-                },
-              })}
+        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="province"
+              className="block text-sm font-medium leading-6 text-gray-100"
             >
-              {[
-                { province: "Alberta", abbr: "AB" },
-                { province: "British Columbia", abbr: "BC" },
-                { province: "Manitoba", abbr: "MB" },
-                { province: "New Brunswick", abbr: "NB" },
-                { province: "Newfoundland and Labrador", abbr: "NL" },
-                { province: "Northwest Territories", abbr: "NT" },
-                { province: "Nova Scotia", abbr: "NS" },
-                { province: "Nunavut", abbr: "NU" },
-                { province: "Ontario", abbr: "ON" },
-                { province: "Prince Edward Island", abbr: "PE" },
-                { province: "Quebec", abbr: "QC" },
-                { province: "Saskatchewan", abbr: "SK" },
-                { province: "Yukon", abbr: "YT" },
-              ].map((province, index) => (
-                <MenuItem key={index} value={province.abbr}>
-                  {province.province}
-                </MenuItem>
-              ))}
-            </Select>
-          </label>
-        </FormControl>
+              Province
+            </label>
+            <div className="mt-2">
+              <select
+                id="province"
+                {...register("province", {
+                  required: {
+                    value: true,
+                    message: "Province is required",
+                  },
+                })}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6"
+              >
+                <option value=""></option>
+                {provinces.map((province, index) => (
+                  <option key={index} value={province.abbr}>
+                    {province.province}
+                  </option>
+                ))}
+              </select>
+              {errors.province?.message && (
+                <p className="mt-2 text-sm text-red-400">
+                  {errors.province?.message}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
 
         <div>
           <label>
