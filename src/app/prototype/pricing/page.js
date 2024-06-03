@@ -7,6 +7,9 @@ import { useRouter } from "next/navigation";
 const Pricing = () => {
   const router = useRouter();
 
+  const handleGetStarted = () => {
+    router.push("/prototype/form");
+  };
   return (
     <Layout>
       <div className="container mx-auto text-center">
@@ -46,6 +49,9 @@ const Pricing = () => {
                 any province or territory.
               </li>
             </ul>
+            <button onClick={handleGetStarted} className="btn">
+              Get Started
+            </button>
           </div>
           <div className="plan bg-gray-800 p-8 rounded-lg shadow-lg w-full md:w-1/3">
             <h3 className="text-2xl font-semibold mb-4">Managed Corporation</h3>
@@ -77,6 +83,9 @@ const Pricing = () => {
                 transactions per month included
               </li>
             </ul>
+            <button onClick={handleGetStarted} className="btn">
+              Get Started
+            </button>
           </div>
         </div>
       </div>
