@@ -4,6 +4,16 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { useState } from "react";
+
+const steps = [
+  { id: "Step 1", name: "Personal Details" },
+  { id: "Step 2", name: "Corporation Details" },
+  { id: "Step 3", name: "Business Address" },
+  { id: "Step 4", name: "Plans" },
+  { id: "Step 5", name: "Payment" },
+  { id: "Step 6", name: "Complete" },
+];
 
 export default function Form() {
   const {
@@ -18,219 +28,257 @@ export default function Form() {
 
   console.log(errors);
 
+  const [currentStep, setCurrentStep] = useState(0);
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {/* Personal Details */}
-      <div>
-        <label>
-          First Name
-          <input
-            className="text-black"
-            type="text"
-            {...register("firstName", {
-              required: {
-                value: "true",
-                message: "First Name is Required",
-              },
-            })}
-          />
-        </label>
-        <p>{errors.firstName?.message}</p>
-      </div>
+    <section className="absolute inset-0 flex flex-col justify-between p-24 bg-gray-900 text-gray-100">
+      {/* steps */}
+      <nav aria-label="Progress">
+        <ol role="list" className="space-y-4 md:flex md:space-x-8 md:space-y-0">
+          {steps.map((step, index) => (
+            <li key={step.name} className="md:flex-1">
+              {currentStep > index ? (
+                <div className="group flex w-full flex-col border-l-4 border-sky-600 py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
+                  <span className="text-sm font-medium text-sky-400 transition-colors">
+                    {step.id}
+                  </span>
+                  <span className="text-sm font-medium">{step.name}</span>
+                </div>
+              ) : currentStep === index ? (
+                <div
+                  className="flex w-full flex-col border-l-4 border-sky-600 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4"
+                  aria-current="step"
+                >
+                  <span className="text-sm font-medium text-sky-400">
+                    {step.id}
+                  </span>
+                  <span className="text-sm font-medium">{step.name}</span>
+                </div>
+              ) : (
+                <div className="group flex w-full flex-col border-l-4 border-gray-600 py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
+                  <span className="text-sm font-medium text-gray-400 transition-colors">
+                    {step.id}
+                  </span>
+                  <span className="text-sm font-medium">{step.name}</span>
+                </div>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Personal Details */}
+        <div>
+          <label>
+            First Name
+            <input
+              className="text-black"
+              type="text"
+              {...register("firstName", {
+                required: {
+                  value: "true",
+                  message: "First Name is Required",
+                },
+              })}
+            />
+          </label>
+          <p>{errors.firstName?.message}</p>
+        </div>
 
-      <div>
-        <label>
-          Last Name
-          <input
-            className="text-black"
-            type="text"
-            {...register("lastName", {
-              required: {
-                value: "true",
-                message: "Last Name is Required",
-              },
-            })}
-          />
-          <p>{errors.lastName?.message}</p>
-        </label>
-      </div>
+        <div>
+          <label>
+            Last Name
+            <input
+              className="text-black"
+              type="text"
+              {...register("lastName", {
+                required: {
+                  value: "true",
+                  message: "Last Name is Required",
+                },
+              })}
+            />
+            <p>{errors.lastName?.message}</p>
+          </label>
+        </div>
 
-      <div>
-        <label>
-          Phone Number
-          <input
-            className="text-black"
-            type="tel"
-            {...register("phoneNumber")}
-          />
-        </label>
-      </div>
+        <div>
+          <label>
+            Phone Number
+            <input
+              className="text-black"
+              type="tel"
+              {...register("phoneNumber")}
+            />
+          </label>
+        </div>
 
-      {/* Corporation Details */}
-      <div>
-        <label>
-          Corporation Name
-          <input
-            className="text-black"
-            type="text"
-            {...register("corporationName", {
-              required: {
-                value: true,
-                message: "Corporation Name is required.",
-              },
-              minLength: {
-                value: 5,
-                message:
-                  "Corporation Name should at least be 5 characters long.",
-              },
-            })}
-          />
-        </label>
-        <p>{errors.corporationName?.message}</p>
-      </div>
+        {/* Corporation Details */}
+        <div>
+          <label>
+            Corporation Name
+            <input
+              className="text-black"
+              type="text"
+              {...register("corporationName", {
+                required: {
+                  value: true,
+                  message: "Corporation Name is required.",
+                },
+                minLength: {
+                  value: 5,
+                  message:
+                    "Corporation Name should at least be 5 characters long.",
+                },
+              })}
+            />
+          </label>
+          <p>{errors.corporationName?.message}</p>
+        </div>
 
-      <FormControl fullWidth>
-        <label>
-          Choose your type of incorporation
-          <Select
-            defaultValue=""
-            {...register("corpType", {
-              required: {
-                value: "true",
-                message: "Incorporation type is required",
-              },
-            })}
-          >
-            <MenuItem value={"federal"}>Federal</MenuItem>
-            <MenuItem value={"provincial"}>Provincial</MenuItem>
-          </Select>
-        </label>
-      </FormControl>
+        <FormControl fullWidth>
+          <label>
+            Choose your type of incorporation
+            <Select
+              defaultValue=""
+              {...register("corpType", {
+                required: {
+                  value: "true",
+                  message: "Incorporation type is required",
+                },
+              })}
+            >
+              <MenuItem value={"federal"}>Federal</MenuItem>
+              <MenuItem value={"provincial"}>Provincial</MenuItem>
+            </Select>
+          </label>
+        </FormControl>
 
-      <FormControl fullWidth>
-        <label>
-          Choose your Province
-          <Select
-            defaultValue=""
-            {...register("province", {
-              required: {
-                value: "true",
-                message: "Province is required",
-              },
-            })}
-          >
-            {[
-              { province: "Alberta", abbr: "AB" },
-              { province: "British Columbia", abbr: "BC" },
-              { province: "Manitoba", abbr: "MB" },
-              { province: "New Brunswick", abbr: "NB" },
-              { province: "Newfoundland and Labrador", abbr: "NL" },
-              { province: "Northwest Territories", abbr: "NT" },
-              { province: "Nova Scotia", abbr: "NS" },
-              { province: "Nunavut", abbr: "NU" },
-              { province: "Ontario", abbr: "ON" },
-              { province: "Prince Edward Island", abbr: "PE" },
-              { province: "Quebec", abbr: "QC" },
-              { province: "Saskatchewan", abbr: "SK" },
-              { province: "Yukon", abbr: "YT" },
-            ].map((province, index) => (
-              <MenuItem key={index} value={province.abbr}>
-                {province.province}
-              </MenuItem>
-            ))}
-          </Select>
-        </label>
-      </FormControl>
+        <FormControl fullWidth>
+          <label>
+            Choose your Province
+            <Select
+              defaultValue=""
+              {...register("province", {
+                required: {
+                  value: "true",
+                  message: "Province is required",
+                },
+              })}
+            >
+              {[
+                { province: "Alberta", abbr: "AB" },
+                { province: "British Columbia", abbr: "BC" },
+                { province: "Manitoba", abbr: "MB" },
+                { province: "New Brunswick", abbr: "NB" },
+                { province: "Newfoundland and Labrador", abbr: "NL" },
+                { province: "Northwest Territories", abbr: "NT" },
+                { province: "Nova Scotia", abbr: "NS" },
+                { province: "Nunavut", abbr: "NU" },
+                { province: "Ontario", abbr: "ON" },
+                { province: "Prince Edward Island", abbr: "PE" },
+                { province: "Quebec", abbr: "QC" },
+                { province: "Saskatchewan", abbr: "SK" },
+                { province: "Yukon", abbr: "YT" },
+              ].map((province, index) => (
+                <MenuItem key={index} value={province.abbr}>
+                  {province.province}
+                </MenuItem>
+              ))}
+            </Select>
+          </label>
+        </FormControl>
 
-      {/* Business Address */}
-      <div>
-        <label>
-          Address
-          <input
-            className="text-black"
-            type="text"
-            {...register("address", {
-              required: {
-                value: "true",
-                message: "Address is Required",
-              },
-            })}
-          />
-        </label>
-        <p>{errors.address?.message}</p>
-      </div>
+        {/* Business Address */}
+        <div>
+          <label>
+            Address
+            <input
+              className="text-black"
+              type="text"
+              {...register("address", {
+                required: {
+                  value: "true",
+                  message: "Address is Required",
+                },
+              })}
+            />
+          </label>
+          <p>{errors.address?.message}</p>
+        </div>
 
-      <div>
-        <label>
-          City
-          <input
-            className="text-black"
-            type="text"
-            {...register("city", {
-              required: {
-                value: "true",
-                message: "City is Required",
-              },
-            })}
-          />
-        </label>
-        <p>{errors.city?.message}</p>
-      </div>
+        <div>
+          <label>
+            City
+            <input
+              className="text-black"
+              type="text"
+              {...register("city", {
+                required: {
+                  value: "true",
+                  message: "City is Required",
+                },
+              })}
+            />
+          </label>
+          <p>{errors.city?.message}</p>
+        </div>
 
-      <FormControl fullWidth>
-        <label>
-          Choose your Province
-          <Select
-            defaultValue=""
-            {...register("province", {
-              required: {
-                value: "true",
-                message: "Province is required",
-              },
-            })}
-          >
-            {[
-              { province: "Alberta", abbr: "AB" },
-              { province: "British Columbia", abbr: "BC" },
-              { province: "Manitoba", abbr: "MB" },
-              { province: "New Brunswick", abbr: "NB" },
-              { province: "Newfoundland and Labrador", abbr: "NL" },
-              { province: "Northwest Territories", abbr: "NT" },
-              { province: "Nova Scotia", abbr: "NS" },
-              { province: "Nunavut", abbr: "NU" },
-              { province: "Ontario", abbr: "ON" },
-              { province: "Prince Edward Island", abbr: "PE" },
-              { province: "Quebec", abbr: "QC" },
-              { province: "Saskatchewan", abbr: "SK" },
-              { province: "Yukon", abbr: "YT" },
-            ].map((province, index) => (
-              <MenuItem key={index} value={province.abbr}>
-                {province.province}
-              </MenuItem>
-            ))}
-          </Select>
-        </label>
-      </FormControl>
+        <FormControl fullWidth>
+          <label>
+            Choose your Province
+            <Select
+              defaultValue=""
+              {...register("province", {
+                required: {
+                  value: "true",
+                  message: "Province is required",
+                },
+              })}
+            >
+              {[
+                { province: "Alberta", abbr: "AB" },
+                { province: "British Columbia", abbr: "BC" },
+                { province: "Manitoba", abbr: "MB" },
+                { province: "New Brunswick", abbr: "NB" },
+                { province: "Newfoundland and Labrador", abbr: "NL" },
+                { province: "Northwest Territories", abbr: "NT" },
+                { province: "Nova Scotia", abbr: "NS" },
+                { province: "Nunavut", abbr: "NU" },
+                { province: "Ontario", abbr: "ON" },
+                { province: "Prince Edward Island", abbr: "PE" },
+                { province: "Quebec", abbr: "QC" },
+                { province: "Saskatchewan", abbr: "SK" },
+                { province: "Yukon", abbr: "YT" },
+              ].map((province, index) => (
+                <MenuItem key={index} value={province.abbr}>
+                  {province.province}
+                </MenuItem>
+              ))}
+            </Select>
+          </label>
+        </FormControl>
 
-      <div>
-        <label>
-          Postal Code
-          <input
-            className="text-black"
-            type="text"
-            {...register("postalCode", {
-              required: {
-                value: "true",
-                message: "Postal Code is Required",
-              },
-            })}
-          />
-        </label>
-        <p>{errors.postalCode?.message}</p>
-      </div>
+        <div>
+          <label>
+            Postal Code
+            <input
+              className="text-black"
+              type="text"
+              {...register("postalCode", {
+                required: {
+                  value: "true",
+                  message: "Postal Code is Required",
+                },
+              })}
+            />
+          </label>
+          <p>{errors.postalCode?.message}</p>
+        </div>
 
-      <button type="submit">Submit</button>
-    </form>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
   );
 }
 
