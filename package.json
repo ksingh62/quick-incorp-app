@@ -9,10 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
     "@hookform/resolvers": "^3.4.2",
-    "@mui/material": "^5.15.19",
     "axios": "^1.7.2",
     "encoding": "^0.1.13",
     "firebase": "^10.12.1",
