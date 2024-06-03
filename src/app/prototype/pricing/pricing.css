@@ -1,57 +1,89 @@
-.pricing-container {
-    text-align: center;
-    padding: 50px;
-  }
-  .pricing-container h1 {
-    margin-top: 0;
-    color:white;
-    font-size: 40px;
-  }
-  .pricing-cards {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-    background-attachment: fixed;
+.pricing-section {
+  background-color: #1a202c;
+  color: #edf2f7;
+  padding: 3rem 0;
+}
 
-  }
-  .pricing-card {
-    background-color: grey;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    width: 350px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.pricing-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-  }
-  
-  .pricing-card h2 {
-    margin-top: 0;
-    color: black;
-    font-size: 25px;
-    font-style: bold;
-  }
-  
-  .pricing-card ul {
-    list-style: none;
-    padding: 0;
-    
-  }
-  
-  .pricing-card ul li {
-    margin: 10px 0;
-    
-  }
-  
-  .pricing-card button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .pricing-card button:hover {
-    background-color: #0056b3;
-  }
-  
+.pricing-section h2 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.pricing-section p {
+  font-size: 1.125rem;
+  margin-bottom: 3rem;
+}
+
+.plan {
+  background-color: #2d3748;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin: 0 1rem;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.plan:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.plan h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.plan p {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.plan ul {
+  text-align: left;
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 1.5rem;
+}
+
+.plan ul li {
+  margin-bottom: 0.5rem;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.plan ul li::before {
+  content: "✔";
+  color: #63b3ed;
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1.5em;
+  position: absolute;
+  left: 0;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #63b3ed;
+  color: #1a202c;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn:hover {
+  background-color: #4299e1;
+  transform: translateY(-2px);
+}
