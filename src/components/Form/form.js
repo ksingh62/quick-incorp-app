@@ -7,12 +7,28 @@ import Select from "@mui/material/Select";
 import { useState } from "react";
 
 const steps = [
-  { id: "Step 1", name: "Personal Details" },
-  { id: "Step 2", name: "Corporation Details" },
-  { id: "Step 3", name: "Business Address" },
-  { id: "Step 4", name: "Plans" },
-  { id: "Step 5", name: "Payment" },
-  { id: "Step 6", name: "Complete" },
+  {
+    id: "Step 1",
+    name: "Personal Details",
+    fields: ["firstName", "lastName", "phoneNumber"],
+  },
+  {
+    id: "Step 2",
+    name: "Corporation Details",
+    fields: ["corporationName", "corpType", "corpProvince"],
+  },
+  {
+    id: "Step 3",
+    name: "Business Address",
+    fields: ["address", "city", "province", "postalCode"],
+  },
+  {
+    id: "Step 4",
+    name: "Plans",
+    fields: [],
+  },
+  { id: "Step 5", name: "Payment", fields: [] },
+  { id: "Step 6", name: "Complete", fields: [] },
 ];
 
 const provinces = [
@@ -36,13 +52,10 @@ export default function Form() {
     register,
     handleSubmit,
     formState: { errors },
+    trigger,
   } = useForm({
     mode: "onChange",
   });
-
-  const onSubmit = (data) => console.log(data);
-
-  console.log(errors);
 
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -52,8 +65,19 @@ export default function Form() {
     }
   };
 
-  const next = () => {
+  const next = async () => {
+    const currentStepFields = steps[currentStep].fields;
+    const isDataValid = await trigger(currentStepFields);
+
+    if (!isDataValid) return;
+
     if (currentStep < steps.length - 1) {
+      if (currentStep === steps.length - 2) {
+        const onSubmit = (data) => {
+          console.log(data);
+        };
+        await handleSubmit(onSubmit)();
+      }
       setCurrentStep((step) => step + 1);
     }
   };
@@ -94,9 +118,8 @@ export default function Form() {
           ))}
         </ol>
       </nav>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form>
         {/* Personal Details */}
-
         {currentStep === 0 && (
           <>
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -414,7 +437,6 @@ export default function Form() {
         {currentStep === 3 && <p>Plans</p>}
         {currentStep === 4 && <p>Payment</p>}
         {currentStep === 5 && <p>Thank you</p>}
-        <button type="submit">Submit</button>
       </form>
 
       {/* Navigation */}
