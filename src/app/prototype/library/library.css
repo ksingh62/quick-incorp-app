@@ -1,72 +1,55 @@
-.library-container {
-    padding: 20px;
-  }
-  
-  .library-title {
-    font-size: 2em;
-    margin-bottom: 20px;
-  }
-  
-  .library-description {
-    font-size: 1.2em;
-    margin-bottom: 20px;
-  }
-  
-  .library-search input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    font-size: 1em;
-  }
-  
-  .library-section {
-    margin-bottom: 20px;
-  }
-  
-  .library-section h2 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
-  
-  .library-section ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .library-section ul li {
-    padding: 5px 0;
-  }
-  
-  .library-section ul li a {
-    color: #0070f3;
-    text-decoration: none;
-  }
-  
-  .library-section ul li a:hover {
-    text-decoration: underline;
-  }
-  
-  .library-resources {
-    margin-bottom: 20px;
-  }
-  
-  .library-resources h2 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
-  
-  .library-resources ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .library-resources ul li {
-    padding: 10px;
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-  }
-  
-  .library-resources ul li h3 {
-    margin: 0 0 5px 0;
-  }
-  
+.library-section {
+  background-color: #1a202c;
+  color: #edf2f7;
+  padding: 3rem 0;
+}
+
+.library-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.library-section h2, .library-section h3 {
+  font-weight: 600;
+}
+
+.library-section p {
+  font-size: 1.125rem;
+}
+
+.resource-card {
+  background-color: #2d3748;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.resource-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.resource-card h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.resource-card p {
+  color: #a0aec0;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.resource-card a {
+  color: #63b3ed;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.resource-card a:hover {
+  color: #4299e1;
+}
