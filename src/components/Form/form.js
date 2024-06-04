@@ -1,5 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useUserAuth } from "@/app/prototype/_utils/auth-context";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/app/prototype/_utils/firebase";
 
 const steps = [
   {
@@ -43,11 +46,13 @@ const provinces = [
 ];
 
 export default function Form() {
+  const { user } = useUserAuth();
   const {
     register,
     handleSubmit,
     formState: { errors },
     trigger,
+    reset,
   } = useForm({
     mode: "onChange",
   });
@@ -68,12 +73,27 @@ export default function Form() {
 
     if (currentStep < steps.length - 1) {
       if (currentStep === steps.length - 2) {
-        const onSubmit = (data) => {
+        const onSubmit = async (data) => {
+          const success = await addDataToFirestore(data);
           console.log(data);
+          reset();
         };
         await handleSubmit(onSubmit)();
       }
       setCurrentStep((step) => step + 1);
+    }
+  };
+
+  const addDataToFirestore = async (data) => {
+    try {
+      await setDoc(doc(db, "users", user.uid), {
+        ...data,
+        userId: user.uid,
+      });
+      return true;
+    } catch (error) {
+      console.error("Error " + error);
+      return false;
     }
   };
 
