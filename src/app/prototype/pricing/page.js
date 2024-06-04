@@ -17,8 +17,8 @@ const Pricing = () => {
           Fair and Transparent Pricing
         </h2>
         <p className="text-lg mb-12">
-          Whether you're starting a new business or already running one, we've
-          got you covered.
+          Whether you&apos;re starting a new business or already running one,
+          we&apos;ve got you covered.
         </p>
         <div className="flex flex-col md:flex-row justify-center space-y-8 md:space-y-0 md:space-x-8">
           <div className="plan bg-gray-800 p-8 rounded-lg shadow-lg w-full md:w-1/3">
@@ -94,3 +94,6 @@ const Pricing = () => {
 };
 
 export default Pricing;
+
+//https://nextjs.org/docs/pages/api-reference/functions/use-router
+//https://www.freecodecamp.org/news/html-button-onclick-javascript-click-event-tutorial/
