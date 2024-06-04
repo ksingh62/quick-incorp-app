@@ -6,17 +6,17 @@ const resources = [
   {
     title: 'How to Incorporate Your Business',
     description: 'A comprehensive guide on the steps to incorporate your business in Canada.',
-    link: '/',
+    link: 'https://www.ownr.co/blog/guide-to-business-incorporation-in-canada/',
   },
   {
-    title: 'Managing Your Business Finances',
-    description: 'Tips and tools for effective financial management of your business.',
-    link: '/',
+    title: 'Managing Your Business',
+    description: 'Tips and tools for effective management of your business.',
+    link: 'https://www.ownr.co/blog/category/ownrship-101/business-stages/managing-your-business/',
   },
   {
     title: 'Legal Requirements for Startups',
     description: 'Understanding the legal requirements and obligations for new businesses.',
-    link: '/',
+    link: 'https://www.freshbooks.com/en-ca/hub/startup/starting-small-business-legal-requirements-in-canada',
   },
 ];
 
@@ -50,3 +50,7 @@ const Library = () => {
 };
 
 export default Library;
+
+//https://www.ownr.co/blog/guide-to-business-incorporation-in-canada/ 
+//https://www.ownr.co/blog/category/ownrship-101/business-stages/managing-your-business/ 
+//https://www.freshbooks.com/en-ca/hub/startup/starting-small-business-legal-requirements-in-canada 
