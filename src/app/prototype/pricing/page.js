@@ -94,3 +94,6 @@ const Pricing = () => {
 };
 
 export default Pricing;
+
+//https://nextjs.org/docs/pages/api-reference/functions/use-router
+//https://www.freecodecamp.org/news/html-button-onclick-javascript-click-event-tutorial/
