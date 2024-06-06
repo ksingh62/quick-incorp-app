@@ -3,7 +3,7 @@ import mg from 'nodemailer-mailgun-transport';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    const { firstName, lastName, email, country, state, city, street, zip } = req.body;
+    const { firstName, lastName, phoneNumber, corporationName, corpType, corpProvince, address, city, province, postalCode } = req.body;
 
     const auth = {
       auth: {
@@ -23,14 +23,18 @@ export default async function handler(req, res) {
       Personal Information:
       First Name: ${firstName}
       Last Name: ${lastName}
-      Email: ${email}
+      Phone Number: ${phoneNumber}
 
-      Address:
-      Country: ${country}
-      State: ${state}
+      Corporation Details:
+      Corporation Name: ${corporationName}
+      Corporation Type: ${corpType}
+      Corporation Province: ${corpProvince}
+
+      Business Address:
+      Address: ${address}
       City: ${city}
-      Street: ${street}
-      ZIP/Postal Code: ${zip}
+      Province: ${province}
+      Postal Code: ${postalCode}
       `,
     };
 
