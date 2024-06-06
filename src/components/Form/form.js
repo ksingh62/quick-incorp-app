@@ -21,13 +21,13 @@ const steps = [
     name: "Business Address",
     fields: ["address", "city", "province", "postalCode"],
   },
-  {
-    id: "Step 4",
-    name: "Plans",
-    fields: [],
-  },
-  { id: "Step 5", name: "Payment", fields: [] },
-  { id: "Step 6", name: "Complete", fields: [] },
+  // {
+  //   id: "Step 4",
+  //   name: "Plans",
+  //   fields: [],
+  // },
+  // { id: "Step 5", name: "Payment", fields: [] },
+  { id: "Step 4", name: "Complete", fields: [] },
 ];
 
 const provinces = [
@@ -529,9 +529,9 @@ export default function Form() {
           </>
         )}
 
-        {currentStep === 3 && <p>Plans</p>}
-        {currentStep === 4 && <p>Payment</p>}
-        {currentStep === 5 && (
+        {/* {currentStep === 3 && <p>Plans</p>}
+        {currentStep === 4 && <p>Payment</p>} */}
+        {currentStep === 3 && (
           <div className="flex flex-col items-center">
             <p className="text-xl font-semibold">Thank you for your submission!</p>
             <p className="text-lg">Redirecting to the homepage...</p>
