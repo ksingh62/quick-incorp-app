@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUserAuth } from "@/app/prototype/_utils/auth-context";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/app/prototype/_utils/firebase";
+import { useRouter } from 'next/navigation';
 
 const steps = [
   {
@@ -47,6 +48,7 @@ const provinces = [
 
 export default function Form() {
   const { user } = useUserAuth();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -118,6 +120,15 @@ export default function Form() {
       return false;
     }
   };
+
+  useEffect(() => {
+    if (currentStep === steps.length - 1) {
+      const timer = setTimeout(() => {
+        router.push('/prototype/homepage');
+      }, 3000); // Redirect after 3 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [currentStep, router]);
 
   return (
     <section className="absolute inset-0 flex flex-col justify-between p-24 bg-gray-900 text-gray-100">
@@ -520,7 +531,12 @@ export default function Form() {
 
         {currentStep === 3 && <p>Plans</p>}
         {currentStep === 4 && <p>Payment</p>}
-        {currentStep === 5 && <p>Thank you</p>}
+        {currentStep === 5 && (
+          <div className="flex flex-col items-center">
+            <p className="text-xl font-semibold">Thank you for your submission!</p>
+            <p className="text-lg">Redirecting to the homepage...</p>
+          </div>
+        )}
       </form>
 
       {/* Navigation */}
