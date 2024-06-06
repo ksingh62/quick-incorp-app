@@ -45,12 +45,14 @@ const Profile = () => {
       <div className="mt-4">
         <p><strong>First Name:</strong> {userData.firstName}</p>
         <p><strong>Last Name:</strong> {userData.lastName}</p>
-        <p><strong>Email:</strong> {userData.email}</p>
-        <p><strong>Country:</strong> {userData.country}</p>
-        <p><strong>State:</strong> {userData.state}</p>
+        <p><strong>Phone Number:</strong> {userData.phoneNumber}</p>
+        <p><strong>Corporation Name:</strong> {userData.corporationName}</p>
+        <p><strong>Corporation Type:</strong> {userData.corpType}</p>
+        <p><strong>Corporation Province:</strong> {userData.corpProvince}</p>
+        <p><strong>Address:</strong> {userData.address}</p>
         <p><strong>City:</strong> {userData.city}</p>
-        <p><strong>Street:</strong> {userData.street}</p>
-        <p><strong>ZIP/Postal Code:</strong> {userData.zip}</p>
+        <p><strong>Province:</strong> {userData.province}</p>
+        <p><strong>ZIP/Postal Code:</strong> {userData.postalCode}</p>
       </div>
     </section>
   );
