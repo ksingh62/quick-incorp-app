@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { db } from "@/app/prototype/_utils/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useUserAuth } from "@/app/prototype/_utils/auth-context"; // Use the correct import path
+import Layout from "@/components/Layout";
 
 const Profile = () => {
   const { user } = useUserAuth();
@@ -40,6 +41,7 @@ const Profile = () => {
   }
 
   return (
+    <Layout>
     <section className="p-6 bg-gray-900 text-gray-100 min-h-screen">
       <h2 className="text-2xl font-semibold">Profile</h2>
       <div className="mt-4">
@@ -55,6 +57,7 @@ const Profile = () => {
         <p><strong>ZIP/Postal Code:</strong> {userData.postalCode}</p>
       </div>
     </section>
+    </Layout>
   );
 };
 

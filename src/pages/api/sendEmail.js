@@ -53,7 +53,7 @@ export default async function handler(req, res) {
 
     const mailOptionsLawyer = {
       from: 'no-reply@yourdomain.com',  // Replace with your Mailgun verified sender email
-      to: 'kapilmeetbaath@gmail.com',
+      to: 'quickincorp51@gmail.com',
       subject: `New Business Registration - Application ID: ${applicationId}`,
       html: emailTemplate(
         'New Business Registration',

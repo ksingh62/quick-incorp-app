@@ -75,7 +75,7 @@ export default function Page() {
                 finance, healthcare, and manufacturing.
               </p>
             </div>
-            <Link href={`https://calendly.com/`} target="_blank" className="bg-sky-500 w-1/2 ml-28 p-2 rounded-xl text-center">Book session on Calendly</Link>
+            <Link href={`https://calendly.com/quickincorp51/30min`} target="_blank" className="bg-sky-500 w-1/2 ml-28 p-2 rounded-xl text-center">Book session on Calendly</Link>
           </div>
         </section>
       </div>
