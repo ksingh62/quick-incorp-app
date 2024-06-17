@@ -1,19 +1,8 @@
-import { DataGrid } from "@mui/x-data-grid";
-import { mockDataTeam } from "./mockData";
-
 export default function Page() {
-  const columns = [
-    { field: "id", headerName: "ID" },
-    { field: "name", headerName: "Name" },
-    { field: "email", headerName: "Email" },
-    { field: "age", headerName: "Age" },
-    { field: "phone", headerName: "Phone Number" },
-  ];
 
   return (
     <>
-      <h1>Team</h1>
-      <DataGrid rows={mockDataTeam} columns={columns} />
+    Dashboard Home
     </>
   );
 }
