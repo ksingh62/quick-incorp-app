@@ -48,12 +48,13 @@ export default function UpdateUserModal({
                             Employee ID
                             <input
                                 className="outline outline-blue-400"
-                                type="text"
+                                type="number"
                                 {...register("eid", {
                                     required: {
                                         value: "true",
                                         message: "Employee Id is required",
                                     },
+                                    valueAsNumber: true,
                                     disabled: true,
                                 })}
                             />
@@ -83,12 +84,13 @@ export default function UpdateUserModal({
                             Age
                             <input
                                 className="outline outline-blue-400"
-                                type="text"
+                                type="number"
                                 {...register("age", {
                                     required: {
                                         value: "true",
                                         message: "Age is required",
                                     },
+                                    valueAsNumber: true
                                 })}
                             />
                             <p className="text-red-600">{errors.age?.message}</p>

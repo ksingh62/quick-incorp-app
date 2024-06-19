@@ -31,11 +31,11 @@ export default function Page() {
   }, [getEmployees, noOfUsersAdded]);
 
   const columns = [
-    { field: "eid", headerName: "Employee Id", headerClassName: "bg-purple-900" },
-    { field: "name", headerName: "Name", headerClassName: "bg-purple-900" },
-    { field: "age", headerName: "Age", headerClassName: "bg-purple-900" },
-    { field: "email", headerName: "Email", headerClassName: "bg-purple-900" },
-    { field: "p_number", headerName: "Phone Number", headerClassName: "bg-purple-900" },
+    { field: "eid", headerName: "Employee Id", headerClassName: "bg-purple-900", flex: 1 },
+    { field: "name", headerName: "Name", headerClassName: "bg-purple-900", flex: 1 },
+    { field: "age", headerName: "Age", headerClassName: "bg-purple-900", flex: 1 },
+    { field: "email", headerName: "Email", headerClassName: "bg-purple-900", flex: 1 },
+    { field: "p_number", headerName: "Phone Number", headerClassName: "bg-purple-900", flex: 1 },
     {
       field: "deleteUser",
       headerName: "Delete User",
@@ -71,7 +71,9 @@ export default function Page() {
   return (
     <>
       <h1>Team</h1>
-      <DataGrid rows={employees} columns={columns} sx={{ color: "white" }} />
+      <div className="text-white">
+        <DataGrid rows={employees} columns={columns} sx={{ color: "white" }} />
+      </div>
       <button onClick={() => setShowAddUserModal(!showAddUserModal)}>
         Add Employee
       </button>

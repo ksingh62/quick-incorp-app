@@ -5,7 +5,7 @@ export default function AddUserModal({
     addEmployee,
 }) {
     const onSubmit = async (data) => {
-        await addEmployee(data);
+        await addEmployee({ ...data });
         reset();
         setShowModal((modalVisibility) => !modalVisibility);
     };
@@ -30,12 +30,13 @@ export default function AddUserModal({
                             Employee ID
                             <input
                                 className="outline outline-blue-400"
-                                type="text"
+                                type="number"
                                 {...register("eid", {
                                     required: {
                                         value: "true",
                                         message: "Employee Id is required",
                                     },
+                                    valueAsNumber: true
                                 })}
                             />
                             <p className="text-red-600">{errors.eid?.message}</p>
@@ -64,12 +65,13 @@ export default function AddUserModal({
                             Age
                             <input
                                 className="outline outline-blue-400"
-                                type="text"
+                                type="number"
                                 {...register("age", {
                                     required: {
                                         value: "true",
                                         message: "Age is required",
                                     },
+                                    valueAsNumber: true
                                 })}
                             />
                             <p className="text-red-600">{errors.age?.message}</p>
