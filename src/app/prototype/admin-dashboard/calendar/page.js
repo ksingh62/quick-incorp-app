@@ -12,14 +12,9 @@ import {
     ListItem,
     ListItemText,
     Typography,
-    useTheme,
 } from "@mui/material";
-// import Header from "../../components/Header";
-// import { tokens } from "../../theme";
 
 const Calendar = () => {
-    // const theme = useTheme();
-    // const colors = tokens(theme.palette.mode);
     const [currentEvents, setCurrentEvents] = useState([]);
 
     const handleDateClick = (selected) => {
@@ -80,10 +75,6 @@ const Calendar = () => {
                                                 month: "short",
                                                 day: "numeric",
                                             })}
-                                            {/* {
-                                                
-                                                moment(event.start, 'DD.MM.YYYY').format('YYYY-MM-DD')
-                                            } */}
                                         </Typography>
                                     }
                                 />
