@@ -9,20 +9,14 @@
   --input-bg-dark: #444;
 }
 
-body.light {
+.settings-container.light {
   background-color: var(--background-light);
   color: var(--color-light);
 }
 
-body.dark {
+.settings-container.dark {
   background-color: var(--background-dark);
   color: var(--color-dark);
-}
-
-.settings-container {
-  max-width: 800px;
-  padding: 20px;
-  background-color: inherit;
 }
 
 .settings-section {
@@ -32,16 +26,16 @@ body.dark {
   border-radius: 8px;
 }
 
-body.dark .settings-section {
+.settings-container.dark .settings-section {
   background-color: var(--section-bg-dark);
 }
 
 .settings-section h3 {
-  color: inherit;
+  color: var(--color-light);
 }
 
-body.dark .settings-section h3 {
-  color: inherit;
+.settings-container.dark .settings-section h3 {
+  color: var(--color-dark);
 }
 
 .settings-option input {
@@ -49,7 +43,11 @@ body.dark .settings-section h3 {
 }
 
 .settings-option span {
-  color: inherit;
+  color: var(--color-light);
+}
+
+.settings-container.dark .settings-option span {
+  color: var(--color-dark);
 }
 
 select {
@@ -61,7 +59,7 @@ select {
   width: 100%;
 }
 
-body.dark select {
+.settings-container.dark select {
   background-color: var(--input-bg-dark);
   color: var(--color-dark);
 }
@@ -71,7 +69,7 @@ select option {
   color: var(--color-light);
 }
 
-body.dark select option {
+.settings-container.dark select option {
   background-color: var(--input-bg-dark);
   color: var(--color-dark);
 }

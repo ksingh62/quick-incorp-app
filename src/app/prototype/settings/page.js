@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import "./settings.css";
-import "./global.css";
 import Layout from "@/components/Layout";
 import { FaMoon, FaSun, FaBell, FaEnvelope, FaMobileAlt } from "react-icons/fa";
 
@@ -12,13 +11,11 @@ const Settings = () => {
   useEffect(() => {
     const storedDarkMode = localStorage.getItem("darkMode") === "true";
     setDarkMode(storedDarkMode);
-    document.documentElement.classList.toggle("dark", storedDarkMode);
   }, []);
 
   const handleDarkModeToggle = () => {
     setDarkMode(!darkMode);
     localStorage.setItem("darkMode", !darkMode);
-    document.documentElement.classList.toggle("dark", !darkMode);
   };
 
   const handleNotificationChange = (event) => {
@@ -28,7 +25,9 @@ const Settings = () => {
 
   return (
     <Layout>
-      <div className="settings-container mx-auto">
+      <div
+        className={`settings-container mx-auto ${darkMode ? "dark" : "light"}`}
+      >
         <h2 className="text-4xl font-semibold mb-6">Settings</h2>
 
         <div className="settings-section">
