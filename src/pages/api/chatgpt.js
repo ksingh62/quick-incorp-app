@@ -1,5 +1,5 @@
-// pages/api/chatgpt.js
 import axios from "axios";
+import knowledgeBase from "@/components/Chatbot/data/knowledgeBase";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
@@ -7,7 +7,18 @@ export default async function handler(req, res) {
 
     const customContext = `
       You are a chatbot for QuickIncorp. QuickIncorp helps users register their businesses in Canada. 
-      You provide assistance with business registration, legal advice, and other related services.`;
+      You provide assistance with business registration, legal advice, and other related services.
+      
+      Here are some frequently asked questions and their answers:
+      ${knowledgeBase
+        .map((faq) => `Q: ${faq.question}\nA: ${faq.answer}`)
+        .join("\n\n")}
+    `;
+
+    const filterContext = `
+      You should only answer questions related to the QuickIncorp app, business registration, and running a business in Canada.
+      If the question is not related to these topics, respond with: "I'm sorry, I can only assist with questions related to QuickIncorp and business registration in Canada."
+    `;
 
     try {
       console.log("Received message:", message);
@@ -18,7 +29,7 @@ export default async function handler(req, res) {
         {
           model: "gpt-3.5-turbo",
           messages: [
-            { role: "system", content: customContext },
+            { role: "system", content: customContext + filterContext },
             { role: "user", content: message },
           ],
         },
@@ -37,12 +48,10 @@ export default async function handler(req, res) {
         "Error calling OpenAI API:",
         error.response ? error.response.data : error.message
       );
-      res
-        .status(500)
-        .json({
-          error: "Error calling OpenAI API",
-          details: error.response ? error.response.data : error.message,
-        });
+      res.status(500).json({
+        error: "Error calling OpenAI API",
+        details: error.response ? error.response.data : error.message,
+      });
     }
   } else {
     res.status(405).json({ error: "Method not allowed" });
