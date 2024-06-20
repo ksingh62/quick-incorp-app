@@ -15,22 +15,22 @@ export default function Sidebar() {
         <div className="sidebar-options">
           <div className="sidebar-option ">
             <img src="/icon-board.svg" alt="" />
-            <Link href='/prototype/form'>Register a Company</Link>
+            <Link href="/prototype/form">Register a Company</Link>
           </div>
 
           <div className="sidebar-option active-sidebar-option">
             <img src="/icon-board.svg" alt="" />
-            <Link href='/prototype/homepage'>Book a Session with advisor</Link>
+            <Link href="/prototype/homepage">Book a Session with advisor</Link>
           </div>
 
           <div className="sidebar-option">
             <img src="/icon-board.svg" alt="" />
-            <Link href='/prototype/tax'>Tax Management</Link>
+            <Link href="/prototype/tax">Tax Management</Link>
           </div>
 
           <div className="sidebar-option">
             <img src="/icon-board.svg" alt="" />
-            <Link href='/prototype/inbox'>Inbox</Link>
+            <Link href="/prototype/inbox">Inbox</Link>
           </div>
         </div>
       </div>
@@ -38,7 +38,7 @@ export default function Sidebar() {
         <div className="sidebar-help-container">
           <div className="sidebar-option">
             <img src="/icon-board.svg" alt="" />
-            <p>Help & Support</p>
+            <Link href="/prototype/support">Help & Support</Link>
           </div>
 
           <div className="sidebar-option">
