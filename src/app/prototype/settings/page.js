@@ -271,3 +271,7 @@ const Settings = () => {
 };
 
 export default Settings;
+
+//https://www.youtube.com/watch?v=JNA1VXuyIyc
+//https://stackoverflow.com/questions/58542649/can-i-toggle-dark-mode-using-javascript
+//https://www.youtube.com/watch?v=bSQ-QD1Iqi0
