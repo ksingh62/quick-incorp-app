@@ -1,14 +1,15 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUserAuth } from "@/app/prototype/_utils/auth-context";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/app/prototype/_utils/firebase";
+import { useRouter } from 'next/navigation';
 
 const steps = [
   {
     id: "Step 1",
     name: "Personal Details",
-    fields: ["firstName", "lastName", "phoneNumber"],
+    fields: ["firstName", "lastName", "email", "phoneNumber"],
   },
   {
     id: "Step 2",
@@ -20,13 +21,13 @@ const steps = [
     name: "Business Address",
     fields: ["address", "city", "province", "postalCode"],
   },
-  {
-    id: "Step 4",
-    name: "Plans",
-    fields: [],
-  },
-  { id: "Step 5", name: "Payment", fields: [] },
-  { id: "Step 6", name: "Complete", fields: [] },
+  // {
+  //   id: "Step 4",
+  //   name: "Plans",
+  //   fields: [],
+  // },
+  // { id: "Step 5", name: "Payment", fields: [] },
+  { id: "Step 4", name: "Complete", fields: [] },
 ];
 
 const provinces = [
@@ -47,6 +48,7 @@ const provinces = [
 
 export default function Form() {
   const { user } = useUserAuth();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -58,6 +60,27 @@ export default function Form() {
   });
 
   const [currentStep, setCurrentStep] = useState(0);
+
+  const sendEmail = async (data) => {
+    try {
+      const response = await fetch('/api/sendEmail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      const responseData = await response.json();
+      console.log('Email sent successfully:', responseData);
+    } catch (error) {
+      console.error('Error sending email:', error.message);
+    }
+  };
 
   const prev = () => {
     if (currentStep > 0) {
@@ -75,6 +98,7 @@ export default function Form() {
       if (currentStep === steps.length - 2) {
         const onSubmit = async (data) => {
           const success = await addDataToFirestore(data);
+          await sendEmail(data);
           console.log(data);
           reset();
         };
@@ -96,6 +120,15 @@ export default function Form() {
       return false;
     }
   };
+
+  useEffect(() => {
+    if (currentStep === steps.length - 1) {
+      const timer = setTimeout(() => {
+        router.push('/prototype/homepage');
+      }, 3000); // Redirect after 3 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [currentStep, router]);
 
   return (
     <section className="absolute inset-0 flex flex-col justify-between p-24 bg-gray-900 text-gray-100">
@@ -198,6 +231,39 @@ export default function Form() {
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-3">
                 <label
+                  htmlFor="email"
+                  className="block text-sm font-medium leading-6 text-gray-100"
+                >
+                  Email
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="email"
+                    id="email"
+                    {...register("email", {
+                      required: {
+                        value: "true",
+                        message: "Email is required"
+                      },
+                      pattern: {
+                        value: /^\S+@\S+\.\S+$/,
+                        message: "Please enter a valid email"
+                      }
+                    })}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
+                  />
+                  {errors.email?.message && (
+                    <p className="mt-2 text-sm text-red-400">
+                      {errors.email.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-3">
+                <label
                   htmlFor="phoneNumber"
                   className="block text-sm font-medium leading-6 text-gray-100"
                 >
@@ -207,7 +273,17 @@ export default function Form() {
                   <input
                     type="tel"
                     id="phoneNumber"
-                    {...register("phoneNumber")}
+                    {...register("phoneNumber", {
+                      required: {
+                        value: "true",
+                        message: "Phone number is required"
+                      },
+                      pattern: {
+                        value: /(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
+                        message: "Please enter a valid phone number"
+
+                      }
+                    })}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
                   />
                   {errors.phoneNumber?.message && (
@@ -435,6 +511,10 @@ export default function Form() {
                         value: "true",
                         message: "Postal Code is Required",
                       },
+                      pattern: {
+                        value: /^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i,
+                        message: "Please enter a valid postal code."
+                      }
                     })}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
                   />
@@ -449,9 +529,14 @@ export default function Form() {
           </>
         )}
 
-        {currentStep === 3 && <p>Plans</p>}
-        {currentStep === 4 && <p>Payment</p>}
-        {currentStep === 5 && <p>Thank you</p>}
+        {/* {currentStep === 3 && <p>Plans</p>}
+        {currentStep === 4 && <p>Payment</p>} */}
+        {currentStep === 3 && (
+          <div className="flex flex-col items-center">
+            <p className="text-xl font-semibold">Thank you for your submission!</p>
+            <p className="text-lg">Redirecting to the homepage...</p>
+          </div>
+        )}
       </form>
 
       {/* Navigation */}
@@ -506,22 +591,5 @@ export default function Form() {
 }
 
 /* 
-Personal Details
--First Name
--Last Name
--Phone Number
-
-Corporation Details
--Name of Corporation
--Choose your type of incorporation
--Choose your province
-
-Business Address
--Address
--City
--Province
--Postal Code
-
-Plans
-Payment
+https://github.com/warsylewicz/webdev2-demos/blob/100cc0edb5c7a22c3533f79d2ead165db1bd6ab2/app/week-10/_services/blog-service.js
 */
