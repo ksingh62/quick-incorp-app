@@ -1,5 +1,3 @@
-
-
 .about-section {
   background-color: #1a202c;
   color: #edf2f7;
@@ -17,19 +15,6 @@
 
 .about-section p {
   font-size: 1.125rem;
-}
-
-.mission-vision {
-  margin-bottom: 3rem;
-  text-align: center;
-}
-
-.mission-vision h3 {
-  margin-bottom: 1rem;
-}
-
-.mission-vision p {
-  margin-bottom: 1.5rem;
 }
 
 .team {
@@ -104,4 +89,3 @@
 .more-info-btn.hidden {
   display: none;
 }
-
