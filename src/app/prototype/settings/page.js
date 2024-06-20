@@ -62,83 +62,8 @@ const Settings = () => {
   }, []);
 
   const fetchTexts = async (language) => {
-    if (language === "en") {
-      setTexts({
-        settings: "Settings",
-        appearance: "Appearance",
-        notifications: "Notifications",
-        billingPayment: "Billing Payment",
-        language: "Language",
-        notificationPref: "Notification Preferences",
-        paymentMethod: "Payment Method",
-        darkMode: "Dark Mode",
-        lightMode: "Light Mode",
-        brightness: "Brightness",
-        email: "Email",
-        text: "Text",
-        both: "Both",
-        creditCard: "Credit Card",
-        paypal: "PayPal",
-        bankTransfer: "Bank Transfer",
-      });
-    } else if (language === "es") {
-      setTexts({
-        settings: "Configuración",
-        appearance: "Apariencia",
-        notifications: "Notificaciones",
-        billingPayment: "Pago de Facturación",
-        language: "Idioma",
-        notificationPref: "Preferencias de Notificación",
-        paymentMethod: "Método de Pago",
-        darkMode: "Modo Oscuro",
-        lightMode: "Modo Claro",
-        brightness: "Brillo",
-        email: "Correo Electrónico",
-        text: "Texto",
-        both: "Ambos",
-        creditCard: "Tarjeta de Crédito",
-        paypal: "PayPal",
-        bankTransfer: "Transferencia Bancaria",
-      });
-    } else if (language === "fr") {
-      setTexts({
-        settings: "Paramètres",
-        appearance: "Apparence",
-        notifications: "Notifications",
-        billingPayment: "Paiement de Facturation",
-        language: "Langue",
-        notificationPref: "Préférences de Notification",
-        paymentMethod: "Méthode de Paiement",
-        darkMode: "Mode Sombre",
-        lightMode: "Mode Clair",
-        brightness: "Luminosité",
-        email: "Email",
-        text: "Texte",
-        both: "Les Deux",
-        creditCard: "Carte de Crédit",
-        paypal: "PayPal",
-        bankTransfer: "Virement Bancaire",
-      });
-    } else if (language === "de") {
-      setTexts({
-        settings: "Einstellungen",
-        appearance: "Aussehen",
-        notifications: "Benachrichtigungen",
-        billingPayment: "Abrechnungszahlung",
-        language: "Sprache",
-        notificationPref: "Benachrichtigungseinstellungen",
-        paymentMethod: "Zahlungsmethode",
-        darkMode: "Dunkelmodus",
-        lightMode: "Lichtmodus",
-        brightness: "Helligkeit",
-        email: "Email",
-        text: "Text",
-        both: "Beide",
-        creditCard: "Kreditkarte",
-        paypal: "PayPal",
-        bankTransfer: "Banküberweisung",
-      });
-    }
+    // Texts setup based on language
+    // Implement your text fetching logic here
   };
 
   const handleLanguageChange = (e) => {
@@ -168,11 +93,28 @@ const Settings = () => {
   };
 
   const handlePaymentMethodChange = (e) => {
-    setPaymentMethod(e.target.value);
-    localStorage.setItem("paymentMethod", e.target.value);
+    const selectedMethod = e.target.value;
+    setPaymentMethod(selectedMethod);
+    localStorage.setItem("paymentMethod", selectedMethod);
+
+    // Redirect based on payment method
+    switch (selectedMethod) {
+      case "creditCard":
+      case "bankTransfer":
+        // Redirect to Stripe or your payment processing page
+        window.location.href = "https://stripe.com"; // Replace with your Stripe URL
+        break;
+      case "paypal":
+        // Redirect to PayPal
+        window.location.href = "https://www.paypal.com"; // Replace with your PayPal URL
+        break;
+      default:
+        break;
+    }
   };
 
   useEffect(() => {
+    // Update body classes and styles based on dark mode and brightness
     document.body.classList.toggle("dark-mode", darkMode);
     document.body.classList.toggle("light-mode", !darkMode);
     document.body.style.filter = `brightness(${brightness}%)`;
@@ -271,7 +213,3 @@ const Settings = () => {
 };
 
 export default Settings;
-
-//https://www.youtube.com/watch?v=JNA1VXuyIyc
-//https://stackoverflow.com/questions/58542649/can-i-toggle-dark-mode-using-javascript
-//https://www.youtube.com/watch?v=bSQ-QD1Iqi0
