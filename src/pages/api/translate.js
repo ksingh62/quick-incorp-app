@@ -1,4 +1,3 @@
-"use client";
 export default function handler(req, res) {
   const { language } = req.query;
 

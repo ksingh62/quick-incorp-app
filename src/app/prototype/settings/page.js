@@ -25,7 +25,6 @@ const Settings = () => {
     { code: "es", name: "Spanish" },
     { code: "fr", name: "French" },
     { code: "de", name: "German" },
-    // we can add more languages if needed
   ]);
   const [texts, setTexts] = useState({
     settings: "Settings",
@@ -62,15 +61,14 @@ const Settings = () => {
 
   const fetchTexts = async (lang) => {
     try {
-      const response = await fetch(`/api/translate?language=${lang}`); // Fetch from API endpoint
+      const response = await fetch(`/api/translate?language=${lang}`);
       if (!response.ok) {
         throw new Error("Failed to fetch language texts");
       }
       const data = await response.json();
-      setTexts(data); // Update texts state with fetched data
+      setTexts(data);
     } catch (error) {
       console.error("Error fetching language texts:", error);
-      // Handle error fetching texts
     }
   };
 
@@ -104,15 +102,12 @@ const Settings = () => {
     setPaymentMethod(selectedMethod);
     localStorage.setItem("paymentMethod", selectedMethod);
 
-    // Redirect based on payment method
     switch (selectedMethod) {
       case "creditCard":
       case "bankTransfer":
-        // Redirect to Stripe or your payment processing page
-        window.location.href = "https://stripe.com"; // Replace with your Stripe URL
+        window.location.href = "https://stripe.com";
         break;
       case "paypal":
-        // Redirect to PayPal
         window.location.href = "https://www.paypal.com";
         break;
       default:
@@ -151,9 +146,7 @@ const Settings = () => {
               }`}
             ></span>
           </label>
-          <label className="block mb-2 text-lg">
-            {texts.brightness}Brightness
-          </label>
+          <label className="block mb-2 text-lg">Brightness</label>
           <input
             type="range"
             min="1"
@@ -220,7 +213,3 @@ const Settings = () => {
 };
 
 export default Settings;
-//https://www.youtube.com/watch?v=JNA1VXuyIyc
-//https://stackoverflow.com/questions/58542649/can-i-toggle-dark-mode-using-javascript
-//https://www.youtube.com/watch?v=bSQ-QD1Iqi0
-//https://sebhastian.com/handlechange-react/

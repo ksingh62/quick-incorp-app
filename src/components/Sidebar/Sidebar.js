@@ -20,7 +20,7 @@ export default function Sidebar() {
 
           <div className="sidebar-option active-sidebar-option">
             <img src="/icon-board.svg" alt="" />
-            <Link href="/prototype/settings">Settings</Link>
+            <Link href="/prototype/settings">Book a Session with advisor</Link>
           </div>
 
           <div className="sidebar-option">
