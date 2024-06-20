@@ -16,6 +16,7 @@ import {
 
 const Settings = () => {
   const [darkMode, setDarkMode] = useState(false);
+  const [brightness, setBrightness] = useState(100);
   const [notificationPref, setNotificationPref] = useState("email");
   const [paymentMethod, setPaymentMethod] = useState("creditCard");
   const [language, setLanguage] = useState("en");
@@ -36,6 +37,7 @@ const Settings = () => {
     paymentMethod: "Payment Method",
     darkMode: "Dark Mode",
     lightMode: "Light Mode",
+    brightness: "Brightness",
     email: "Email",
     text: "Text",
     both: "Both",
@@ -47,6 +49,8 @@ const Settings = () => {
   useEffect(() => {
     const storedDarkMode = localStorage.getItem("darkMode") === "true";
     setDarkMode(storedDarkMode);
+    const storedBrightness = localStorage.getItem("brightness") || 100;
+    setBrightness(storedBrightness);
     const storedNotificationPref =
       localStorage.getItem("notificationPref") || "email";
     setNotificationPref(storedNotificationPref);
@@ -69,6 +73,7 @@ const Settings = () => {
         paymentMethod: "Payment Method",
         darkMode: "Dark Mode",
         lightMode: "Light Mode",
+        brightness: "Brightness",
         email: "Email",
         text: "Text",
         both: "Both",
@@ -87,6 +92,7 @@ const Settings = () => {
         paymentMethod: "Método de Pago",
         darkMode: "Modo Oscuro",
         lightMode: "Modo Claro",
+        brightness: "Brillo",
         email: "Correo Electrónico",
         text: "Texto",
         both: "Ambos",
@@ -105,6 +111,7 @@ const Settings = () => {
         paymentMethod: "Méthode de Paiement",
         darkMode: "Mode Sombre",
         lightMode: "Mode Clair",
+        brightness: "Luminosité",
         email: "Email",
         text: "Texte",
         both: "Les Deux",
@@ -123,6 +130,7 @@ const Settings = () => {
         paymentMethod: "Zahlungsmethode",
         darkMode: "Dunkelmodus",
         lightMode: "Lichtmodus",
+        brightness: "Helligkeit",
         email: "Email",
         text: "Text",
         both: "Beide",
@@ -147,6 +155,13 @@ const Settings = () => {
     document.body.classList.toggle("light-mode", !newDarkMode);
   };
 
+  const handleBrightnessChange = (e) => {
+    const newBrightness = e.target.value;
+    setBrightness(newBrightness);
+    localStorage.setItem("brightness", newBrightness);
+    document.body.style.filter = `brightness(${newBrightness}%)`;
+  };
+
   const handleNotificationChange = (e) => {
     setNotificationPref(e.target.value);
     localStorage.setItem("notificationPref", e.target.value);
@@ -160,7 +175,8 @@ const Settings = () => {
   useEffect(() => {
     document.body.classList.toggle("dark-mode", darkMode);
     document.body.classList.toggle("light-mode", !darkMode);
-  }, [darkMode]);
+    document.body.style.filter = `brightness(${brightness}%)`;
+  }, [darkMode, brightness]);
 
   return (
     <Layout>
@@ -187,6 +203,15 @@ const Settings = () => {
               }`}
             ></span>
           </label>
+          <label className="block mb-2 text-lg">{texts.brightness}:</label>
+          <input
+            type="range"
+            min="1"
+            max="100"
+            value={brightness}
+            onChange={handleBrightnessChange}
+            className="slider"
+          />
         </div>
 
         <div className="settings-section">
