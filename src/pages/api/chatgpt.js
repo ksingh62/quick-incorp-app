@@ -22,7 +22,7 @@ export default async function handler(req, res) {
 
     try {
       console.log("Received message:", message);
-      console.log("OpenAI API Key:", process.env.OPENAI_API_KEY); // This should log your API key
+      // console.log("OpenAI API Key:", process.env.OPENAI_API_KEY); // This should log your API key
 
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",
@@ -57,3 +57,5 @@ export default async function handler(req, res) {
     res.status(405).json({ error: "Method not allowed" });
   }
 }
+
+// https://platform.openai.com/docs/overview
