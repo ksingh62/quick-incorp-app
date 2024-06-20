@@ -1,17 +1,17 @@
 import { useForm } from "react-hook-form";
 
-export default function UpdateUserModal({
+export default function UpdateInvoiceModal({
     invoiceToUpdate,
     setShowModal,
-    updateEmployee,
+    updateInvoice,
 }) {
     const onSubmit = async (data) => {
         try {
-            await updateEmployee(userToUpdate.current.id, {
-                name: data.name,
-                age: data.age,
-                email: data.email,
-                p_number: data.p_number,
+            const res = await updateInvoice(invoiceToUpdate.current.id, {
+                customerName: data.customerName,
+                date: data.date,
+                amount: data.amount,
+                status: data.status
             });
             reset();
             setShowModal((modalVisibility) => !modalVisibility);
@@ -27,11 +27,11 @@ export default function UpdateUserModal({
         reset,
     } = useForm({
         defaultValues: {
-            eid: userToUpdate.current.eid,
-            name: userToUpdate.current.name,
-            age: userToUpdate.current.age,
-            email: userToUpdate.current.email,
-            p_number: userToUpdate.current.p_number,
+            invoiceId: invoiceToUpdate.current.invoiceId,
+            customerName: invoiceToUpdate.current.customerName,
+            date: invoiceToUpdate.current.date.toLocaleDateString("fr-CA", {year:"numeric", month: "2-digit", day:"2-digit"}),
+            amount: invoiceToUpdate.current.amount,
+            status: invoiceToUpdate.current.status
         },
     });
 
@@ -43,100 +43,87 @@ export default function UpdateUserModal({
             ></div>
             <div className="fixed inset-40 p-10 bg-white">
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="py-2">
-                        <label className="text-black">
-                            Employee ID
-                            <input
-                                className="outline outline-blue-400"
-                                type="number"
-                                {...register("eid", {
-                                    required: {
-                                        value: "true",
-                                        message: "Employee Id is required",
-                                    },
-                                    valueAsNumber: true,
-                                    disabled: true,
-                                })}
-                            />
-                            <p className="text-red-600">{errors.eid?.message}</p>
-                        </label>
-                    </div>
 
                     <div className="py-2">
                         <label className="text-black">
-                            Name
+                            Invoice ID
                             <input
                                 className="outline outline-blue-400"
                                 type="text"
-                                {...register("name", {
+                                {...register("invoiceId", {
                                     required: {
                                         value: "true",
-                                        message: "Name is required",
+                                        message: "Invoice Id is required",
                                     },
+                                    disabled: true
                                 })}
                             />
-                            <p className="text-red-600">{errors.name?.message}</p>
+                            <p className="text-red-600">{errors.invoiceId?.message}</p>
                         </label>
                     </div>
 
                     <div className="py-2">
                         <label className="text-black">
-                            Age
+                            Customer Name
+                            <input
+                                className="outline outline-blue-400"
+                                type="text"
+                                {...register("customerName", {
+                                    required: {
+                                        value: "true",
+                                        message: "Customer name is required",
+                                    },
+                                })}
+                            />
+                            <p className="text-red-600">{errors.customerName?.message}</p>
+                        </label>
+                    </div>
+
+                    <div className="py-2">
+                        <label className="text-black">
+                            Date
+                            <input
+                                className="outline outline-blue-400"
+                                type="text"
+                                {...register("date", {
+                                    required: {
+                                        value: "true",
+                                        message: "Date is required",
+                                    },
+                                })}
+                            />
+                            <p className="text-red-600">{errors.date?.message}</p>
+                        </label>
+                    </div>
+
+                    <div className="py-2">
+                        <label className="text-black">
+                            Amount
                             <input
                                 className="outline outline-blue-400"
                                 type="number"
-                                {...register("age", {
+                                {...register("amount", {
                                     required: {
                                         value: "true",
-                                        message: "Age is required",
+                                        message: "Amount is required",
                                     },
                                     valueAsNumber: true
                                 })}
                             />
-                            <p className="text-red-600">{errors.age?.message}</p>
+                            <p className="text-red-600">{errors.amount?.message}</p>
                         </label>
                     </div>
 
                     <div className="py-2">
                         <label className="text-black">
-                            Email
-                            <input
-                                className="outline outline-blue-400"
-                                type="text"
-                                {...register("email", {
-                                    required: {
-                                        value: "true",
-                                        message: "Email is required",
-                                    },
-                                    pattern: {
-                                        value: /^\S+@\S+\.\S+$/,
-                                        message: "Please enter a valid email",
-                                    },
-                                })}
-                            />
-                            <p className="text-red-600">{errors.email?.message}</p>
-                        </label>
-                    </div>
-
-                    <div className="py-2">
-                        <label className="text-black">
-                            Phone Number
-                            <input
-                                className="outline outline-blue-400"
-                                type="text"
-                                {...register("p_number", {
-                                    required: {
-                                        value: "true",
-                                        message: "Phone Number is required",
-                                    },
-                                    pattern: {
-                                        value:
-                                            /(\+\d{1,2}\s?)?1?-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
-                                        message: "Please enter a valid phone number",
-                                    },
-                                })}
-                            />
-                            <p className="text-red-600">{errors.phoneNumber?.message}</p>
+                            Status
+                            <select {...register("status", { required: { value: "true", message: "Status is required" } })}>
+                                <option value=""></option>
+                                <option value="overdue">Overdue</option>
+                                <option value="pending">Pending</option>
+                                <option value="paid">Paid</option>
+                            </select>
+                            <p className="text-red-600">{errors.status?.message}</p>
                         </label>
                     </div>
                     <button className="text-black border border-black" type="submit">Submit</button>

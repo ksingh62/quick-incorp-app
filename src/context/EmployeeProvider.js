@@ -47,7 +47,7 @@ export function EmployeeProvider({children}) {
   const updateEmployee = async (employeeDocId, newData) => {
     const employee = doc(memoizedDb, "employees", employeeDocId);
     await updateDoc(employee, newData);
-    setNoOfUsersAdded(noOfUsersAdded - 1);
+    setNoOfUsersAdded(noOfUsersAdded + 1);
   };
 
   return (
