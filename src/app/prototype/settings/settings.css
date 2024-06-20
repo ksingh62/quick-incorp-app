@@ -1,75 +1,46 @@
-:root {
-  --background-light: #f9f9f9;
-  --color-light: #333;
-  --background-dark: #181818;
-  --color-dark: #ddd;
-  --section-bg-light: #f0f0f0;
-  --section-bg-dark: #282828;
-  --input-bg-light: #fff;
-  --input-bg-dark: #444;
-}
-
-.settings-container.light {
-  background-color: var(--background-light);
-  color: var(--color-light);
-}
-
-.settings-container.dark {
-  background-color: var(--background-dark);
-  color: var(--color-dark);
+.settings-page {
+  padding: 20px;
 }
 
 .settings-section {
-  background-color: var(--section-bg-light);
-  padding: 20px;
   margin-bottom: 20px;
-  border-radius: 8px;
 }
 
-.settings-container.dark .settings-section {
-  background-color: var(--section-bg-dark);
+.toggle-button {
+  width: 40px;
+  height: 20px;
+  background: #ccc;
+  border-radius: 20px;
+  position: relative;
+  transition: background 0.3s;
 }
 
-.settings-section h3 {
-  color: var(--color-light);
+.toggle-button::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s;
 }
 
-.settings-container.dark .settings-section h3 {
-  color: var(--color-dark);
+.toggle-button-dark {
+  background: #333;
 }
 
-.settings-option input {
-  margin-right: 10px;
+.toggle-button-dark::before {
+  transform: translateX(20px);
 }
 
-.settings-option span {
-  color: var(--color-light);
+.dark-mode {
+  background: #222;
+  color: #fff;
 }
 
-.settings-container.dark .settings-option span {
-  color: var(--color-dark);
-}
-
-select {
-  background-color: var(--input-bg-light);
-  color: var(--color-light);
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100%;
-}
-
-.settings-container.dark select {
-  background-color: var(--input-bg-dark);
-  color: var(--color-dark);
-}
-
-select option {
-  background-color: var(--input-bg-light);
-  color: var(--color-light);
-}
-
-.settings-container.dark select option {
-  background-color: var(--input-bg-dark);
-  color: var(--color-dark);
+.light-mode {
+  background: #fff;
+  color: #000;
 }

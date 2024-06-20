@@ -76,107 +76,117 @@ const Settings = () => {
         paypal: "PayPal",
         bankTransfer: "Bank Transfer",
       });
-      return;
-    }
-
-    try {
-      const response = await fetch("/api/translate", {
-        method: "POST",
-        body: JSON.stringify({
-          texts: [
-            "Settings",
-            "Appearance",
-            "Notifications",
-            "Billing Payment",
-            "Language",
-            "Notification Preferences",
-            "Payment Method",
-            "Dark Mode",
-            "Light Mode",
-            "Email",
-            "Text",
-            "Both",
-            "Credit Card",
-            "PayPal",
-            "Bank Transfer",
-          ],
-          targetLanguage: language,
-        }),
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = await response.json();
+    } else if (language === "es") {
       setTexts({
-        settings: data.translations[0],
-        appearance: data.translations[1],
-        notifications: data.translations[2],
-        billingPayment: data.translations[3],
-        language: data.translations[4],
-        notificationPref: data.translations[5],
-        paymentMethod: data.translations[6],
-        darkMode: data.translations[7],
-        lightMode: data.translations[8],
-        email: data.translations[9],
-        text: data.translations[10],
-        both: data.translations[11],
-        creditCard: data.translations[12],
-        paypal: data.translations[13],
-        bankTransfer: data.translations[14],
+        settings: "Configuración",
+        appearance: "Apariencia",
+        notifications: "Notificaciones",
+        billingPayment: "Pago de Facturación",
+        language: "Idioma",
+        notificationPref: "Preferencias de Notificación",
+        paymentMethod: "Método de Pago",
+        darkMode: "Modo Oscuro",
+        lightMode: "Modo Claro",
+        email: "Correo Electrónico",
+        text: "Texto",
+        both: "Ambos",
+        creditCard: "Tarjeta de Crédito",
+        paypal: "PayPal",
+        bankTransfer: "Transferencia Bancaria",
       });
-    } catch (error) {
-      console.error("Error fetching texts:", error);
+    } else if (language === "fr") {
+      setTexts({
+        settings: "Paramètres",
+        appearance: "Apparence",
+        notifications: "Notifications",
+        billingPayment: "Paiement de Facturation",
+        language: "Langue",
+        notificationPref: "Préférences de Notification",
+        paymentMethod: "Méthode de Paiement",
+        darkMode: "Mode Sombre",
+        lightMode: "Mode Clair",
+        email: "Email",
+        text: "Texte",
+        both: "Les Deux",
+        creditCard: "Carte de Crédit",
+        paypal: "PayPal",
+        bankTransfer: "Virement Bancaire",
+      });
+    } else if (language === "de") {
+      setTexts({
+        settings: "Einstellungen",
+        appearance: "Aussehen",
+        notifications: "Benachrichtigungen",
+        billingPayment: "Abrechnungszahlung",
+        language: "Sprache",
+        notificationPref: "Benachrichtigungseinstellungen",
+        paymentMethod: "Zahlungsmethode",
+        darkMode: "Dunkelmodus",
+        lightMode: "Lichtmodus",
+        email: "Email",
+        text: "Text",
+        both: "Beide",
+        creditCard: "Kreditkarte",
+        paypal: "PayPal",
+        bankTransfer: "Banküberweisung",
+      });
     }
   };
 
-  const handleDarkModeToggle = () => {
-    setDarkMode(!darkMode);
-    localStorage.setItem("darkMode", !darkMode);
-  };
-
-  const handleNotificationChange = (event) => {
-    setNotificationPref(event.target.value);
-    localStorage.setItem("notificationPref", event.target.value);
-  };
-
-  const handlePaymentMethodChange = (event) => {
-    const selectedMethod = event.target.value;
-    setPaymentMethod(selectedMethod);
-    localStorage.setItem("paymentMethod", selectedMethod);
-
-    if (selectedMethod === "creditCard") {
-      window.location.href = "https://stripe.com";
-    } else if (selectedMethod === "paypal") {
-      window.location.href = "https://paypal.com";
-    }
-  };
-
-  const handleLanguageChange = (event) => {
-    const selectedLanguage = event.target.value;
+  const handleLanguageChange = (e) => {
+    const selectedLanguage = e.target.value;
     setLanguage(selectedLanguage);
     fetchTexts(selectedLanguage);
   };
 
+  const handleDarkModeChange = () => {
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    localStorage.setItem("darkMode", newDarkMode);
+    document.body.classList.toggle("dark-mode", newDarkMode);
+    document.body.classList.toggle("light-mode", !newDarkMode);
+  };
+
+  const handleNotificationChange = (e) => {
+    setNotificationPref(e.target.value);
+    localStorage.setItem("notificationPref", e.target.value);
+  };
+
+  const handlePaymentMethodChange = (e) => {
+    setPaymentMethod(e.target.value);
+    localStorage.setItem("paymentMethod", e.target.value);
+  };
+
+  useEffect(() => {
+    document.body.classList.toggle("dark-mode", darkMode);
+    document.body.classList.toggle("light-mode", !darkMode);
+  }, [darkMode]);
+
   return (
     <Layout>
-      <div
-        className={`settings-container mx-auto ${darkMode ? "dark" : "light"}`}
-      >
-        <h2 className="text-4xl font-semibold mb-6">{texts.settings}</h2>
+      <div className={`settings-page ${darkMode ? "dark-mode" : "light-mode"}`}>
+        <h2 className="text-3xl font-semibold mb-6">{texts.settings}</h2>
 
         <div className="settings-section">
           <h3 className="text-2xl font-semibold mb-4 flex items-center">
-            <FaSun className="mr-2" /> {texts.appearance}
+            <FaMoon className="mr-2" /> {texts.appearance}
           </h3>
-          <div className="settings-option flex items-center">
+          <label className="flex items-center cursor-pointer mb-4">
+            <span className="mr-2">
+              {darkMode ? texts.darkMode : texts.lightMode}
+            </span>
             <input
               type="checkbox"
               checked={darkMode}
-              onChange={handleDarkModeToggle}
-              className="mr-2"
+              onChange={handleDarkModeChange}
+              className="hidden"
             />
-            <span className="text-lg">
-              {darkMode ? texts.darkMode : texts.lightMode}
-            </span>
-          </div>
+            <span
+              className={`toggle-button ${
+                darkMode ? "toggle-button-dark" : ""
+              }`}
+            ></span>
+          </label>
         </div>
 
         <div className="settings-section">
@@ -222,7 +232,6 @@ const Settings = () => {
             value={language}
             onChange={handleLanguageChange}
             className="p-2 border rounded w-full"
-            size="5"
           >
             {availableLanguages.map((lang) => (
               <option key={lang.code} value={lang.code}>
