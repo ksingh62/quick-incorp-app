@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import "./settings.css";
+import "./global.css";
 import Layout from "@/components/Layout";
 import { FaMoon, FaSun, FaBell, FaEnvelope, FaMobileAlt } from "react-icons/fa";
 
