@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+"use client";
 import Image from "next/image";
 import "./Sidebar.css";
 import Link from "next/link";
@@ -7,20 +7,20 @@ export default function Sidebar() {
   return (
     <div className="sidebar">
       <div className="sidebar-logo-options-container">
-        <Link href={`/prototype/homepage`} className="sidebar-logo-container">
+        <Link href="/prototype/homepage" className="sidebar-logo-container">
           <img src="/logo-mobile.svg" alt="" />
           <p>QuickIncorp</p>
         </Link>
 
         <div className="sidebar-options">
-          <div className="sidebar-option ">
+          <div className="sidebar-option">
             <img src="/icon-board.svg" alt="" />
             <Link href="/prototype/form">Register a Company</Link>
           </div>
 
           <div className="sidebar-option active-sidebar-option">
             <img src="/icon-board.svg" alt="" />
-            <Link href="/prototype/homepage">Book a Session with advisor</Link>
+            <Link href="/prototype/settings">Settings</Link>
           </div>
 
           <div className="sidebar-option">
@@ -42,9 +42,8 @@ export default function Sidebar() {
           </div>
 
           <div className="sidebar-option">
-            <Link href={"/prototype/settings"}></Link>
             <img src="/icon-board.svg" alt="" />
-            <p>Settings</p>
+            <Link href="/prototype/settings">Settings</Link>
           </div>
         </div>
         <div className="hide-container">

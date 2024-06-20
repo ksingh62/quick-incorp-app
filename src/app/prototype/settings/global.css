@@ -1,10 +1,9 @@
 body.light {
-    background-color: var(--background-light);
-    color: var(--color-light);
-  }
-  
-  body.dark {
-    background-color: var(--background-dark);
-    color: var(--color-dark);
-  }
-  
+  background-color: var(--background-light);
+  color: var(--color-light);
+}
+
+body.dark {
+  background-color: var(--background-dark);
+  color: var(--color-dark);
+}

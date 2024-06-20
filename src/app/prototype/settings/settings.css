@@ -61,12 +61,12 @@
 
 .dark-mode select,
 .dark-mode input[type="range"] {
-  background: #555;
+  background: #555; 
   color: #fff; 
   border: 1px solid #666; 
 }
 
 .light-mode {
-  background: #fff; /* Light background */
-  color: #000; /* Black text */
+  background: #fff; 
+  color: #000; 
 }

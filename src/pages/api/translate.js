@@ -1,5 +1,4 @@
-// pages/api/translate.js
-
+"use client";
 export default function handler(req, res) {
   const { language } = req.query;
 
@@ -72,7 +71,6 @@ export default function handler(req, res) {
       paypal: "PayPal",
       bankTransfer: "Banküberweisung",
     },
-    // Add more languages as needed
   };
 
   res.status(200).json(translations[language] || translations.en);

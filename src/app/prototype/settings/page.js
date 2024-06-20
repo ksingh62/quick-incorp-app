@@ -25,7 +25,7 @@ const Settings = () => {
     { code: "es", name: "Spanish" },
     { code: "fr", name: "French" },
     { code: "de", name: "German" },
-    // Add more languages as needed
+    // we can add more languages if needed
   ]);
   const [texts, setTexts] = useState({
     settings: "Settings",
@@ -113,7 +113,7 @@ const Settings = () => {
         break;
       case "paypal":
         // Redirect to PayPal
-        window.location.href = "https://www.paypal.com"; // Replace with your PayPal URL
+        window.location.href = "https://www.paypal.com";
         break;
       default:
         break;
@@ -121,7 +121,6 @@ const Settings = () => {
   };
 
   useEffect(() => {
-    // Update body classes and styles based on dark mode and brightness
     document.body.classList.toggle("dark-mode", darkMode);
     document.body.classList.toggle("light-mode", !darkMode);
     document.body.style.filter = `brightness(${brightness}%)`;
@@ -224,3 +223,4 @@ export default Settings;
 //https://www.youtube.com/watch?v=JNA1VXuyIyc
 //https://stackoverflow.com/questions/58542649/can-i-toggle-dark-mode-using-javascript
 //https://www.youtube.com/watch?v=bSQ-QD1Iqi0
+//https://sebhastian.com/handlechange-react/
