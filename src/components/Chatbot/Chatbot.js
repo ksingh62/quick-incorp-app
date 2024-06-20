@@ -1,101 +1,109 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const chatContainerRef = useRef(null);
 
-  const sendMessage = async (message) => {
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { from: "user", text: message },
-    ]);
+  useEffect(() => {
+    if (isOpen && messages.length === 0) {
+      setMessages([
+        { role: "bot", content: "Hello! How can I assist you today?" },
+      ]);
+    }
+  }, [isOpen]);
+
+  const sendMessage = async () => {
+    const userMessage = input.trim();
+    if (!userMessage) return;
+
+    setMessages([...messages, { role: "user", content: userMessage }]);
     setInput("");
 
     try {
       const response = await fetch("/api/chatgpt", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: userMessage }),
       });
 
-      const data = await response.json();
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { from: "bot", text: data.message },
-      ]);
+      if (response.ok) {
+        const data = await response.json();
+        setMessages([
+          ...messages,
+          { role: "user", content: userMessage },
+          { role: "bot", content: data.message },
+        ]);
+      } else {
+        const errorData = await response.json();
+        setMessages([
+          ...messages,
+          { role: "user", content: userMessage },
+          { role: "bot", content: `Error: ${errorData.error}` },
+        ]);
+      }
     } catch (error) {
-      console.error("Error:", error);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { from: "bot", text: "Sorry, something went wrong." },
+      setMessages([
+        ...messages,
+        { role: "user", content: userMessage },
+        { role: "bot", content: "Error: Unable to reach the server." },
       ]);
-    }
-  };
-
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
-    }
-  }, [messages]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (input.trim()) {
-      sendMessage(input.trim());
     }
   };
 
   return (
-    <div className="fixed bottom-4 right-4">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="bg-blue-500 text-white p-4 rounded-full shadow-lg focus:outline-none"
-      >
-        {isOpen ? "Close" : "Chat"}
-      </button>
+    <div className="fixed bottom-4 right-4 z-50">
+      {!isOpen && (
+        <button
+          className="bg-blue-600 text-white rounded-full p-4 shadow-lg hover:bg-blue-700 focus:outline-none"
+          onClick={() => setIsOpen(true)}
+        >
+          Chat with Us!
+        </button>
+      )}
       {isOpen && (
-        <div className="w-80 h-96 bg-white rounded-lg shadow-lg flex flex-col mt-2">
-          <div className="flex-1 overflow-y-auto p-4" ref={chatContainerRef}>
+        <div className="w-96 h-128 bg-gray-900 text-gray-100 rounded-lg shadow-lg flex flex-col justify-between">
+          <div className="bg-gray-800 p-4 rounded-t-lg flex justify-between items-center">
+            <h3 className="text-lg font-semibold">QuickIncorp Chatbot</h3>
+            <button
+              className="text-gray-100 hover:text-gray-400"
+              onClick={() => setIsOpen(false)}
+            >
+              ✖
+            </button>
+          </div>
+          <div className="p-4 flex-grow overflow-y-auto custom-scrollbar">
             {messages.map((msg, index) => (
               <div
                 key={index}
-                className={`mb-2 ${
-                  msg.from === "user" ? "text-right" : "text-left"
+                className={`mb-2 p-2 rounded-lg ${
+                  msg.role === "user"
+                    ? "bg-blue-600 ml-20 max-w-80"
+                    : "bg-gray-700 self-start max-w-80"
                 }`}
               >
-                <span
-                  className={`inline-block p-2 rounded-lg ${
-                    msg.from === "user"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-300 text-gray-800"
-                  }`}
-                >
-                  {msg.text}
-                </span>
+                {msg.content}
               </div>
             ))}
           </div>
-          <form
-            onSubmit={handleSubmit}
-            className="p-2 border-t border-gray-300 flex"
-          >
+          <div className="bg-gray-800 p-4 rounded-b-lg flex">
             <input
               type="text"
-              className="flex-1 p-2 border border-gray-300 rounded-l-lg focus:outline-none"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message..."
+              className="flex-grow p-2 rounded-l-lg border-0 focus:ring-2 focus:ring-blue-600 bg-gray-700 text-white placeholder-gray-400"
+              onKeyPress={(e) => e.key === "Enter" && sendMessage()}
             />
             <button
-              type="submit"
-              className="p-2 bg-blue-500 text-white rounded-r-lg"
+              onClick={sendMessage}
+              className="bg-blue-600 text-white p-2 rounded-r-lg hover:bg-blue-700 focus:outline-none"
             >
               Send
             </button>
-          </form>
+          </div>
         </div>
       )}
     </div>
