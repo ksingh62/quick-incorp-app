@@ -38,7 +38,7 @@ export default function Sidebar() {
         <div className="sidebar-help-container">
           <div className="sidebar-option">
             <img src="/icon-board.svg" alt="" />
-            <p>Help & Support</p>
+            <Link href="/prototype/support">Help & Support</Link>
           </div>
 
           <div className="sidebar-option">

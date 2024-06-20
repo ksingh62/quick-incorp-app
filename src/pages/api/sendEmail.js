@@ -1,10 +1,24 @@
-import nodemailer from 'nodemailer';
-import mg from 'nodemailer-mailgun-transport';
-import { nanoid } from 'nanoid';
+import nodemailer from "nodemailer";
+import mg from "nodemailer-mailgun-transport";
+import { v4 as uuidv4 } from "uuid";
+import { db } from "@/app/prototype/_utils/firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    const { firstName, lastName, email, phoneNumber, corporationName, corpType, corpProvince, address, city, province, postalCode } = req.body;
+  if (req.method === "POST") {
+    const {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      corporationName,
+      corpType,
+      corpProvince,
+      address,
+      city,
+      province,
+      postalCode,
+    } = req.body;
 
     const auth = {
       auth: {
@@ -14,7 +28,8 @@ export default async function handler(req, res) {
     };
 
     const transporter = nodemailer.createTransport(mg(auth));
-    const applicationId = nanoid(10); // Generate a 10-character ID
+    const applicationId = await getNextApplicationId();
+    const messageId = uuidv4(); // Generate unique ID for email
 
     const emailTemplate = (subject, content) => `
       <!DOCTYPE html>
@@ -52,11 +67,11 @@ export default async function handler(req, res) {
     `;
 
     const mailOptionsLawyer = {
-      from: 'no-reply@yourdomain.com',  // Replace with your Mailgun verified sender email
-      to: 'quickincorp51@gmail.com',
+      from: "no-reply@yourdomain.com",
+      to: "quickincorp51@gmail.com",
       subject: `New Business Registration - Application ID: ${applicationId}`,
       html: emailTemplate(
-        'New Business Registration',
+        "New Business Registration",
         `A new business registration has been submitted with the following details:<br><br>
         <strong>Personal Information:</strong><br>
         First Name: ${firstName}<br>
@@ -73,14 +88,15 @@ export default async function handler(req, res) {
         Postal Code: ${postalCode}<br><br>
         Application ID: ${applicationId}`
       ),
+      messageId,
     };
 
     const mailOptionsUser = {
-      from: 'no-reply@yourdomain.com',  // Replace with your Mailgun verified sender email
+      from: "no-reply@yourdomain.com",
       to: email,
       subject: `Application Received - Application ID: ${applicationId}`,
       html: emailTemplate(
-        'Application Received',
+        "Application Received",
         `Dear ${firstName} ${lastName},<br><br>
         Thank you for submitting your business registration application. Your application is currently being processed.<br><br>
         <strong>Application ID:</strong> ${applicationId}<br><br>
@@ -88,18 +104,25 @@ export default async function handler(req, res) {
         Best regards,<br>
         The Team`
       ),
+      messageId,
     };
 
     try {
       await transporter.sendMail(mailOptionsLawyer);
       await transporter.sendMail(mailOptionsUser);
+      await storeSentEmail(mailOptionsLawyer);
+      await storeSentEmail(mailOptionsUser);
       console.log("Emails sent successfully");
-      res.status(200).json({ message: 'Emails sent successfully', applicationId });
+      res
+        .status(200)
+        .json({ message: "Emails sent successfully", applicationId });
     } catch (error) {
       console.error("Error sending emails:", error);
-      res.status(500).json({ error: 'Error sending emails', details: error.message });
+      res
+        .status(500)
+        .json({ error: "Error sending emails", details: error.message });
     }
   } else {
-    res.status(405).json({ error: 'Method not allowed' });
+    res.status(405).json({ error: "Method not allowed" });
   }
 }
