@@ -80,7 +80,7 @@ const Chatbot = () => {
                 key={index}
                 className={`mb-2 p-2 rounded-lg ${
                   msg.role === "user"
-                    ? "bg-blue-600 ml-20 max-w-80"
+                    ? "bg-blue-600 self-end ml-20 max-w-80"
                     : "bg-gray-700 self-start max-w-80"
                 }`}
               >
