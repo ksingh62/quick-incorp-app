@@ -37,7 +37,6 @@ const Settings = () => {
     paymentMethod: "Payment Method",
     darkMode: "Dark Mode",
     lightMode: "Light Mode",
-    brightness: "Brightness",
     email: "Email",
     text: "Text",
     both: "Both",
@@ -58,24 +57,32 @@ const Settings = () => {
       localStorage.getItem("paymentMethod") || "creditCard";
     setPaymentMethod(storedPaymentMethod);
 
-    fetchTexts("en");
-  }, []);
+    fetchTexts(language);
+  }, [language]);
 
-  const fetchTexts = async (language) => {
-    // Texts setup based on language
-    // Implement your text fetching logic here
+  const fetchTexts = async (lang) => {
+    try {
+      const response = await fetch(`/api/translate?language=${lang}`); // Fetch from API endpoint
+      if (!response.ok) {
+        throw new Error("Failed to fetch language texts");
+      }
+      const data = await response.json();
+      setTexts(data); // Update texts state with fetched data
+    } catch (error) {
+      console.error("Error fetching language texts:", error);
+      // Handle error fetching texts
+    }
   };
 
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     setLanguage(selectedLanguage);
-    fetchTexts(selectedLanguage);
   };
 
   const handleDarkModeChange = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
-    localStorage.setItem("darkMode", newDarkMode);
+    localStorage.setItem("darkMode", newDarkMode.toString());
     document.body.classList.toggle("dark-mode", newDarkMode);
     document.body.classList.toggle("light-mode", !newDarkMode);
   };
@@ -83,7 +90,7 @@ const Settings = () => {
   const handleBrightnessChange = (e) => {
     const newBrightness = e.target.value;
     setBrightness(newBrightness);
-    localStorage.setItem("brightness", newBrightness);
+    localStorage.setItem("brightness", newBrightness.toString());
     document.body.style.filter = `brightness(${newBrightness}%)`;
   };
 
@@ -145,7 +152,9 @@ const Settings = () => {
               }`}
             ></span>
           </label>
-          <label className="block mb-2 text-lg">{texts.brightness}:</label>
+          <label className="block mb-2 text-lg">
+            {texts.brightness}Brightness
+          </label>
           <input
             type="range"
             min="1"
@@ -194,7 +203,6 @@ const Settings = () => {
           <h3 className="text-2xl font-semibold mb-4 flex items-center">
             <FaGlobe className="mr-2" /> {texts.language}
           </h3>
-          <label className="block mb-2 text-lg">{texts.language}:</label>
           <select
             value={language}
             onChange={handleLanguageChange}
@@ -213,3 +221,6 @@ const Settings = () => {
 };
 
 export default Settings;
+//https://www.youtube.com/watch?v=JNA1VXuyIyc
+//https://stackoverflow.com/questions/58542649/can-i-toggle-dark-mode-using-javascript
+//https://www.youtube.com/watch?v=bSQ-QD1Iqi0

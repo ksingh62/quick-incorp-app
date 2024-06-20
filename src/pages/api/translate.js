@@ -1,3 +1,5 @@
+// pages/api/translate.js
+
 export default function handler(req, res) {
   const { language } = req.query;
 
