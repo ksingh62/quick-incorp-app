@@ -2,15 +2,31 @@
 import React, { useState, useEffect } from "react";
 import "./settings.css";
 import Layout from "@/components/Layout";
-import { FaMoon, FaSun, FaBell, FaEnvelope, FaMobileAlt } from "react-icons/fa";
+import {
+  FaMoon,
+  FaSun,
+  FaBell,
+  FaEnvelope,
+  FaMobileAlt,
+  FaCreditCard,
+  FaPaypal,
+  FaUniversity,
+} from "react-icons/fa";
 
 const Settings = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [notificationPref, setNotificationPref] = useState("email");
+  const [paymentMethod, setPaymentMethod] = useState("creditCard");
 
   useEffect(() => {
     const storedDarkMode = localStorage.getItem("darkMode") === "true";
     setDarkMode(storedDarkMode);
+    const storedNotificationPref =
+      localStorage.getItem("notificationPref") || "email";
+    setNotificationPref(storedNotificationPref);
+    const storedPaymentMethod =
+      localStorage.getItem("paymentMethod") || "creditCard";
+    setPaymentMethod(storedPaymentMethod);
   }, []);
 
   const handleDarkModeToggle = () => {
@@ -21,6 +37,18 @@ const Settings = () => {
   const handleNotificationChange = (event) => {
     setNotificationPref(event.target.value);
     localStorage.setItem("notificationPref", event.target.value);
+  };
+
+  const handlePaymentMethodChange = (event) => {
+    const selectedMethod = event.target.value;
+    setPaymentMethod(selectedMethod);
+    localStorage.setItem("paymentMethod", selectedMethod);
+
+    if (selectedMethod === "creditCard") {
+      window.location.href = "https://stripe.com";
+    } else if (selectedMethod === "paypal") {
+      window.location.href = "https://paypal.com";
+    }
   };
 
   return (
@@ -62,6 +90,22 @@ const Settings = () => {
             <option value="email">Email</option>
             <option value="text">Text</option>
             <option value="both">Both</option>
+          </select>
+        </div>
+
+        <div className="settings-section">
+          <h3 className="text-2xl font-semibold mb-4 flex items-center">
+            <FaCreditCard className="mr-2" /> Billing Payment
+          </h3>
+          <label className="block mb-2 text-lg">Payment Method:</label>
+          <select
+            value={paymentMethod}
+            onChange={handlePaymentMethodChange}
+            className="p-2 border rounded w-full"
+          >
+            <option value="creditCard">Credit Card</option>
+            <option value="paypal">PayPal</option>
+            <option value="bankTransfer">Bank Transfer</option>
           </select>
         </div>
       </div>
