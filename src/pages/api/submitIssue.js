@@ -91,7 +91,7 @@ export default async function handler(req, res) {
           `A new support issue has been submitted with the following details:<br><br>
           <strong>User:</strong> ${user.email}<br>
           <strong>Subject:</strong> ${subject}<br>
-          <strong>Description:</strong><br>
+          <strong>Description:</strong>
           ${description}<br><br>
           <strong>Ticket Number:</strong> ${ticketNumber}`
         ),
