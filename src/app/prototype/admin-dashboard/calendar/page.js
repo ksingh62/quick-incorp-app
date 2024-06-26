@@ -45,31 +45,30 @@ const Calendar = () => {
 
     return (
         <Box m="20px">
-            {/* <Header title="Calendar" subtitle="Full Calendar Interactive Page" /> */}
-
             <Box display="flex" justifyContent="space-between">
                 {/* CALENDAR SIDEBAR */}
                 <Box
                     flex="1 1 20%"
-                    backgroundColor="red"
+                    backgroundColor="rgb(100, 96, 199)"
                     p="15px"
                     borderRadius="4px"
                 >
-                    <Typography variant="h5">Events</Typography>
+                    <Typography variant="h5" color="white">Events</Typography>
                     <List>
                         {currentEvents.map((event) => (
                             <ListItem
                                 key={event.id}
                                 sx={{
-                                    backgroundColor: "green",
+                                    backgroundColor: "rgb(120, 116, 219)",
                                     margin: "10px 0",
                                     borderRadius: "2px",
                                 }}
                             >
                                 <ListItemText
                                     primary={event.title}
+                                    primaryTypographyProps={{ color: "white" }}
                                     secondary={
-                                        <Typography>
+                                        <Typography color="white">
                                             {formatDate(event.start, {
                                                 year: "numeric",
                                                 month: "short",
@@ -118,6 +117,9 @@ const Calendar = () => {
                                 date: "2022-09-28",
                             },
                         ]}
+                        themeSystem='bootstrap'
+                        eventColor="rgb(100, 96, 199)"
+                        dayHeaderClassNames="text-white bg-indigo-600"
                     />
                 </Box>
             </Box>

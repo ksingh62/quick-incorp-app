@@ -18,34 +18,6 @@ export default function Page() {
     deleteInvoice
   } = useInvoices();
 
-  // const invoicesCollection = collection(db, "invoices");
-  // const [invoices, setInvoices] = useState([]);
-  // const [noOfUsersAdded, setNoOfUsersAdded] = useState(0);
-  // const getInvoices = async () => {
-  //   const invoicesDocs = await getDocs(invoicesCollection);
-  //   const invoicesData = invoicesDocs.docs.map(doc => {
-  //     return { ...doc.data(), date: new Date(doc.data().date), id: doc.id }
-  //   })
-  //   setInvoices(invoicesData);
-  // }
-
-  // const addInvoice = async (invoiceToAdd) => {
-  //   await addDoc(invoicesCollection, invoiceToAdd);
-  //   setNoOfUsersAdded(noOfUsersAdded + 1);
-  // }
-
-  // const updateInvoice = async (invoiceDocId, newInvoiceInfo) => {
-  //   const invoice = doc(db, "invoices", invoiceDocId);
-  //   const res = await updateDoc(invoice, newInvoiceInfo);
-  //   setNoOfUsersAdded(noOfUsersAdded + 1);
-  // }
-
-  // const deleteInvoice = async (invoiceDocId) => {
-  //   const invoice = doc(db, "invoices", invoiceDocId);
-  //   await deleteDoc(invoice);
-  //   setNoOfUsersAdded(noOfUsersAdded - 1);
-  // }
-
   useEffect(() => {
     getInvoices();
   }, [getInvoices, noOfUsersAdded])
@@ -54,26 +26,25 @@ export default function Page() {
     deleteInvoice(params.row.id);
   };
   const onUpdateClick = async (event, params) => {
-    // console.log(params.row);
     invoiceToUpdate.current = params.row;
     setShowUpdateInvoiceModal(true);
   };
 
 
   const columns = [
-    { field: 'invoiceId', headerName: 'Invoice ID', headerClassName: "bg-purple-900", flex: 1 },
-    { field: 'customerName', headerName: 'Customer Name', headerClassName: "bg-purple-900", flex: 1 },
-    { field: 'date', headerName: 'Date', headerClassName: "bg-purple-900", flex: 1, type: "date" },
-    { field: 'amount', headerName: 'Amount', headerClassName: "bg-purple-900", flex: 1, type: 'number' },
-    { field: 'status', headerName: 'Status', headerClassName: "bg-purple-900", flex: 1 },
+    { field: 'invoiceId', headerName: 'Invoice ID', headerClassName: "bg-indigo-700 text-white", flex: 1 },
+    { field: 'customerName', headerName: 'Customer Name', headerClassName: "bg-indigo-700 text-white", flex: 1 },
+    { field: 'date', headerName: 'Date', headerClassName: "bg-indigo-700 text-white", flex: 1, type: "date" },
+    { field: 'amount', headerName: 'Amount', headerClassName: "bg-indigo-700 text-white", flex: 1, type: 'number' },
+    { field: 'status', headerName: 'Status', headerClassName: "bg-indigo-700 text-white", flex: 1 },
     {
       field: "deleteUser",
       headerName: "Delete User",
-      headerClassName: "bg-purple-900",
+      headerClassName: "bg-indigo-700 text-white",
       renderCell: (params) => {
         return (
           <button
-            className="bg-red-400 p-2 rounded-lg text-black"
+            className="bg-red-500 hover:bg-red-600 p-2 text-white rounded-xl"
             onClick={(event) => onDeleteClick(event, params)}
           >
             Delete
@@ -84,11 +55,11 @@ export default function Page() {
     {
       field: "updateUser",
       headerName: "Update User",
-      headerClassName: "bg-purple-900",
+      headerClassName: "bg-indigo-700 text-white",
       renderCell: (params) => {
         return (
           <button
-            className="bg-green-400 p-2 rounded-lg text-black"
+            className="bg-indigo-500 hover:bg-indigo-600 p-2 rounded-lg text-white"
             onClick={(event) => onUpdateClick(event, params)}
           >
             Update
@@ -100,11 +71,38 @@ export default function Page() {
 
   return (
     <>
-      <h1>Team</h1>
-      <DataGrid rows={invoices} columns={columns} sx={{ color: "white" }} />
-      <button onClick={() => setShowAddInvoiceModal(!showAddInvoiceModal)}>Add Invoice</button>
-      {showAddInvoiceModal && <AddInvoiceModal addInvoice={addInvoice} setShowModal={setShowAddInvoiceModal} />}
-      {showUpdateInvoiceModal && <UpdateInvoiceModal invoiceToUpdate={invoiceToUpdate} setShowModal={setShowUpdateInvoiceModal} updateInvoice={updateInvoice} />}
+      <div className="min-h-screen bg-gray-900 text-white">
+        <div className="container mx-auto py-8">
+          <h1 className="text-3xl font-bold mb-6 text-center">Invoices</h1>
+          <div className="mb-6">
+            <DataGrid rows={invoices} columns={columns} sx={{color: "white"}} className="bg-gray-800 border border-gray-700 text-white" />
+          </div>
+          <div className="flex justify-center">
+            <button
+              onClick={() => setShowAddInvoiceModal(!showAddInvoiceModal)}
+              className="bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded"
+            >
+              Add Invoice
+            </button>
+          </div>
+        </div>
+
+        {showAddInvoiceModal && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+              <AddInvoiceModal addInvoice={addInvoice} setShowModal={setShowAddInvoiceModal} />
+            </div>
+          </div>
+        )}
+
+        {showUpdateInvoiceModal && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+              <UpdateInvoiceModal invoiceToUpdate={invoiceToUpdate} setShowModal={setShowUpdateInvoiceModal} updateInvoice={updateInvoice} />
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 }
