@@ -6,4 +6,3 @@ export default function Page() {
     </>
   );
 }
-// npm i @mui/material @emotion/react @emotion/react @emotion/styled @mui/x-data-grid @mui/icons-material fullcalendar @nivo/core @nivo/pie @nivo/bar @nivo/line
