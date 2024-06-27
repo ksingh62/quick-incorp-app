@@ -48,18 +48,6 @@ const MyResponsiveBar = () => {
     console.log(data)
 
     return (
-        // <ResponsiveBar
-        //     data={data}
-        //     keys={['amount']}
-        //     indexBy="month"
-        //     margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-        //     padding={0.3}
-        //     valueScale={{ type: 'linear' }}
-        //     indexScale={{ type: 'band', round: true }}
-        //     colors={{ scheme: 'nivo' }}
-        //     axisBottom={{ legend: 'Month', legendPosition: 'middle', legendOffset: 32 }}
-        //     axisLeft={{ legend: 'Total Amount', legendPosition: 'middle', legendOffset: -40 }}
-        // />
         <div style={{ height: '500px', width: '100%' }}>
             <ResponsiveBar
                 data={data}

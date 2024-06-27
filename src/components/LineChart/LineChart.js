@@ -20,8 +20,9 @@ const fetchInvoiceData = async () => {
         acc[date] += invoice.amount;
         return acc;
     }, {});
-
-    return Object.entries(dailyData).map(([date, amount]) => ({ x: date, y: amount }));
+    const data = Object.entries(dailyData).map(([date, amount]) => ({ x: date, y: amount }));
+    const sortedData = [...data].sort((a, b) => new Date(a.x) - new Date(b.x))
+    return sortedData;
 };
 
 const MyResponsiveLine = () => {
