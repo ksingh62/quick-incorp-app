@@ -1,3 +1,4 @@
+// submitIssue.js
 import nodemailer from "nodemailer";
 import mg from "nodemailer-mailgun-transport";
 import { db } from "@/app/prototype/_utils/firebase";
@@ -27,7 +28,10 @@ export default async function handler(req, res) {
             const counterDoc = await transaction.get(counterRef);
 
             if (!counterDoc.exists()) {
-              throw new Error("Counter document does not exist!");
+              await transaction.set(counterRef, { current: 0 }); // Initialize if it doesn't exist
+              throw new Error(
+                "Counter document did not exist, so it was initialized. Please try again."
+              );
             }
 
             const newCount = counterDoc.data().current + 1;
@@ -43,6 +47,17 @@ export default async function handler(req, res) {
         throw error;
       }
     }
+
+    const storeSentEmail = async (emailData) => {
+      try {
+        await setDoc(doc(db, "emails", emailData.messageId), {
+          ...emailData,
+          read: false, // Set read flag to false
+        });
+      } catch (error) {
+        console.error("Error storing email:", error);
+      }
+    };
 
     try {
       const ticketNumber = await getNextTicketNumber();
@@ -95,6 +110,7 @@ export default async function handler(req, res) {
           ${description}<br><br>
           <strong>Ticket Number:</strong> ${ticketNumber}`
         ),
+        messageId: `ticket-${ticketNumber}`,
       };
 
       const mailOptionsUser = {
@@ -110,18 +126,40 @@ export default async function handler(req, res) {
           Best regards,<br>
           The Support Team`
         ),
+        messageId: `ticket-${ticketNumber}`,
       };
 
       await transporter.sendMail(mailOptionsAdmin);
+      await transporter.sendMail(mailOptionsAdmin);
       await transporter.sendMail(mailOptionsUser);
 
+      // Remove <style> tags before storing the email content
+      const removeStyleTag = (htmlContent) => {
+        return htmlContent.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "");
+      };
+
+      mailOptionsAdmin.html = removeStyleTag(mailOptionsAdmin.html);
+      mailOptionsUser.html = removeStyleTag(mailOptionsUser.html);
+
       // Store the ticket information in Firestore
-      await setDoc(doc(db, "tickets", `${ticketNumber}`), {
-        subject,
-        description,
-        user: user.email,
-        ticketNumber,
+      await storeSentEmail({
+        to: "quickincorp51@gmail.com",
+        from: "no-reply@yourdomain.com",
+        subject: mailOptionsAdmin.subject,
+        html: mailOptionsAdmin.html,
         timestamp: new Date(),
+        messageId: mailOptionsAdmin.messageId,
+        read: false, // Set read flag to false
+      });
+
+      await storeSentEmail({
+        to: user.email,
+        from: "quickincorp51@gmail.com",
+        subject: mailOptionsUser.subject,
+        html: mailOptionsUser.html,
+        timestamp: new Date(),
+        messageId: mailOptionsUser.messageId,
+        read: false, // Set read flag to false
       });
 
       console.log("Emails sent and ticket stored successfully");
@@ -140,5 +178,3 @@ export default async function handler(req, res) {
     res.status(405).json({ error: "Method not allowed" });
   }
 }
-
-// https://nodemailer.com/usage/
