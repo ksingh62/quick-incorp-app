@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { useUserAuth } from "@/app/prototype/_utils/auth-context";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, runTransaction } from "firebase/firestore";
 import { db } from "@/app/prototype/_utils/firebase";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 const steps = [
   {
@@ -21,12 +21,6 @@ const steps = [
     name: "Business Address",
     fields: ["address", "city", "province", "postalCode"],
   },
-  // {
-  //   id: "Step 4",
-  //   name: "Plans",
-  //   fields: [],
-  // },
-  // { id: "Step 5", name: "Payment", fields: [] },
   { id: "Step 4", name: "Complete", fields: [] },
 ];
 
@@ -63,12 +57,12 @@ export default function Form() {
 
   const sendEmail = async (data) => {
     try {
-      const response = await fetch('/api/sendEmail', {
-        method: 'POST',
+      const response = await fetch("/api/sendEmail", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {
@@ -76,9 +70,9 @@ export default function Form() {
       }
 
       const responseData = await response.json();
-      console.log('Email sent successfully:', responseData);
+      console.log("Email sent successfully:", responseData);
     } catch (error) {
-      console.error('Error sending email:', error.message);
+      console.error("Error sending email:", error.message);
     }
   };
 
@@ -110,10 +104,34 @@ export default function Form() {
 
   const addDataToFirestore = async (data) => {
     try {
+      const applicationId = await getNextApplicationId();
+      const emailData = {
+        to: data.email,
+        from: "no-reply@yourdomain.com",
+        subject: `Application Received - Application ID: ${applicationId}`,
+        html: `
+          <html>
+          <body>
+            <h2>Application Received</h2>
+            <p>Dear ${data.firstName} ${data.lastName},</p>
+            <p>Thank you for submitting your business registration application. Your application is currently being processed.</p>
+            <p><strong>Application ID:</strong> ${applicationId}</p>
+            <p>We will notify you once your application has been reviewed.</p>
+            <p>Best regards,<br>The Team</p>
+          </body>
+          </html>
+        `,
+        timestamp: new Date(),
+        messageId: `application-${applicationId}`,
+      };
+
       await setDoc(doc(db, "users", user.uid), {
         ...data,
         userId: user.uid,
       });
+
+      await storeSentEmail(emailData);
+
       return true;
     } catch (error) {
       console.error("Error " + error);
@@ -121,10 +139,40 @@ export default function Form() {
     }
   };
 
+  async function getNextApplicationId() {
+    const counterRef = doc(db, "counters", "applications");
+    try {
+      const newApplicationId = await runTransaction(db, async (transaction) => {
+        const counterDoc = await transaction.get(counterRef);
+        if (!counterDoc.exists()) {
+          await transaction.set(counterRef, { current: 0 });
+          throw new Error(
+            "Counter document did not exist, so it was initialized. Please try again."
+          );
+        }
+        const newCount = counterDoc.data().current + 1;
+        transaction.update(counterRef, { current: newCount });
+        return newCount;
+      });
+      return newApplicationId;
+    } catch (error) {
+      console.error("Error getting next application ID:", error);
+      throw error;
+    }
+  }
+
+  const storeSentEmail = async (emailData) => {
+    try {
+      await setDoc(doc(db, "emails", emailData.messageId), emailData);
+    } catch (error) {
+      console.error("Error storing email:", error);
+    }
+  };
+
   useEffect(() => {
     if (currentStep === steps.length - 1) {
       const timer = setTimeout(() => {
-        router.push('/prototype/homepage');
+        router.push("/prototype/homepage");
       }, 3000); // Redirect after 3 seconds
       return () => clearTimeout(timer);
     }
@@ -132,7 +180,6 @@ export default function Form() {
 
   return (
     <section className="absolute inset-0 flex flex-col justify-between p-24 bg-gray-900 text-gray-100">
-      {/* steps */}
       <nav aria-label="Progress">
         <ol role="list" className="space-y-4 md:flex md:space-x-8 md:space-y-0">
           {steps.map((step, index) => (
@@ -167,7 +214,6 @@ export default function Form() {
         </ol>
       </nav>
       <form>
-        {/* Personal Details */}
         {currentStep === 0 && (
           <>
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -197,9 +243,7 @@ export default function Form() {
                   )}
                 </div>
               </div>
-            </div>
 
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-3">
                 <label
                   htmlFor="lastName"
@@ -226,9 +270,7 @@ export default function Form() {
                   )}
                 </div>
               </div>
-            </div>
 
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-3">
                 <label
                   htmlFor="email"
@@ -243,12 +285,12 @@ export default function Form() {
                     {...register("email", {
                       required: {
                         value: "true",
-                        message: "Email is required"
+                        message: "Email is required",
                       },
                       pattern: {
                         value: /^\S+@\S+\.\S+$/,
-                        message: "Please enter a valid email"
-                      }
+                        message: "Please enter a valid email",
+                      },
                     })}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
                   />
@@ -259,9 +301,7 @@ export default function Form() {
                   )}
                 </div>
               </div>
-            </div>
 
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-3">
                 <label
                   htmlFor="phoneNumber"
@@ -276,13 +316,13 @@ export default function Form() {
                     {...register("phoneNumber", {
                       required: {
                         value: "true",
-                        message: "Phone number is required"
+                        message: "Phone number is required",
                       },
                       pattern: {
-                        value: /(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
-                        message: "Please enter a valid phone number"
-
-                      }
+                        value:
+                          /(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
+                        message: "Please enter a valid phone number",
+                      },
                     })}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
                   />
@@ -327,9 +367,7 @@ export default function Form() {
                   )}
                 </div>
               </div>
-            </div>
 
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-3">
                 <label
                   htmlFor="corpType"
@@ -359,9 +397,7 @@ export default function Form() {
                   )}
                 </div>
               </div>
-            </div>
 
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-3">
                 <label
                   htmlFor="corpProvince"
@@ -428,9 +464,7 @@ export default function Form() {
                   )}
                 </div>
               </div>
-            </div>
 
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-3">
                 <label
                   htmlFor="city"
@@ -448,7 +482,7 @@ export default function Form() {
                         message: "City is Required",
                       },
                     })}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm                    sm:leading-6"
                   />
                   {errors.city?.message && (
                     <p className="mt-2 text-sm text-red-400">
@@ -457,9 +491,7 @@ export default function Form() {
                   )}
                 </div>
               </div>
-            </div>
 
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-3">
                 <label
                   htmlFor="province"
@@ -487,14 +519,12 @@ export default function Form() {
                   </select>
                   {errors.province?.message && (
                     <p className="mt-2 text-sm text-red-400">
-                      {errors.province?.message}
+                      {errors.province.message}
                     </p>
                   )}
                 </div>
               </div>
-            </div>
 
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-3">
                 <label
                   htmlFor="postalCode"
@@ -512,9 +542,10 @@ export default function Form() {
                         message: "Postal Code is Required",
                       },
                       pattern: {
-                        value: /^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i,
-                        message: "Please enter a valid postal code."
-                      }
+                        value:
+                          /^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i,
+                        message: "Please enter a valid postal code.",
+                      },
                     })}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
                   />
@@ -529,17 +560,16 @@ export default function Form() {
           </>
         )}
 
-        {/* {currentStep === 3 && <p>Plans</p>}
-        {currentStep === 4 && <p>Payment</p>} */}
         {currentStep === 3 && (
           <div className="flex flex-col items-center">
-            <p className="text-xl font-semibold">Thank you for your submission!</p>
+            <p className="text-xl font-semibold">
+              Thank you for your submission!
+            </p>
             <p className="text-lg">Redirecting to the homepage...</p>
           </div>
         )}
       </form>
 
-      {/* Navigation */}
       <div className="mt-8 pt-5">
         <div className="flex justify-between">
           <button
@@ -589,7 +619,3 @@ export default function Form() {
     </section>
   );
 }
-
-/* 
-https://github.com/warsylewicz/webdev2-demos/blob/100cc0edb5c7a22c3533f79d2ead165db1bd6ab2/app/week-10/_services/blog-service.js
-*/

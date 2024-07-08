@@ -1,9 +1,29 @@
-/* eslint-disable @next/next/no-img-element */
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import "./Sidebar.css";
 import Link from "next/link";
+import { useUserAuth } from "@/app/prototype/_utils/auth-context";
+import { db } from "@/app/prototype/_utils/firebase";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 
 export default function Sidebar() {
+  const { user } = useUserAuth();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    if (user) {
+      const q = query(
+        collection(db, "emails"),
+        where("to", "==", user.email),
+        where("read", "==", false)
+      );
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        setUnreadCount(querySnapshot.size);
+      });
+      return () => unsubscribe();
+    }
+  }, [user]);
+
   return (
     <div className="sidebar">
       <div className="sidebar-logo-options-container">
@@ -13,7 +33,7 @@ export default function Sidebar() {
         </Link>
 
         <div className="sidebar-options">
-          <div className="sidebar-option ">
+          <div className="sidebar-option">
             <img src="/icon-board.svg" alt="" />
             <Link href="/prototype/form">Register a Company</Link>
           </div>
@@ -31,6 +51,9 @@ export default function Sidebar() {
           <div className="sidebar-option">
             <img src="/icon-board.svg" alt="" />
             <Link href="/prototype/inbox">Inbox</Link>
+            {unreadCount > 0 && (
+              <span className="unread-count">{unreadCount}</span>
+            )}
           </div>
         </div>
       </div>
