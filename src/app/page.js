@@ -2,26 +2,43 @@
 "use client";
 import Navbar from "@/components/Navbar/Navbar";
 import "./page.css";
-import Layout from "@/components/Layout";
 import Link from "next/link";
 
 export default function LandingPage() {
   return (
     <>
       <nav className="nav-bar">
-
         <Link href={`/`} className="sidebar-logo-container">
           <img src="/logo-mobile.svg" alt="" />
           <p>QuickIncorp</p>
         </Link>
-        <div>Solutions</div>
-        <div>Pricing</div>
-        <div>Library</div>
-        <div>About Us</div>
-        <div>FAQs</div>
+        <div className="dropdown">
+          <button className="dropbtn">Solutions</button>
+          <div className="dropdown-content">
+            <Link href="/prototype/solutions/item1">Solution 1</Link>
+            <Link href="/prototype/solutions/item2">Solution 2</Link>
+            <Link href="/prototype/solutions/item3">Solution 3</Link>
+          </div>
+        </div>
+        <div>
+          <Link href={"/prototype/pricing"}>Pricing</Link>
+        </div>
+        <div>
+          <Link href={"/prototype/library"}>Library</Link>
+        </div>
+        <div>
+          <Link href={"/prototype/about"}>About Us</Link>
+        </div>
+        <div>
+          <Link href={"/prototype/faq"}>FAQs</Link>
+        </div>
         <div className="button-container">
-          <Link href={`/prototype`} className="user-info-button">Login</Link>
-          <Link href={`/prototype`} className="bg-sky-500 rounded-xl p-2">Get Started!</Link>
+          <Link href={`/prototype`} className="user-info-button">
+            Login
+          </Link>
+          <Link href={`/prototype`} className="bg-sky-500 rounded-xl p-2">
+            Get Started!
+          </Link>
         </div>
       </nav>
 
