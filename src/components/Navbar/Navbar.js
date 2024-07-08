@@ -1,16 +1,21 @@
 import Link from "next/link";
 import "./Navbar.css";
-// import { useUserAuth } from "@/app/prototype/_utils/auth-context";
 import { useUserAuth } from "@/app/prototype/_utils/auth-context";
 
 export default function Navbar() {
-  console.log(useUserAuth);
   const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
-  console.log(user);
+
   return (
     <>
       <nav className="nav-bar">
-        <div>Solutions</div>
+        <div className="dropdown">
+          <button className="dropbtn">Solutions</button>
+          <div className="dropdown-content">
+            <Link href="/prototype/solutions/item1">Solution 1</Link>
+            <Link href="/prototype/solutions/item2">Solution 2</Link>
+            <Link href="/prototype/solutions/item3">Solution 3</Link>
+          </div>
+        </div>
         <div>
           <Link href={"/prototype/pricing"}>Pricing</Link>
         </div>
