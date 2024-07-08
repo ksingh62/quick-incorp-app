@@ -1,83 +1,90 @@
-/* app/prototype/solutions/item2/PayrollCalculator.module.css */
+.payroll-calculator-container {
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 2rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+}
 
-.container {
-    max-width: 600px;
-    margin: 3rem auto;
-    padding: 2rem;
-    border: 1px solid black;
-    border-radius: 12px;
-    background-color: red;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    font-family: 'Roboto', sans-serif;
-  }
-  
-  .title {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2rem;
-    color: red;
-    font-weight: 500;
-  }
-  
-  .input,
-  .select {
-    width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 1.5rem;
-    border: 1px solid black;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  }
-  
-  .input:focus,
-  .select:focus {
-    border-color: #007bff;
-    color:red;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
-    outline: none;
-  }
-  
-  .button {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #007bff;
-    color: black;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out, transform 0.2s;
-  }
-  
-  .button:hover {
-    background-color: #0056b3;
-    transform: scale(1.02);
-  }
-  
-  .results {
-    text-align: center;
-    margin-top: 2rem;
-    padding: 1.5rem;
-    background-color: #e9ffe8;
-    border: 1px solid #d4efd4;
-    border-radius: 8px;
-  }
-  
-  .results p {
-    margin: 0.5rem 0;
-    font-size: 1.1rem;
-    color: #333;
-  }
-  
-  .error {
-    text-align: center;
-    margin-top: 2rem;
-    font-size: 1.2rem;
-    color: #dc3545;
-    padding: 1rem;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    border-radius: 8px;
-  }
-  
+.payroll-calculator-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  color: #007bff; /* Blue color */
+}
+
+.payroll-calculator-formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.payroll-calculator-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #007bff; /* Blue color for labels */
+}
+
+.payroll-calculator-input,
+.payroll-calculator-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease-in-out;
+  color: #007bff; /* Blue color */
+  background-color: #f9f9f9;
+}
+
+.payroll-calculator-input::placeholder,
+.payroll-calculator-select::placeholder {
+  color: #007bff; /* Blue color for placeholder */
+}
+
+.payroll-calculator-input:focus,
+.payroll-calculator-select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.payroll-calculator-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  font-weight: bold;
+}
+
+.payroll-calculator-button:hover {
+  background-color: #0056b3;
+}
+
+.payroll-calculator-results {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.5rem;
+  color: #28a745;
+}
+
+.payroll-calculator-error {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  color: #dc3545;
+}
+
+.payroll-calculator-h2 {
+  color: #007bff; /* Blue color */
+}
+
+.payroll-calculator-text-black {
+  color: #000; /* Black color for specific text */
+}
