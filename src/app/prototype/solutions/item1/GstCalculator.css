@@ -1,6 +1,4 @@
-/* app/prototype/solutions/item1/GstCalculator.module.css */
-
-.container {
+.gst-calculator-container {
   max-width: 600px;
   margin: 3rem auto;
   padding: 2rem;
@@ -11,31 +9,48 @@
   font-family: 'Roboto', sans-serif;
 }
 
-.title {
+.gst-calculator-title {
   text-align: center;
   margin-bottom: 2rem;
   font-size: 1.8rem;
-  color: #333;
+  color: #007bff; /* Blue color */
 }
 
-.input,
-.select {
+.gst-calculator-formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.gst-calculator-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #007bff; /* Blue color for labels */
+}
+
+.gst-calculator-input,
+.gst-calculator-select {
   width: 100%;
   padding: 0.75rem;
-  margin-bottom: 1.5rem;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.3s ease-in-out;
+  color: #007bff; /* Blue color */
+  background-color: #f9f9f9;
 }
 
-.input:focus,
-.select:focus {
+.gst-calculator-input::placeholder,
+.gst-calculator-select::placeholder {
+  color: #007bff; /* Blue color for placeholder */
+}
+
+.gst-calculator-input:focus,
+.gst-calculator-select:focus {
   border-color: #007bff;
   outline: none;
 }
 
-.button {
+.gst-calculator-button {
   width: 100%;
   padding: 0.75rem;
   background-color: #007bff;
@@ -45,22 +60,31 @@
   font-size: 1.2rem;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
+  font-weight: bold;
 }
 
-.button:hover {
+.gst-calculator-button:hover {
   background-color: #0056b3;
 }
 
-.result {
+.gst-calculator-result {
   text-align: center;
   margin-top: 2rem;
   font-size: 1.5rem;
   color: #28a745;
 }
 
-.error {
+.gst-calculator-error {
   text-align: center;
   margin-top: 2rem;
   font-size: 1.2rem;
   color: #dc3545;
+}
+
+.gst-calculator-h2 {
+  color: #007bff; /* Blue color */
+}
+
+.gst-calculator-text-black {
+  color: #000; /* Black color for specific text */
 }

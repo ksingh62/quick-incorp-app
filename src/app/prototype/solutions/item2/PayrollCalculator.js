@@ -25,7 +25,7 @@ const PayrollCalculator = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Canadian Payroll Tax Calculator</h1>
+      <h1 className={styles.title}>Enter the following details:</h1>
       <input
         type="number"
         placeholder="Enter your income"

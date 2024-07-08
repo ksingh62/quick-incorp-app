@@ -6,7 +6,7 @@ import PayrollCalculator from "./PayrollCalculator";
 const Page = () => {
   return (
     <div>
-      <h1>Item 2 Solutions</h1>
+      <h1>Payroll Calculator</h1>
       <PayrollCalculator />
     </div>
   );
