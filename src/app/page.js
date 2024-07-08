@@ -16,8 +16,9 @@ export default function LandingPage() {
           <button className="dropbtn">Solutions</button>
           <div className="dropdown-content">
             <Link href="/prototype/solutions/item1"></Link>
-            <Link href="/prototype/solutions/item2">Solution 2</Link>
-            <Link href="/prototype/solutions/item3">Solution 3</Link>
+            <Link href="/prototype/solutions/item2"></Link>
+            <Link href="/prototype/solutions/item3"></Link>
+            <Link href="/prototype/solutions/item4"></Link>
           </div>
         </div>
         <div>
