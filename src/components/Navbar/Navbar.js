@@ -15,6 +15,9 @@ export default function Navbar() {
             <Link href="/prototype/solutions/item2">Payroll Calculator</Link>
             <Link href="/prototype/solutions/item3">Currency Converter</Link>
             <Link href="/prototype/solutions/item4">Loan Calculator</Link>
+            <Link href="/prototype/solutions/item5">
+              Create a Business plan
+            </Link>
           </div>
         </div>
         <div>
