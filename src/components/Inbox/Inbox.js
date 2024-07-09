@@ -132,3 +132,6 @@ const ReplyForm = ({ to, subject, parentEmail }) => {
 };
 
 export default Inbox;
+
+// https://www.youtube.com/watch?v=LnVRGV-9NOY&t=245s
+// https://www.youtube.com/watch?v=xYuW_XDvYyQ

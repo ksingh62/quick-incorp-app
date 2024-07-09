@@ -1,0 +1,74 @@
+[
+  {
+    "id": "1",
+    "name": "Keith Piper",
+    "image": "/pic-2.jpg",
+    "title": "Business Advisor",
+    "education": "LLB, LLM",
+    "email":"keith.piper@quickincrops.com",
+    "rating": 4.8,
+    "synopsis": "Keith Piper is a seasoned legal professional...",
+    "fullSynopsis": "Keith Piper is a seasoned legal professional specializing in providing strategic counsel to businesses of all sizes. With over two decades of experience in the legal industry, Keith has developed a reputation for his sharp analytical skills, comprehensive understanding of business law, and his ability to craft innovative solutions to complex legal challenges. His clients range from startups and small enterprises to large corporations, across various sectors including technology, finance, healthcare, and manufacturing.",
+    "calendly": "https://calendly.com/quickincorp51/30min"
+  },
+  {
+    "id": "2",
+    "name": "Andrew Scott",
+    "image": "/pic-3.jpg",
+    "title": "Legal Advisor",
+    "education": "JD, MBA",
+    "email":"keith.piper@quickincrops.com",
+    "rating": 4.8,
+    "synopsis": "Andrew Scott has extensive experience in corporate law...",
+    "fullSynopsis": "Andrew Scott is a seasoned legal professional specializing in providing strategic counsel to businesses of all sizes. With over two decades of experience in the legal industry, Keith has developed a reputation for his sharp analytical skills, comprehensive understanding of business law, and his ability to craft innovative solutions to complex legal challenges. His clients range from startups and small enterprises to large corporations, across various sectors including technology, finance, healthcare, and manufacturing.",
+    "calendly": "https://calendly.com/quickincorp51/30min"
+  },
+  {
+    "id": "3",
+    "name": "Abigail Nolan",
+    "image": "/pic-4.jpg",
+    "title": "Business Advisor",
+    "education": "LLB, LLM",
+    "email":"abigail.nolan@quickincrops.com",
+    "rating": 4.8,
+    "synopsis": "Abigail Nolan is a seasoned legal professional...",
+    "fullSynopsis": "Abigail Nolan is a seasoned legal professional specializing in providing strategic counsel to businesses of all sizes. With over two decades of experience in the legal industry, Keith has developed a reputation for his sharp analytical skills, comprehensive understanding of business law, and his ability to craft innovative solutions to complex legal challenges. His clients range from startups and small enterprises to large corporations, across various sectors including technology, finance, healthcare, and manufacturing.",
+    "calendly": "https://calendly.com/quickincorp51/30min"
+  },
+  {
+    "id": "4",
+    "name": "Faith Morris",
+    "image": "/pic-1.jpg",
+    "title": "Business Advisor",
+    "education": "LLB, LLM",
+    "email":"faith.morris@quickincrops.com",
+    "rating": 4.8,
+    "synopsis": "Faith Morris is a seasoned legal professional...",
+    "fullSynopsis": "Faith Morris is a seasoned legal professional specializing in providing strategic counsel to businesses of all sizes. With over two decades of experience in the legal industry, Keith has developed a reputation for his sharp analytical skills, comprehensive understanding of business law, and his ability to craft innovative solutions to complex legal challenges. His clients range from startups and small enterprises to large corporations, across various sectors including technology, finance, healthcare, and manufacturing.",
+    "calendly": "https://calendly.com/quickincorp51/30min"
+  },
+  {
+    "id": "5",
+    "name": "Keith Piper",
+    "image": "/pic-2.jpg",
+    "title": "Business Advisor",
+    "education": "LLB, LLM",
+    "email":"keith.piper@quickincrops.com",
+    "rating": 4.8,
+    "synopsis": "Keith Piper is a seasoned legal professional...",
+    "fullSynopsis": "Keith Piper is a seasoned legal professional specializing in providing strategic counsel to businesses of all sizes. With over two decades of experience in the legal industry, Keith has developed a reputation for his sharp analytical skills, comprehensive understanding of business law, and his ability to craft innovative solutions to complex legal challenges. His clients range from startups and small enterprises to large corporations, across various sectors including technology, finance, healthcare, and manufacturing.",
+    "calendly": "https://calendly.com/quickincorp51/30min"
+  },
+  {
+    "id": "6",
+    "name": "Andrew Scott",
+    "image": "/pic-3.jpg",
+    "title": "Legal Advisor",
+    "education": "JD, MBA",
+    "email":"keith.piper@quickincrops.com",
+    "rating": 4.8,
+    "synopsis": "Andrew Scott has extensive experience in corporate law...",
+    "fullSynopsis": "Andrew Scott has extensive experience in corporate law and provides top-notch legal advice...",
+    "calendly": "https://calendly.com/quickincorp51/30min"
+  }
+]
