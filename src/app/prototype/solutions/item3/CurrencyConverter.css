@@ -1,4 +1,4 @@
-.currency-converter-container {
+currency-converter-container {
     max-width: 600px;
     margin: 3rem auto;
     padding: 2rem;
@@ -8,25 +8,25 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-family: 'Roboto', sans-serif;
   }
-  
+
   .currency-converter-title {
     text-align: center;
     margin-bottom: 2rem;
     font-size: 1.8rem;
     color: #007bff; /* Blue color */
   }
-  
+
   .currency-converter-formGroup {
     margin-bottom: 1.5rem;
   }
-  
+
   .currency-converter-label {
     display: block;
     margin-bottom: 0.5rem;
     font-size: 1rem;
     color: #007bff; /* Blue color for labels */
   }
-  
+
   .currency-converter-input {
     width: 100%;
     padding: 0.75rem;
@@ -37,16 +37,16 @@
     color: #007bff; /* Blue color */
     background-color: #f9f9f9;
   }
-  
+
   .currency-converter-input::placeholder {
     color: #007bff; /* Blue color for placeholder */
   }
-  
+
   .currency-converter-input:focus {
     border-color: #007bff;
     outline: none;
   }
-  
+
   .currency-converter-button {
     width: 100%;
     padding: 0.75rem;
@@ -59,30 +59,29 @@
     transition: background-color 0.3s ease-in-out;
     font-weight: bold;
   }
-  
+
   .currency-converter-button:hover {
     background-color: #0056b3;
   }
-  
+
   .currency-converter-result {
     text-align: center;
     margin-top: 2rem;
     font-size: 1.5rem;
     color: #28a745;
   }
-  
+
   .currency-converter-error {
     text-align: center;
     margin-top: 2rem;
     font-size: 1.2rem;
     color: #dc3545;
   }
-  
+
   .currency-converter-h2 {
     color: #007bff; /* Blue color */
   }
-  
+
   .currency-converter-text-black {
     color: #000; /* Black color for specific text */
   }
-  

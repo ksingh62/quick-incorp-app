@@ -67,6 +67,23 @@
   .loan-calculator-results {
     text-align: center;
     margin-top: 2rem;
+    color: #007bff;
+  }
+  
+  .loan-calculator-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+  }
+  
+  .loan-calculator-table th, .loan-calculator-table td {
+    border: 1px solid blue;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .loan-calculator-table th {
+    background-color: black;
   }
   
   .loan-calculator-chart {
@@ -79,13 +96,5 @@
     margin-top: 2rem;
     font-size: 1.2rem;
     color: #dc3545;
-  }
-  
-  .loan-calculator-h2 {
-    color: #007bff; /* Blue color */
-  }
-  
-  .loan-calculator-text-black {
-    color: #000; /* Black color for specific text */
   }
   

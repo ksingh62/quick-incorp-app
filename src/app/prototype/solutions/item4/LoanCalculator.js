@@ -2,23 +2,24 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import "./LoanCalculator.css";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const LoanCalculator = () => {
   const [loanAmount, setLoanAmount] = useState("");
   const [loanTerm, setLoanTerm] = useState("");
   const [interestRate, setInterestRate] = useState("");
-  const [compound, setCompound] = useState("");
-  const [payback, setPayback] = useState("");
+  const [monthlyPayment, setMonthlyPayment] = useState("");
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
 
   const handleCalculate = async () => {
     try {
       const response = await axios.get("/api/loan-calculator", {
-        params: { loanAmount, loanTerm, interestRate, compound, payback },
+        params: { loanAmount, loanTerm, interestRate, monthlyPayment },
       });
-      console.log("API response:", response.data);
       setResults(response.data);
       setError(null); // Clear any previous errors
     } catch (error) {
@@ -84,26 +85,14 @@ const LoanCalculator = () => {
         />
       </div>
       <div className="loan-calculator-formGroup">
-        <label htmlFor="compound" className="loan-calculator-label">
-          Compound Frequency (per year)
+        <label htmlFor="monthlyPayment" className="loan-calculator-label">
+          Monthly Payment (optional)
         </label>
         <input
           type="number"
-          id="compound"
-          value={compound}
-          onChange={(e) => setCompound(e.target.value)}
-          className="loan-calculator-input"
-        />
-      </div>
-      <div className="loan-calculator-formGroup">
-        <label htmlFor="payback" className="loan-calculator-label">
-          Payback Frequency (per year)
-        </label>
-        <input
-          type="number"
-          id="payback"
-          value={payback}
-          onChange={(e) => setPayback(e.target.value)}
+          id="monthlyPayment"
+          value={monthlyPayment}
+          onChange={(e) => setMonthlyPayment(e.target.value)}
           className="loan-calculator-input"
         />
       </div>
@@ -113,12 +102,28 @@ const LoanCalculator = () => {
       {results && (
         <div className="loan-calculator-results">
           <h2>Results</h2>
-          <p>Monthly Payment: ${results.monthlyPayment}</p>
-          <p>Total Payment: ${results.totalPayment}</p>
-          <p>Total Interest: ${results.totalInterest}</p>
-          <p>Federal Tax: ${results.federalTax}</p>
-          <p>Provincial Tax: ${results.provincialTax}</p>
-          <p>Total Tax: ${results.totalTax}</p>
+          <table className="loan-calculator-table">
+            <thead>
+              <tr>
+                <th>Monthly Payment</th>
+                <th>Total Payment</th>
+                <th>Total Interest</th>
+                <th>Federal Tax</th>
+                <th>Provincial Tax</th>
+                <th>Total Tax</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>${results.monthlyPayment}</td>
+                <td>${results.totalPayment}</td>
+                <td>${results.totalInterest}</td>
+                <td>${results.federalTax}</td>
+                <td>${results.provincialTax}</td>
+                <td>${results.totalTax}</td>
+              </tr>
+            </tbody>
+          </table>
           <div className="loan-calculator-chart">
             <Pie data={data} />
           </div>
