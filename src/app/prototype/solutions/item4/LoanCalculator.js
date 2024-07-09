@@ -135,3 +135,6 @@ const LoanCalculator = () => {
 };
 
 export default LoanCalculator;
+
+//https://www.codepel.com/vanilla-javascript/javascript-finance-calculator
+// https://chatgpt.com/share/11593831-72af-4f6c-ab2c-be5dd35e464f

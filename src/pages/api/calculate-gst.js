@@ -27,3 +27,5 @@ export default function handler(req, res) {
 
   res.status(200).json({ gst });
 }
+
+// gst rates https://www.retailcouncil.org/resources/quick-facts/sales-tax-rates-by-province/
