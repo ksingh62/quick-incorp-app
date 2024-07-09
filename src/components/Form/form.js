@@ -589,8 +589,8 @@ export default function Form() {
               Fair and Transparent Pricing
             </h2>
             <p>
-              Whether you're starting a new business or already running one,
-              we've got you covered.
+              Whether you&apos;re starting a new business or already running
+              one, we&apos;ve got you covered.
             </p>
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
               <div
@@ -743,3 +743,6 @@ export default function Form() {
     </section>
   );
 }
+
+// https://www.youtube.com/watch?v=2JDKquIMJws
+// https://docs.stripe.com/payments?payments=popular
