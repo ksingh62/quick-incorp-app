@@ -2,8 +2,44 @@
 import React, { useState } from "react";
 import "./BusinessPlan.css";
 
+const industrySuggestions = {
+  technology: {
+    businessDescription: "Innovative",
+    targetMarket: "Tech-savvy",
+    productsServices: "Software",
+    revenueModel: "Subscription",
+    marketingStrategy: "Digital",
+    financialPlan: "Scalable",
+  },
+  retail: {
+    businessDescription: "Customer-centric",
+    targetMarket: "Shoppers",
+    productsServices: "Merchandise",
+    revenueModel: "Sales",
+    marketingStrategy: "Promotions",
+    financialPlan: "Profit-focused",
+  },
+  healthcare: {
+    businessDescription: "Wellness",
+    targetMarket: "Patients",
+    productsServices: "Services",
+    revenueModel: "Insurance",
+    marketingStrategy: "Trust",
+    financialPlan: "Compliance",
+  },
+  education: {
+    businessDescription: "Knowledge",
+    targetMarket: "Students",
+    productsServices: "Courses",
+    revenueModel: "Tuition",
+    marketingStrategy: "Content",
+    financialPlan: "Growth",
+  },
+};
+
 const BusinessPlan = () => {
   const [inputs, setInputs] = useState({
+    industry: "",
     businessName: "",
     businessDescription: "",
     targetMarket: "",
@@ -14,6 +50,21 @@ const BusinessPlan = () => {
   });
 
   const [businessPlan, setBusinessPlan] = useState(null);
+
+  const handleIndustryChange = (e) => {
+    const industry = e.target.value;
+    setInputs({
+      ...inputs,
+      industry,
+      businessDescription:
+        industrySuggestions[industry]?.businessDescription || "",
+      targetMarket: industrySuggestions[industry]?.targetMarket || "",
+      productsServices: industrySuggestions[industry]?.productsServices || "",
+      revenueModel: industrySuggestions[industry]?.revenueModel || "",
+      marketingStrategy: industrySuggestions[industry]?.marketingStrategy || "",
+      financialPlan: industrySuggestions[industry]?.financialPlan || "",
+    });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,6 +79,9 @@ const BusinessPlan = () => {
   const generateBusinessPlan = () => {
     const plan = `
       ## Business Plan for ${inputs.businessName}
+
+      **Industry:**
+      ${inputs.industry}
 
       **Business Description:**
       ${inputs.businessDescription}
@@ -55,6 +109,24 @@ const BusinessPlan = () => {
     <div className="business-plan-container">
       <h1 className="business-plan-title">Business Plan Generator</h1>
       <form onSubmit={handleSubmit}>
+        <div className="business-plan-formGroup">
+          <label htmlFor="industry" className="business-plan-label">
+            Industry
+          </label>
+          <select
+            id="industry"
+            name="industry"
+            value={inputs.industry}
+            onChange={handleIndustryChange}
+            className="business-plan-select"
+          >
+            <option value="">Select Industry</option>
+            <option value="technology">Technology</option>
+            <option value="retail">Retail</option>
+            <option value="healthcare">Healthcare</option>
+            <option value="education">Education</option>
+          </select>
+        </div>
         <div className="business-plan-formGroup">
           <label htmlFor="businessName" className="business-plan-label">
             Business Name

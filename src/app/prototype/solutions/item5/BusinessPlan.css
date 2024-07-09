@@ -28,7 +28,8 @@
   }
   
   .business-plan-input,
-  .business-plan-textarea {
+  .business-plan-textarea,
+  .business-plan-select {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #ddd;
@@ -45,7 +46,8 @@
   }
   
   .business-plan-input:focus,
-  .business-plan-textarea:focus {
+  .business-plan-textarea:focus,
+  .business-plan-select:focus {
     border-color: #007bff;
     outline: none;
   }
