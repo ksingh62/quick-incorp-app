@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { ResponsivePie } from '@nivo/pie';
 import { ResponsiveLine } from '@nivo/line';
+import { ResponsiveRadar } from '@nivo/radar';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 const customColors = ['rgb(100, 96, 199)'];
@@ -160,6 +161,18 @@ const Page = () => {
               },
             ]}
           />
+        </div>
+      </div>
+
+      <div className="bg-gray-800 p-6 rounded-lg shadow-md">
+        <h3 className="text-xl font-semibold mb-4">Number of Employees</h3>
+        <p className="text-2xl">{employees.length}</p>
+      </div>
+
+      <div className="bg-gray-800 p-6 rounded-lg shadow-md">
+        <h3 className="text-xl font-semibold mb-4">Employees by Age Group</h3>
+        <div className="h-64">
+          <ResponsiveRadar data={radarData} keys={['count']} indexBy="taste" colors={customColors} theme={customTheme} />
         </div>
       </div>
     </div>
