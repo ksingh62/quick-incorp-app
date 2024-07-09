@@ -1,0 +1,100 @@
+.loan-calculator-container {
+    max-width: 600px;
+    margin: 3rem auto;
+    padding: 2rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .loan-calculator-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    color: #007bff; /* Blue color */
+  }
+  
+  .loan-calculator-formGroup {
+    margin-bottom: 1.5rem;
+  }
+  
+  .loan-calculator-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #007bff; /* Blue color for labels */
+  }
+  
+  .loan-calculator-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease-in-out;
+    color: #007bff; /* Blue color */
+    background-color: #f9f9f9;
+  }
+  
+  .loan-calculator-input::placeholder {
+    color: #007bff; /* Blue color for placeholder */
+  }
+  
+  .loan-calculator-input:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  .loan-calculator-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    font-weight: bold;
+  }
+  
+  .loan-calculator-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .loan-calculator-results {
+    text-align: center;
+    margin-top: 2rem;
+    color: #007bff;
+  }
+  
+  .loan-calculator-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+  }
+  
+  .loan-calculator-table th, .loan-calculator-table td {
+    border: 1px solid blue;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .loan-calculator-table th {
+    background-color: black;
+  }
+  
+  .loan-calculator-chart {
+    max-width: 500px;
+    margin: 2rem auto;
+  }
+  
+  .loan-calculator-error {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    color: #dc3545;
+  }
+  

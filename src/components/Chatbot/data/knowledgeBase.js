@@ -3,12 +3,12 @@ const knowledgeBase = [
   {
     question: "How do I register a company?",
     answer:
-      "To register a company, go to the 'Register' page from the main menu, fill in the required details, and submit the form. You will receive a confirmation email once your application is processed.",
+      "To register a company, go to the 'Register a company' page from the Sidebar menu, fill in the required details, and submit the form. You will receive a confirmation email once your application is processed.",
   },
   {
-    question: "How can I book an appointment with an advisor?",
+    question: "How can I book an appointment with an financial/legal advisor?",
     answer:
-      "To book an appointment with an advisor, navigate to the 'Advisors' section from the main menu, select an available advisor, and choose a suitable time slot.",
+      "To book an appointment with an advisor, navigate to the 'Book a Session with an advisor' section from the Sidebar menu, select an available advisor, and choose a suitable time slot.",
   },
   {
     question: "Where can I find my submitted applications?",
