@@ -13,6 +13,9 @@ export default function AdminLayout({ children }) {
                             <Link href="/prototype/admin-dashboard/" className="text-white hover:text-indigo-300">
                                 Dashboard Home
                             </Link>
+                            <Link href="/prototype/admin-dashboard/kanban" className="text-white hover:text-indigo-300">
+                                Kanban Board
+                            </Link>
                             <Link href="/prototype/admin-dashboard/manage-teams" className="text-white hover:text-indigo-300">
                                 Manage Teams
                             </Link>
