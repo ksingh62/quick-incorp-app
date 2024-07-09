@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     `;
 
     const filterContext = `
-      You should only answer questions related to the QuickIncorp app, business registration, and running a business in Canada.
+      You should only answer questions related to the QuickIncorp app, business registration, and running a business in Canada. With the exception being replying to greeting.
       If the question is not related to these topics, respond with: "I'm sorry, I can only assist with questions related to QuickIncorp and business registration in Canada."
     `;
 
