@@ -1,7 +1,16 @@
-// pages/api/calculate-payroll.js
+import { db } from "@/app/prototype/_utils/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 export default async function handler(req, res) {
-  const { income, province } = req.query;
+  const { employeeId } = req.query;
+
+  const employee = await getEmployeeById(employeeId); // Implement this function to fetch employee data by ID
+
+  if (!employee) {
+    return res.status(404).json({ error: "Employee not found" });
+  }
+
+  const { income, province } = employee;
 
   const federalTaxRates = [
     { rate: 0.15, threshold: 49020 },
@@ -130,4 +139,15 @@ export default async function handler(req, res) {
     ei: ei.toFixed(2),
     netIncome: netIncome.toFixed(2),
   });
+}
+
+// Implement getEmployeeById function
+async function getEmployeeById(employeeId) {
+  const docRef = doc(db, "employees", employeeId);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    return null;
+  }
 }
