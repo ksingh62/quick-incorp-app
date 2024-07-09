@@ -95,4 +95,6 @@ exports.triggerWeeklyEmails = functions.https.onRequest(async (req, res) => {
 
 // https://us-central1-quickincorp-101de.cloudfunctions.net/triggerWeeklyEmails
 
+// https://www.youtube.com/watch?v=iuGPFbLlKYQ
 // https://firebase.google.com/docs/functions
+// https://www.youtube.com/watch?v=CFns6KByT1Y
