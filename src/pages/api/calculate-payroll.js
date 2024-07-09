@@ -4,7 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 export default async function handler(req, res) {
   const { employeeId } = req.query;
 
-  const employee = await getEmployeeById(employeeId); // Implement this function to fetch employee data by ID
+  const employee = await getEmployeeById(employeeId);
 
   if (!employee) {
     return res.status(404).json({ error: "Employee not found" });

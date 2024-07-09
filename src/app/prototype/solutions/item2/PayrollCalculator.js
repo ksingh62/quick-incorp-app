@@ -44,7 +44,7 @@ const PayrollCalculator = () => {
         params: { employeeId: selectedEmployee },
       });
       setResults(response.data);
-      setError(null); // Clear any previous errors
+      setError(null);
     } catch (error) {
       console.error("Error calculating payroll tax:", error);
       setResults(null);
