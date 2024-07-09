@@ -81,6 +81,26 @@ const Page = () => {
     y: monthlyData[month],
   }));
 
+  // Employees by Age Group
+  const ageGroups = employees.reduce((acc, employee) => {
+    const ageGroup = Math.floor(employee.age / 10) * 10;
+    if (!acc[ageGroup]) {
+      acc[ageGroup] = 0;
+    }
+    acc[ageGroup]++;
+    return acc;
+  }, {});
+
+  const ageGroupChartData = Object.keys(ageGroups).map(ageGroup => ({
+    ageGroup: `${ageGroup}-${parseInt(ageGroup) + 9}`,
+    count: ageGroups[ageGroup],
+  }));
+
+  const radarData = ageGroupChartData.map(group => ({
+    taste: group.ageGroup,
+    count: group.count,
+  }));
+
   return (
     <div className="grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 lg:grid-cols-2">
 
