@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { useUserAuth } from "@/app/prototype/_utils/auth-context";
 import { doc, setDoc, runTransaction } from "firebase/firestore";
 import { db } from "@/app/prototype/_utils/firebase";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from "next/navigation"; // Ensure this is useRouter not next/navigation
+import { loadStripe } from "@stripe/stripe-js";
 
 const steps = [
   {
@@ -43,6 +43,10 @@ const provinces = [
   { province: "Yukon", abbr: "YT" },
 ];
 
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+);
+
 export default function Form() {
   const { user } = useUserAuth();
   const router = useRouter();
@@ -52,21 +56,18 @@ export default function Form() {
     formState: { errors },
     trigger,
     reset,
-  } = useForm({
-    mode: "onChange",
-  });
+  } = useForm({ mode: "onChange" });
 
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [amount, setAmount] = useState(0);
+  const [sessionId, setSessionId] = useState(null);
 
   const sendEmail = async (data) => {
     try {
       const response = await fetch("/api/sendEmail", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
@@ -94,7 +95,8 @@ export default function Form() {
     if (!isDataValid) return;
 
     if (currentStep < steps.length - 1) {
-      if (currentStep === steps.length - 2) {
+      if (currentStep === steps.length - 3) {
+        // Step before payment
         const onSubmit = async (data) => {
           const success = await addDataToFirestore(data);
           await sendEmail(data);
@@ -103,7 +105,26 @@ export default function Form() {
         };
         await handleSubmit(onSubmit)();
       }
-      setCurrentStep((step) => step + 1);
+
+      if (currentStep === steps.length - 2) {
+        // Payment step
+        try {
+          const response = await fetch("/api/create-checkout-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount, plan: selectedPlan }),
+          });
+          const session = await response.json();
+          if (session.id) {
+            localStorage.setItem("stripe_session_id", session.id);
+            window.location.href = `https://checkout.stripe.com/pay/${session.id}`;
+          }
+        } catch (error) {
+          console.error("Error creating checkout session:", error);
+        }
+      } else {
+        setCurrentStep((step) => step + 1);
+      }
     }
   };
 
@@ -130,11 +151,7 @@ export default function Form() {
         messageId: `application-${applicationId}`,
       };
 
-      await setDoc(doc(db, "users", user.uid), {
-        ...data,
-        userId: user.uid,
-      });
-
+      await setDoc(doc(db, "users", user.uid), { ...data, userId: user.uid });
       await storeSentEmail(emailData);
 
       return true;
@@ -175,6 +192,14 @@ export default function Form() {
   };
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const step = urlParams.get("step");
+    if (step) {
+      setCurrentStep(parseInt(step, 10));
+    }
+  }, []);
+
+  useEffect(() => {
     if (currentStep === steps.length - 1) {
       const timer = setTimeout(() => {
         router.push("/prototype/homepage");
@@ -183,20 +208,58 @@ export default function Form() {
     }
   }, [currentStep, router]);
 
-  const handleCheckout = async () => {
-    const response = await fetch("/api/create-checkout-session", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ amount, plan: selectedPlan }),
-    });
+  useEffect(() => {
+    const session_id = new URLSearchParams(window.location.search).get(
+      "session_id"
+    );
 
-    const session = await response.json();
-    if (session.url) {
-      window.location.href = session.url;
-    } else {
-      console.error("Error creating checkout session");
+    const checkPaymentStatus = async (sessionId) => {
+      try {
+        const response = await fetch(`/api/payment-status/${sessionId}`);
+        const data = await response.json();
+        if (data.status === "paid") {
+          setCurrentStep(5); // Directly set to step 6 after successful payment
+          localStorage.removeItem("stripe_session_id");
+        }
+      } catch (error) {
+        console.error("Error checking payment status:", error);
+      }
+    };
+
+    if (session_id) {
+      checkPaymentStatus(session_id);
+    }
+  }, []);
+
+  const handleCheckout = async () => {
+    if (!user || !user.uid) {
+      console.error("User not authenticated");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount, plan: selectedPlan }),
+      });
+
+      const session = await response.json();
+      if (session.id) {
+        const stripe = await stripePromise;
+        const { error } = await stripe.redirectToCheckout({
+          sessionId: session.id,
+        });
+        if (error) {
+          console.error("Stripe checkout error:", error);
+        }
+      } else {
+        console.error("Session ID not received from Stripe");
+      }
+    } catch (error) {
+      console.error("Error creating checkout session:", error);
     }
   };
 
@@ -252,7 +315,7 @@ export default function Form() {
                     id="firstName"
                     {...register("firstName", {
                       required: {
-                        value: "true",
+                        value: true,
                         message: "First Name is Required",
                       },
                     })}
@@ -279,7 +342,7 @@ export default function Form() {
                     id="lastName"
                     {...register("lastName", {
                       required: {
-                        value: "true",
+                        value: true,
                         message: "Last Name is Required",
                       },
                     })}
@@ -306,7 +369,7 @@ export default function Form() {
                     id="email"
                     {...register("email", {
                       required: {
-                        value: "true",
+                        value: true,
                         message: "Email is required",
                       },
                       pattern: {
@@ -337,7 +400,7 @@ export default function Form() {
                     id="phoneNumber"
                     {...register("phoneNumber", {
                       required: {
-                        value: "true",
+                        value: true,
                         message: "Phone number is required",
                       },
                       pattern: {
@@ -376,7 +439,7 @@ export default function Form() {
                     id="corporationName"
                     {...register("corporationName", {
                       required: {
-                        value: "true",
+                        value: true,
                         message: "Corporation Name is Required",
                       },
                     })}
@@ -402,15 +465,15 @@ export default function Form() {
                     id="corpType"
                     {...register("corpType", {
                       required: {
-                        value: "true",
+                        value: true,
                         message: "Incorporation type is required",
                       },
                     })}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-100 bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6"
                   >
-                    <option value={""}></option>
-                    <option value={"federal"}>Federal</option>
-                    <option value={"provincial"}>Provincial</option>
+                    <option value=""></option>
+                    <option value="federal">Federal</option>
+                    <option value="provincial">Provincial</option>
                   </select>
                   {errors.corpType?.message && (
                     <p className="mt-2 text-sm text-red-400">
@@ -473,7 +536,7 @@ export default function Form() {
                     id="address"
                     {...register("address", {
                       required: {
-                        value: "true",
+                        value: true,
                         message: "Address is Required",
                       },
                     })}
@@ -500,7 +563,7 @@ export default function Form() {
                     id="city"
                     {...register("city", {
                       required: {
-                        value: "true",
+                        value: true,
                         message: "City is Required",
                       },
                     })}
@@ -560,7 +623,7 @@ export default function Form() {
                     id="postalCode"
                     {...register("postalCode", {
                       required: {
-                        value: "true",
+                        value: true,
                         message: "Postal Code is Required",
                       },
                       pattern: {
@@ -672,14 +735,13 @@ export default function Form() {
         {currentStep === 4 && (
           <div className="mt-10">
             <h2 className="text-xl font-semibold">Payment</h2>
-            <Link
-              href={"https://buy.stripe.com/test_fZedRk6G2cyP8eI8ww"}
-              target="_blank"
-              // onClick={handleCheckout}
+            <button
+              type="button"
+              onClick={handleCheckout}
               className="mt-4 w-full bg-sky-600 text-white py-2 rounded-lg"
             >
               Proceed to Payment
-            </Link>
+            </button>
           </div>
         )}
 
@@ -743,6 +805,3 @@ export default function Form() {
     </section>
   );
 }
-
-// https://www.youtube.com/watch?v=2JDKquIMJws
-// https://docs.stripe.com/payments?payments=popular
