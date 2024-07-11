@@ -1,4 +1,4 @@
-// sendEmail.js
+
 import nodemailer from "nodemailer";
 import mg from "nodemailer-mailgun-transport";
 import { db } from "@/app/prototype/_utils/firebase";
