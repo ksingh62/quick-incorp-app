@@ -101,27 +101,6 @@ export default function TaxForm() {
   const [formData, setFormData] = useState({});
   const [uploadedFiles, setUploadedFiles] = useState({});
 
-  const sendEmail = async (data) => {
-    try {
-      const response = await fetch("/api/sendEmail", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-
-      const responseData = await response.json();
-      console.log("Email sent successfully:", responseData);
-    } catch (error) {
-      console.error("Error sending email:", error.message);
-    }
-  };
-
   const prev = () => {
     if (currentStep > 0) {
       setCurrentStep((step) => step - 1);
@@ -134,7 +113,6 @@ export default function TaxForm() {
 
     if (!isDataValid) return;
 
-    // Update formData with current step values
     const currentValues = getValues(currentStepFields);
     setFormData((prev) => ({
       ...prev,
@@ -147,7 +125,6 @@ export default function TaxForm() {
   const onSubmit = async (data) => {
     const finalData = { ...formData, ...data, ...uploadedFiles };
 
-    // Remove any fields that are undefined
     const filteredData = Object.fromEntries(
       Object.entries(finalData).filter(([_, v]) => v !== undefined)
     );
@@ -177,7 +154,7 @@ export default function TaxForm() {
       });
 
       reset();
-      setCurrentStep(steps.length - 1); // Set to final step to show the success message
+      setCurrentStep(steps.length - 1);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -229,7 +206,7 @@ export default function TaxForm() {
     if (currentStep === steps.length - 1) {
       const timer = setTimeout(() => {
         router.push("/prototype/homepage");
-      }, 3000); // Redirect after 3 seconds
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [currentStep, router]);
