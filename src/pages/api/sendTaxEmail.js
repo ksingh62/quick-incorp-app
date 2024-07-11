@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer";
 import mg from "nodemailer-mailgun-transport";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import fetch from "node-fetch";
 import fs from "fs";
 import path from "path";
@@ -59,11 +58,11 @@ export default async function handler(req, res) {
       const mailOptionsUser = {
         from: "no-reply@yourdomain.com",
         to: email,
-        subject: `Application Received - Application ID: ${applicationId}`,
+        subject: `Tax Application Received - Application ID: ${applicationId}`,
         html: emailTemplate(
-          "Application Received",
+          "New Tax Application Received",
           `Dear ${email},<br><br>
-          Thank you for submitting your application. Your application is currently being processed.<br><br>
+          Thank you for submitting your tax application. Your application is currently being processed.<br><br>
           <strong>Application ID:</strong> ${applicationId}<br><br>
           We will notify you once your application has been reviewed.<br><br>
           Best regards,<br>
@@ -78,6 +77,9 @@ export default async function handler(req, res) {
       const attachments = await Promise.all(
         Object.entries(uploadedFiles).map(async ([key, url]) => {
           const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`Failed to download file: ${url}`);
+          }
           const buffer = await response.buffer();
           const fileName = key.split("/").pop();
           const tempPath = path.join(os.tmpdir(), fileName);
@@ -98,6 +100,7 @@ export default async function handler(req, res) {
           `A new tax application has been submitted with the following details:<br><br>
           <strong>Application ID:</strong> ${applicationId}<br><br>
           ${Object.entries(formData)
+            .filter(([_, value]) => value)
             .map(([key, value]) => `<strong>${key}:</strong> ${value}<br>`)
             .join("")}<br>
           Please review the attached documents.`
@@ -106,6 +109,11 @@ export default async function handler(req, res) {
       };
 
       await transporter.sendMail(mailOptionsAccountant);
+
+      // Clean up temporary files
+      attachments.forEach((attachment) => {
+        fs.unlinkSync(attachment.path);
+      });
 
       console.log("Emails sent successfully");
       res.status(200).json({

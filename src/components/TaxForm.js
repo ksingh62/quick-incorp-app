@@ -93,6 +93,7 @@ export default function TaxForm() {
     trigger,
     reset,
     getValues,
+    setValue,
   } = useForm({
     mode: "onChange",
   });
@@ -120,13 +121,19 @@ export default function TaxForm() {
     }));
 
     setCurrentStep((step) => step + 1);
+
+    if (steps[currentStep + 1]) {
+      steps[currentStep + 1].fields.forEach((field) => setValue(field, ""));
+    }
   };
 
   const onSubmit = async (data) => {
     const finalData = { ...formData, ...data, ...uploadedFiles };
 
     const filteredData = Object.fromEntries(
-      Object.entries(finalData).filter(([_, v]) => v !== undefined)
+      Object.entries(finalData).filter(
+        ([key, value]) => value !== undefined && !/^\d+$/.test(key)
+      )
     );
 
     try {
@@ -373,3 +380,6 @@ export default function TaxForm() {
     </section>
   );
 }
+
+// https://firebase.google.com/docs/storage
+// https://nodemailer.com/ https://documentation.mailgun.com/docs/mailgun/api-reference/intro/
