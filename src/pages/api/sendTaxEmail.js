@@ -1,5 +1,10 @@
 import nodemailer from "nodemailer";
 import mg from "nodemailer-mailgun-transport";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import fetch from "node-fetch";
+import fs from "fs";
+import path from "path";
+import os from "os";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
@@ -69,11 +74,20 @@ export default async function handler(req, res) {
 
       await transporter.sendMail(mailOptionsUser);
 
-      // Send email to accountant
-      const attachments = Object.entries(uploadedFiles).map(([key, value]) => ({
-        filename: key.split("/").pop(),
-        path: value,
-      }));
+      // Download files from Firebase Storage and attach them
+      const attachments = await Promise.all(
+        Object.entries(uploadedFiles).map(async ([key, url]) => {
+          const response = await fetch(url);
+          const buffer = await response.buffer();
+          const fileName = key.split("/").pop();
+          const tempPath = path.join(os.tmpdir(), fileName);
+          fs.writeFileSync(tempPath, buffer);
+          return {
+            filename: fileName,
+            path: tempPath,
+          };
+        })
+      );
 
       const mailOptionsAccountant = {
         from: "no-reply@yourdomain.com",
