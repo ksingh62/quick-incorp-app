@@ -182,3 +182,5 @@ const BusinessPlan = () => {
 };
 
 export default BusinessPlan;
+
+//https://youtu.be/iU2KLIaxPPQ?si=aQAjzsliLXXlPn2e

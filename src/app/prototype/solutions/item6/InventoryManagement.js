@@ -192,3 +192,4 @@ const InventoryManagement = () => {
 };
 
 export default InventoryManagement;
+//https://www.youtube.com/watch?v=8NJFxpm7IxQ&list=PLxVP80QwEJLAtP-mERzx3MYia5R2jvjTz
