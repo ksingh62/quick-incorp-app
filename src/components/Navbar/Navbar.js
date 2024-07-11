@@ -19,6 +19,7 @@ export default function Navbar() {
               Create a Business plan
             </Link>
             <Link href="/prototype/solutions/item6">Inventory Management</Link>
+            <Link href="/prototype/solutions/item">Commmunity</Link>
           </div>
         </div>
         <div>
