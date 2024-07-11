@@ -2,41 +2,6 @@
 import React, { useState } from "react";
 import "./BusinessPlan.css";
 
-const industrySuggestions = {
-  technology: {
-    businessDescription: "Innovative",
-    targetMarket: "Tech-savvy",
-    productsServices: "Software",
-    revenueModel: "Subscription",
-    marketingStrategy: "Digital",
-    financialPlan: "Scalable",
-  },
-  retail: {
-    businessDescription: "Customer-centric",
-    targetMarket: "Shoppers",
-    productsServices: "Merchandise",
-    revenueModel: "Sales",
-    marketingStrategy: "Promotions",
-    financialPlan: "Profit-focused",
-  },
-  healthcare: {
-    businessDescription: "Wellness",
-    targetMarket: "Patients",
-    productsServices: "Services",
-    revenueModel: "Insurance",
-    marketingStrategy: "Trust",
-    financialPlan: "Compliance",
-  },
-  education: {
-    businessDescription: "Knowledge",
-    targetMarket: "Students",
-    productsServices: "Courses",
-    revenueModel: "Tuition",
-    marketingStrategy: "Content",
-    financialPlan: "Growth",
-  },
-};
-
 const BusinessPlan = () => {
   const [inputs, setInputs] = useState({
     industry: "",
@@ -49,21 +14,11 @@ const BusinessPlan = () => {
     financialPlan: "",
   });
 
-  const [businessPlan, setBusinessPlan] = useState(null);
+  const [imageSrc, setImageSrc] = useState(null);
 
   const handleIndustryChange = (e) => {
     const industry = e.target.value;
-    setInputs({
-      ...inputs,
-      industry,
-      businessDescription:
-        industrySuggestions[industry]?.businessDescription || "",
-      targetMarket: industrySuggestions[industry]?.targetMarket || "",
-      productsServices: industrySuggestions[industry]?.productsServices || "",
-      revenueModel: industrySuggestions[industry]?.revenueModel || "",
-      marketingStrategy: industrySuggestions[industry]?.marketingStrategy || "",
-      financialPlan: industrySuggestions[industry]?.financialPlan || "",
-    });
+    setInputs({ ...inputs, industry });
   };
 
   const handleChange = (e) => {
@@ -77,32 +32,21 @@ const BusinessPlan = () => {
   };
 
   const generateBusinessPlan = () => {
-    const plan = `
-      ## Business Plan for ${inputs.businessName}
-
-      **Industry:**
-      ${inputs.industry}
-
-      **Business Description:**
-      ${inputs.businessDescription}
-
-      **Target Market:**
-      ${inputs.targetMarket}
-
-      **Products and Services:**
-      ${inputs.productsServices}
-
-      **Revenue Model:**
-      ${inputs.revenueModel}
-
-      **Marketing Strategy:**
-      ${inputs.marketingStrategy}
-
-      **Financial Plan:**
-      ${inputs.financialPlan}
-    `;
-
-    setBusinessPlan(plan);
+    fetch("http://localhost:5000/generate-insights", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(inputs),
+    })
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        setImageSrc(url);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
@@ -223,10 +167,10 @@ const BusinessPlan = () => {
           Generate Business Plan
         </button>
       </form>
-      {businessPlan && (
+      {imageSrc && (
         <div className="business-plan-results">
-          <h2>Your Business Plan</h2>
-          <pre>{businessPlan}</pre>
+          <h2>Your Business Plan Flowchart</h2>
+          <img src={imageSrc} alt="Business Plan Flowchart" />
         </div>
       )}
     </div>
