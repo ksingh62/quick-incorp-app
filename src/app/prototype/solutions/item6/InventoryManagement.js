@@ -1,4 +1,4 @@
-"use client";
+"use client"; // This line ensures the component runs on the client side
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Goods.css";
@@ -20,42 +20,66 @@ const InventoryManagement = () => {
   }, []);
 
   const fetchCategories = async () => {
-    const response = await axios.get("http://localhost:5000/categories");
-    setCategories(response.data);
+    try {
+      const response = await axios.get("http://localhost:5000/categories");
+      setCategories(response.data);
+    } catch (err) {
+      console.error("Error fetching categories:", err);
+    }
   };
 
   const fetchGoods = async () => {
-    const response = await axios.get("http://localhost:5000/goods");
-    setGoods(response.data);
+    try {
+      const response = await axios.get("http://localhost:5000/goods");
+      setGoods(response.data);
+    } catch (err) {
+      console.error("Error fetching goods:", err);
+    }
   };
 
   const addCategory = async (e) => {
     e.preventDefault();
-    const response = await axios.post("http://localhost:5000/categories", {
-      name: newCategory,
-    });
-    setCategories([...categories, response.data]);
-    setNewCategory("");
+    try {
+      const response = await axios.post("http://localhost:5000/categories", {
+        name: newCategory,
+      });
+      setCategories([...categories, response.data]);
+      setNewCategory("");
+    } catch (err) {
+      console.error("Error adding category:", err);
+    }
   };
 
   const addGood = async (e) => {
     e.preventDefault();
-    const response = await axios.post("http://localhost:5000/goods", newGood);
-    setGoods([...goods, response.data]);
-    setNewGood({ name: "", category: "", quantity: "", price: "" });
+    try {
+      const response = await axios.post("http://localhost:5000/goods", newGood);
+      setGoods([...goods, response.data]);
+      setNewGood({ name: "", category: "", quantity: "", price: "" });
+    } catch (err) {
+      console.error("Error adding good:", err);
+    }
   };
 
   const updateGood = async (id, updatedGood) => {
-    const response = await axios.put(
-      `http://localhost:5000/goods/${id}`,
-      updatedGood
-    );
-    setGoods(goods.map((good) => (good._id === id ? response.data : good)));
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/goods/${id}`,
+        updatedGood
+      );
+      setGoods(goods.map((good) => (good._id === id ? response.data : good)));
+    } catch (err) {
+      console.error("Error updating good:", err);
+    }
   };
 
   const deleteGood = async (id) => {
-    await axios.delete(`http://localhost:5000/goods/${id}`);
-    setGoods(goods.filter((good) => good._id !== id));
+    try {
+      await axios.delete(`http://localhost:5000/goods/${id}`);
+      setGoods(goods.filter((good) => good._id !== id));
+    } catch (err) {
+      console.error("Error deleting good:", err);
+    }
   };
 
   return (

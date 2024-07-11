@@ -18,7 +18,7 @@ export default function Navbar() {
             <Link href="/prototype/solutions/item5">
               Create a Business plan
             </Link>
-            <Link href="/prototype/solutions/item6">inventory Management</Link>
+            <Link href="/prototype/solutions/item6">Inventory Management</Link>
           </div>
         </div>
         <div>
