@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Script from "next/script";
 import "./BusinessPlan.css";
 
 const BusinessPlan = () => {
@@ -14,12 +15,8 @@ const BusinessPlan = () => {
     financialPlan: "",
   });
 
-  const [imageSrc, setImageSrc] = useState(null);
-
-  const handleIndustryChange = (e) => {
-    const industry = e.target.value;
-    setInputs({ ...inputs, industry });
-  };
+  const [flowchartCode, setFlowchartCode] = useState("");
+  const [isFlowchartGenerated, setIsFlowchartGenerated] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,26 +25,29 @@ const BusinessPlan = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    generateBusinessPlan();
+    generateFlowchart();
   };
 
-  const generateBusinessPlan = () => {
-    fetch("http://localhost:5000/generate-insights", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(inputs),
-    })
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = URL.createObjectURL(blob);
-        setImageSrc(url);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+  const generateFlowchart = () => {
+    const code = `
+      graph TD;
+        A[Business Plan for ${inputs.businessName}] --> B[Industry: ${inputs.industry}];
+        A --> C[Business Description: ${inputs.businessDescription}];
+        A --> D[Target Market: ${inputs.targetMarket}];
+        A --> E[Products and Services: ${inputs.productsServices}];
+        A --> F[Revenue Model: ${inputs.revenueModel}];
+        A --> G[Marketing Strategy: ${inputs.marketingStrategy}];
+        A --> H[Financial Plan: ${inputs.financialPlan}];
+    `;
+    setFlowchartCode(code);
+    setIsFlowchartGenerated(true);
   };
+
+  useEffect(() => {
+    if (isFlowchartGenerated && window.mermaid) {
+      window.mermaid.contentLoaded();
+    }
+  }, [isFlowchartGenerated]);
 
   return (
     <div className="business-plan-container">
@@ -61,7 +61,7 @@ const BusinessPlan = () => {
             id="industry"
             name="industry"
             value={inputs.industry}
-            onChange={handleIndustryChange}
+            onChange={handleChange}
             className="business-plan-select"
           >
             <option value="">Select Industry</option>
@@ -167,12 +167,16 @@ const BusinessPlan = () => {
           Generate Business Plan
         </button>
       </form>
-      {imageSrc && (
+      {isFlowchartGenerated && (
         <div className="business-plan-results">
           <h2>Your Business Plan Flowchart</h2>
-          <img src={imageSrc} alt="Business Plan Flowchart" />
+          <div className="mermaid">{flowchartCode}</div>
         </div>
       )}
+      <Script
+        src="https://unpkg.com/mermaid/dist/mermaid.min.js"
+        strategy="lazyOnload"
+      />
     </div>
   );
 };

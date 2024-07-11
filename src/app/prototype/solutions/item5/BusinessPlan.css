@@ -1,68 +1,50 @@
 .business-plan-container {
-  max-width: 600px;
-  margin: 3rem auto;
-  padding: 2rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  background-color: #ffffff;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: 'Roboto', sans-serif;
+  font-family: Arial, sans-serif;
 }
 
 .business-plan-title {
   text-align: center;
-  margin-bottom: 2rem;
-  font-size: 1.8rem;
+  margin-bottom: 1rem;
   color: #007bff;
 }
 
 .business-plan-formGroup {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .business-plan-label {
   display: block;
   margin-bottom: 0.5rem;
-  font-size: 1rem;
-  color: #007bff;
+  font-weight: bold;
+  color: blue; /* Changed text color to blue */
 }
 
 .business-plan-input,
-.business-plan-textarea,
-.business-plan-select {
+.business-plan-select,
+.business-plan-textarea {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.5rem;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease-in-out;
-  color: #007bff;
-  background-color: #f9f9f9;
-}
-
-.business-plan-input::placeholder,
-.business-plan-textarea::placeholder {
-  color: #007bff;
-}
-
-.business-plan-input:focus,
-.business-plan-textarea:focus,
-.business-plan-select:focus {
-  border-color: #007bff;
-  outline: none;
+  border-radius: 4px;
+  color: blue; /* Changed text color to blue */
 }
 
 .business-plan-button {
+  display: block;
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.5rem;
   background-color: #007bff;
   color: #fff;
   border: none;
-  border-radius: 8px;
-  font-size: 1.2rem;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
-  font-weight: bold;
 }
 
 .business-plan-button:hover {
@@ -71,11 +53,6 @@
 
 .business-plan-results {
   margin-top: 2rem;
-}
-
-.business-plan-results img {
-  max-width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  margin-top: 1rem;
+  text-align: center;
+  color: blue; /* Changed text color to blue */
 }

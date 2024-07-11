@@ -1,14 +1,9 @@
 const express = require("express");
-const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
 const { exec } = require("child_process");
 
-const app = express();
-const port = 5000;
-
-app.use(cors());
-app.use(express.json());
+const router = express.Router();
 
 const generateFlowchart = (flowchartDefinition) => {
   const tempFile = path.join(__dirname, "temp.mmd");
@@ -30,7 +25,7 @@ const generateFlowchart = (flowchartDefinition) => {
   });
 };
 
-app.post("/generate-insights", async (req, res) => {
+router.post("/generate-insights", async (req, res) => {
   const {
     industry,
     businessName,
@@ -43,30 +38,23 @@ app.post("/generate-insights", async (req, res) => {
   } = req.body;
 
   const flowchartDefinition = `
-    graph TD;
-      A[Business Plan for ${businessName}] --> B[Industry: ${industry}];
-      A --> C[Business Description: ${businessDescription}];
-      A --> D[Target Market: ${targetMarket}];
-      A --> E[Products and Services: ${productsServices}];
-      A --> F[Revenue Model: ${revenueModel}];
-      A --> G[Marketing Strategy: ${marketingStrategy}];
-      A --> H[Financial Plan: ${financialPlan}];
-      A --> I[Future Outlook];
-      I --> J[Expansion Opportunities];
-      I --> K[Technological Innovations];
-      I --> L[Sustainability Initiatives];
-      I --> M[Strategic Partnerships];
-      I --> N[Risk Management];
+  graph TD;
+    A[Business Plan for ${businessName}] --> B[Industry: ${industry}];
+    A --> C[Business Description: ${businessDescription}];
+    A --> D[Target Market: ${targetMarket}];
+    A --> E[Products and Services: ${productsServices}];
+    A --> F[Revenue Model: ${revenueModel}];
+    A --> G[Marketing Strategy: ${marketingStrategy}];
+    A --> H[Financial Plan: ${financialPlan}];
   `;
 
   try {
     const imagePath = await generateFlowchart(flowchartDefinition);
     res.sendFile(imagePath);
   } catch (error) {
+    console.error("Error:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+module.exports = router;

@@ -1,87 +1,80 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+require("dotenv").config(); // Load environment variables
 
 const app = express();
 const port = 5000;
-const secretKey = "your-secret-key";
+const secretKey = process.env.JWT_SECRET;
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(passport.initialize());
 
-// Connect to MongoDB
-mongoose.connect("mongodb://localhost:27017/community", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// In-memory storage
+const users = [];
+const posts = [];
 
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", () => {
-  console.log("Connected to MongoDB");
-});
+// Configure Passport with Google strategy
+const callbackURL =
+  process.env.NODE_ENV === "production"
+    ? process.env.PROD_CALLBACK_URL
+    : process.env.DEV_CALLBACK_URL;
 
-// Define User schema and model
-const userSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-});
-
-const User = mongoose.model("User", userSchema);
-
-// Define Post schema and model
-const postSchema = new mongoose.Schema({
-  author: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  content: { type: String, required: true },
-  comments: [
+passport.use(
+  new GoogleStrategy(
     {
-      author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-      content: { type: String, required: true },
-      createdAt: { type: Date, default: Date.now },
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: callbackURL,
     },
-  ],
-  createdAt: { type: Date, default: Date.now },
+    (accessToken, refreshToken, profile, done) => {
+      // Check if the user already exists
+      let user = users.find((u) => u.googleId === profile.id);
+      if (!user) {
+        // If not, create a new user
+        user = {
+          id: users.length + 1,
+          googleId: profile.id,
+          username: profile.displayName,
+          email: profile.emails[0].value,
+        };
+        users.push(user);
+      }
+      return done(null, user);
+    }
+  )
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
 });
 
-const Post = mongoose.model("Post", postSchema);
-
-// Register a new user
-app.post("/register", async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ username, email, password: hashedPassword });
-    await newUser.save();
-    res.status(201).json({ message: "User registered successfully" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+passport.deserializeUser((id, done) => {
+  const user = users.find((u) => u.id === id);
+  done(null, user);
 });
 
-// Login a user
-app.post("/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: "User not found" });
-    }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
-    const token = jwt.sign({ userId: user._id }, secretKey, {
+// Google authentication routes
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/" }),
+  (req, res) => {
+    // Successful authentication, issue token
+    const token = jwt.sign({ userId: req.user.id }, secretKey, {
       expiresIn: "1h",
     });
-    res.json({ token });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.redirect(`http://localhost:3000?token=${token}`);
   }
-});
+);
 
 // Middleware to authenticate user
 const authenticate = (req, res, next) => {
@@ -101,11 +94,14 @@ const authenticate = (req, res, next) => {
 // Create a new post
 app.post("/posts", authenticate, async (req, res) => {
   try {
-    const newPost = new Post({
+    const newPost = {
+      id: posts.length + 1,
       author: req.user.userId,
       content: req.body.content,
-    });
-    await newPost.save();
+      comments: [],
+      createdAt: new Date(),
+    };
+    posts.push(newPost);
     res.status(201).json(newPost);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -115,8 +111,15 @@ app.post("/posts", authenticate, async (req, res) => {
 // Get all posts
 app.get("/posts", async (req, res) => {
   try {
-    const posts = await Post.find().populate("author", "username");
-    res.json(posts);
+    const populatedPosts = posts.map((post) => ({
+      ...post,
+      author: users.find((user) => user.id === post.author),
+      comments: post.comments.map((comment) => ({
+        ...comment,
+        author: users.find((user) => user.id === comment.author),
+      })),
+    }));
+    res.json(populatedPosts);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -125,13 +128,16 @@ app.get("/posts", async (req, res) => {
 // Add a comment to a post
 app.post("/posts/:postId/comments", authenticate, async (req, res) => {
   try {
-    const post = await Post.findById(req.params.postId);
+    const post = posts.find((p) => p.id === parseInt(req.params.postId));
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
-    const newComment = { author: req.user.userId, content: req.body.content };
+    const newComment = {
+      author: req.user.userId,
+      content: req.body.content,
+      createdAt: new Date(),
+    };
     post.comments.push(newComment);
-    await post.save();
     res.status(201).json(post);
   } catch (err) {
     res.status(500).json({ error: err.message });

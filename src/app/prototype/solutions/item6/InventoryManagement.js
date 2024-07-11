@@ -1,7 +1,7 @@
-"use client"; // This line ensures the component runs on the client side
+"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./Goods.css";
+import "./InventoryManagement.css";
 
 const InventoryManagement = () => {
   const [categories, setCategories] = useState([]);
@@ -21,7 +21,7 @@ const InventoryManagement = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/categories");
+      const response = await axios.get("http://localhost:5000/api/categories");
       setCategories(response.data);
     } catch (err) {
       console.error("Error fetching categories:", err);
@@ -30,7 +30,7 @@ const InventoryManagement = () => {
 
   const fetchGoods = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/goods");
+      const response = await axios.get("http://localhost:5000/api/goods");
       setGoods(response.data);
     } catch (err) {
       console.error("Error fetching goods:", err);
@@ -40,9 +40,12 @@ const InventoryManagement = () => {
   const addCategory = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/categories", {
-        name: newCategory,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/categories",
+        {
+          name: newCategory,
+        }
+      );
       setCategories([...categories, response.data]);
       setNewCategory("");
     } catch (err) {
@@ -53,7 +56,10 @@ const InventoryManagement = () => {
   const addGood = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/goods", newGood);
+      const response = await axios.post(
+        "http://localhost:5000/api/goods",
+        newGood
+      );
       setGoods([...goods, response.data]);
       setNewGood({ name: "", category: "", quantity: "", price: "" });
     } catch (err) {
@@ -64,10 +70,10 @@ const InventoryManagement = () => {
   const updateGood = async (id, updatedGood) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/goods/${id}`,
+        `http://localhost:5000/api/goods/${id}`,
         updatedGood
       );
-      setGoods(goods.map((good) => (good._id === id ? response.data : good)));
+      setGoods(goods.map((good) => (good.id === id ? response.data : good)));
     } catch (err) {
       console.error("Error updating good:", err);
     }
@@ -75,8 +81,8 @@ const InventoryManagement = () => {
 
   const deleteGood = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/goods/${id}`);
-      setGoods(goods.filter((good) => good._id !== id));
+      await axios.delete(`http://localhost:5000/api/goods/${id}`);
+      setGoods(goods.filter((good) => good.id !== id));
     } catch (err) {
       console.error("Error deleting good:", err);
     }
@@ -112,7 +118,7 @@ const InventoryManagement = () => {
         >
           <option value="">Select Category</option>
           {categories.map((category) => (
-            <option key={category._id} value={category._id}>
+            <option key={category.id} value={category.id}>
               {category.name}
             </option>
           ))}
@@ -146,15 +152,18 @@ const InventoryManagement = () => {
         </thead>
         <tbody>
           {goods.map((good) => (
-            <tr key={good._id}>
+            <tr key={good.id}>
               <td>{good.name}</td>
-              <td>{good.category.name}</td>
+              <td>
+                {categories.find((category) => category.id === good.category)
+                  ?.name || "Unknown"}
+              </td>
               <td>{good.quantity}</td>
               <td>{good.price}</td>
               <td>
                 <button
                   onClick={() =>
-                    updateGood(good._id, {
+                    updateGood(good.id, {
                       ...good,
                       quantity: good.quantity + 1,
                     })
@@ -164,7 +173,7 @@ const InventoryManagement = () => {
                 </button>
                 <button
                   onClick={() =>
-                    updateGood(good._id, {
+                    updateGood(good.id, {
                       ...good,
                       quantity: good.quantity - 1,
                     })
@@ -172,7 +181,7 @@ const InventoryManagement = () => {
                 >
                   -
                 </button>
-                <button onClick={() => deleteGood(good._id)}>Delete</button>
+                <button onClick={() => deleteGood(good.id)}>Delete</button>
               </td>
             </tr>
           ))}

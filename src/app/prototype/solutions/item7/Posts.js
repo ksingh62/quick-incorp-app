@@ -1,5 +1,7 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./CommunityPage.css"; // Import CSS file
 
 const Posts = ({ token }) => {
   const [posts, setPosts] = useState([]);
@@ -36,7 +38,7 @@ const Posts = ({ token }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setPosts(
-        posts.map((post) => (post._id === postId ? response.data : post))
+        posts.map((post) => (post.id === postId ? response.data : post))
       );
     } catch (err) {
       alert(err.response.data.error);
@@ -57,20 +59,20 @@ const Posts = ({ token }) => {
       </form>
       <div>
         {posts.map((post) => (
-          <div key={post._id}>
+          <div key={post.id}>
             <h3>{post.author.username}</h3>
             <p>{post.content}</p>
             <div>
               <h4>Comments:</h4>
               {post.comments.map((comment) => (
-                <p key={comment._id}>
+                <p key={comment.createdAt}>
                   <strong>{comment.author.username}:</strong> {comment.content}
                 </p>
               ))}
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  handleComment(post._id, e.target.elements.comment.value);
+                  handleComment(post.id, e.target.elements.comment.value);
                   e.target.reset();
                 }}
               >
