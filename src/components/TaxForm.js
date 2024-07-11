@@ -163,10 +163,17 @@ export default function TaxForm() {
         userEmail: user.email,
       });
 
-      await sendEmail({
-        ...filteredData,
-        applicationId,
-        email: user.email,
+      await fetch("/api/sendTaxEmail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user.email,
+          formData: filteredData,
+          applicationId,
+          uploadedFiles,
+        }),
       });
 
       reset();
