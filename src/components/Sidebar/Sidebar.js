@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import "./Sidebar.css";
@@ -40,7 +41,7 @@ export default function Sidebar() {
 
           <div className="sidebar-option active-sidebar-option">
             <img src="/icon-board.svg" alt="" />
-            <Link href="/prototype/homepage">Book a Session with advisor</Link>
+            <Link href="/prototype/advisors">Book a Session with advisor</Link>
           </div>
 
           <div className="sidebar-option">
