@@ -3,14 +3,19 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./CommunityPage.css"; // Import CSS file
 
-const Posts = ({ token }) => {
+const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [content, setContent] = useState("");
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await axios.get("http://localhost:5000/posts");
-      setPosts(response.data);
+      try {
+        const response = await axios.get("http://localhost:5000/posts");
+        setPosts(response.data);
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+        alert("Error fetching posts");
+      }
     };
     fetchPosts();
   }, []);
@@ -18,15 +23,14 @@ const Posts = ({ token }) => {
   const handlePost = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:5000/posts",
-        { content },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const response = await axios.post("http://localhost:5000/posts", {
+        content,
+      });
       setPosts([...posts, response.data]);
       setContent("");
     } catch (err) {
-      alert(err.response.data.error);
+      console.error("Error creating post:", err);
+      alert(err.response?.data?.error || "Error creating post");
     }
   };
 
@@ -34,14 +38,14 @@ const Posts = ({ token }) => {
     try {
       const response = await axios.post(
         `http://localhost:5000/posts/${postId}/comments`,
-        { content: comment },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { content: comment }
       );
       setPosts(
         posts.map((post) => (post.id === postId ? response.data : post))
       );
     } catch (err) {
-      alert(err.response.data.error);
+      console.error("Error adding comment:", err);
+      alert(err.response?.data?.error || "Error adding comment");
     }
   };
 

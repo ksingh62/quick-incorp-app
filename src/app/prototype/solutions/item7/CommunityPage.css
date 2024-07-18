@@ -1,0 +1,33 @@
+body {
+    font-family: Arial, sans-serif;
+    color: #007bff; /* Make text blue */
+  }
+  
+  h2, h3, h4 {
+    color: #007bff; /* Make headers blue */
+  }
+  
+  input, textarea, button {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  input, textarea {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  button {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
