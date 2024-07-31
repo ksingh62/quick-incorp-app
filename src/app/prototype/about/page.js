@@ -5,28 +5,28 @@ import React, { useState } from 'react';
 const teamMembers = [
   {
     name: 'Ammar Khan',
-    title: 'Front End Developer',
+    title: 'Software Developer',
     imgSrc: '/Ammar.jpg',
     description: 'Ammar Khan is a skilled front end developer specializing in creating user-friendly interfaces with HTML, CSS, JavaScript, and React. His attention to detail and passion for innovation ensure our websites are both visually appealing and highly functional.',
     linkedin: 'https://www.linkedin.com/in/ammarkhan08/'
   },
   {
     name: 'Kapilmeet Singh',
-    title: 'Backend Developer',
+    title: 'Software Developer',
     imgSrc: '/Kapil.jpg',
     description: 'Kapilmeet is an expert backend developer with proficiency in Node.js, Express, and MongoDB. His strong problem-solving skills and dedication to building robust, scalable systems ensure our applications run smoothly and efficiently. His technical expertise and commitment to excellence make him an indispensable part of our team.',
     linkedin: 'https://www.linkedin.com/in/kapilmeet-singh/'
   },
   {
     name: 'Sahib Aulakh',
-    title: 'Backend Developer',
+    title: 'Software Developer',
     imgSrc: '/Sahib.jpeg',
     description: 'Sahib is a highly skilled backend developer with expertise in Node.js, Express, and MongoDB. His focus on building secure, scalable, and efficient systems ensures our applications perform flawlessly. His dedication to quality and innovative solutions makes him a vital member of our team.',
     linkedin: 'https://www.linkedin.com/in/sahib-aulakh-512036260/'
   },
   {
     name: 'Vansh Malhotra',
-    title: 'Front End Developer',
+    title: 'Software Developer',
     imgSrc: '/Vansh.jpeg',
     description: 'Vansh is a proficient front end developer with a talent for creating intuitive and engaging user interfaces using HTML, CSS, JavaScript, and React. His creativity and meticulous approach ensure that our websites not only look great but also provide an exceptional user experience.',
     linkedin: 'https://www.linkedin.com/in/vansh-malhotra-softwaredeveloper/'
