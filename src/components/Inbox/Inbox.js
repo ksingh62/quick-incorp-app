@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useUserAuth } from "@/app/prototype/_utils/auth-context";
-import { db } from "@/app/prototype/_utils/firebase";
+import { useUserAuth } from "@/app/prototype/_utils/auth-context"; 
+import { db } from "@/app/prototype/_utils/firebase"; 
 import {
   collection,
   query,
@@ -8,42 +8,44 @@ import {
   onSnapshot,
   doc,
   updateDoc,
-} from "firebase/firestore";
-import axios from "axios";
+} from "firebase/firestore"; 
+import axios from "axios"; 
 
 const Inbox = () => {
-  const { user } = useUserAuth();
-  const [emails, setEmails] = useState([]);
-  const [selectedEmail, setSelectedEmail] = useState(null);
+  const { user } = useUserAuth(); 
+  const [emails, setEmails] = useState([]); 
+  const [selectedEmail, setSelectedEmail] = useState(null); 
 
+  // useEffect to set up a real-time listener for emails when the user is logged in
   useEffect(() => {
     if (user) {
-      const q = query(collection(db, "emails"), where("to", "==", user.email));
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const emailsData = [];
-        querySnapshot.forEach((doc) => {
+      const q = query(collection(db, "emails"), where("to", "==", user.email)); 
+      const unsubscribe = onSnapshot(q, (querySnapshot) => { 
+        const emailsData = []; 
+        querySnapshot.forEach((doc) => { // Loop through query results and push data to emailsData
           emailsData.push({ id: doc.id, ...doc.data() });
         });
-        setEmails(emailsData);
+        setEmails(emailsData); 
       });
-      return () => unsubscribe();
+      return () => unsubscribe(); 
     }
-  }, [user]);
+  }, [user]); 
 
+  // Function to handle email selection and mark it as read
   const handleEmailClick = async (email) => {
-    setSelectedEmail(email);
-    if (!email.read) {
+    setSelectedEmail(email); 
+    if (!email.read) { 
       try {
-        await axios.post("/api/markEmailAsRead", {
+        await axios.post("/api/markEmailAsRead", { 
           messageId: email.messageId,
         });
         // Update the read status locally for instant UI update
         const updatedEmails = emails.map((e) =>
           e.id === email.id ? { ...e, read: true } : e
         );
-        setEmails(updatedEmails);
+        setEmails(updatedEmails); 
       } catch (error) {
-        console.error("Failed to mark email as read", error);
+        console.error("Failed to mark email as read", error); 
       }
     }
   };
@@ -55,36 +57,36 @@ const Inbox = () => {
         <ul>
           {emails.map((email) => (
             <li
-              key={email.id}
+              key={email.id} // Unique key for each email
               className={`p-2 border-b border-gray-700 hover:bg-gray-700 cursor-pointer ${
-                !email.read ? "font-bold" : ""
+                !email.read ? "font-bold" : "" 
               }`}
-              onClick={() => handleEmailClick(email)}
+              onClick={() => handleEmailClick(email)} 
             >
               <h3 className="text-lg text-white">{email.subject}</h3>
               <p className="text-gray-400">{email.from}</p>
-              {!email.read && <span className="text-red-500">●</span>}
+              {!email.read && <span className="text-red-500">●</span>} {/* Indicate unread emails */}
             </li>
           ))}
         </ul>
       </div>
       <div className="w-2/3 bg-gray-900 p-4 overflow-y-auto">
-        {selectedEmail ? (
+        {selectedEmail ? ( 
           <div>
             <h2 className="text-2xl text-white">{selectedEmail.subject}</h2>
             <p className="text-gray-400">{selectedEmail.from}</p>
             <div
               className="mt-4 text-white"
-              dangerouslySetInnerHTML={{ __html: selectedEmail.html }}
+              dangerouslySetInnerHTML={{ __html: selectedEmail.html }} 
             ></div>
-            <ReplyForm
+            <ReplyForm 
               to={selectedEmail.from}
               subject={`Re: ${selectedEmail.subject}`}
               parentEmail={selectedEmail}
             />
           </div>
         ) : (
-          <p className="text-gray-400">Select an email to read</p>
+          <p className="text-gray-400">Select an email to read</p> 
         )}
       </div>
     </div>
@@ -92,13 +94,14 @@ const Inbox = () => {
 };
 
 const ReplyForm = ({ to, subject, parentEmail }) => {
-  const [message, setMessage] = useState("");
-  const { user } = useUserAuth();
+  const [message, setMessage] = useState(""); 
+  const { user } = useUserAuth(); 
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     try {
-      await axios.post("/api/sendReply", {
+      await axios.post("/api/sendReply", { 
         to,
         subject,
         text: message,
@@ -106,9 +109,9 @@ const ReplyForm = ({ to, subject, parentEmail }) => {
         parentEmailId: parentEmail.id,
       });
       alert("Reply sent");
-      setMessage(""); // Clear the message after sending
+      setMessage(""); 
     } catch (error) {
-      console.error("Failed to send reply", error);
+      console.error("Failed to send reply", error); 
     }
   };
 
@@ -118,8 +121,8 @@ const ReplyForm = ({ to, subject, parentEmail }) => {
         className="w-full p-2 bg-gray-800 text-white border border-gray-700 rounded"
         rows="4"
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="Type your reply..."
+        onChange={(e) => setMessage(e.target.value)} 
+        placeholder="Type your reply..." 
       ></textarea>
       <button
         type="submit"
@@ -131,7 +134,7 @@ const ReplyForm = ({ to, subject, parentEmail }) => {
   );
 };
 
-export default Inbox;
+export default Inbox; 
 
 // https://www.youtube.com/watch?v=LnVRGV-9NOY&t=245s
 // https://www.youtube.com/watch?v=xYuW_XDvYyQ
