@@ -1,41 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Script from "next/script";
 import "./BusinessPlan.css";
-
-const industrySuggestions = {
-  technology: {
-    businessDescription: "Innovative",
-    targetMarket: "Tech-savvy",
-    productsServices: "Software",
-    revenueModel: "Subscription",
-    marketingStrategy: "Digital",
-    financialPlan: "Scalable",
-  },
-  retail: {
-    businessDescription: "Customer-centric",
-    targetMarket: "Shoppers",
-    productsServices: "Merchandise",
-    revenueModel: "Sales",
-    marketingStrategy: "Promotions",
-    financialPlan: "Profit-focused",
-  },
-  healthcare: {
-    businessDescription: "Wellness",
-    targetMarket: "Patients",
-    productsServices: "Services",
-    revenueModel: "Insurance",
-    marketingStrategy: "Trust",
-    financialPlan: "Compliance",
-  },
-  education: {
-    businessDescription: "Knowledge",
-    targetMarket: "Students",
-    productsServices: "Courses",
-    revenueModel: "Tuition",
-    marketingStrategy: "Content",
-    financialPlan: "Growth",
-  },
-};
 
 const BusinessPlan = () => {
   const [inputs, setInputs] = useState({
@@ -49,22 +15,8 @@ const BusinessPlan = () => {
     financialPlan: "",
   });
 
-  const [businessPlan, setBusinessPlan] = useState(null);
-
-  const handleIndustryChange = (e) => {
-    const industry = e.target.value;
-    setInputs({
-      ...inputs,
-      industry,
-      businessDescription:
-        industrySuggestions[industry]?.businessDescription || "",
-      targetMarket: industrySuggestions[industry]?.targetMarket || "",
-      productsServices: industrySuggestions[industry]?.productsServices || "",
-      revenueModel: industrySuggestions[industry]?.revenueModel || "",
-      marketingStrategy: industrySuggestions[industry]?.marketingStrategy || "",
-      financialPlan: industrySuggestions[industry]?.financialPlan || "",
-    });
-  };
+  const [flowchartCode, setFlowchartCode] = useState("");
+  const [isFlowchartGenerated, setIsFlowchartGenerated] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -73,37 +25,29 @@ const BusinessPlan = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    generateBusinessPlan();
+    generateFlowchart();
   };
 
-  const generateBusinessPlan = () => {
-    const plan = `
-      ## Business Plan for ${inputs.businessName}
-
-      **Industry:**
-      ${inputs.industry}
-
-      **Business Description:**
-      ${inputs.businessDescription}
-
-      **Target Market:**
-      ${inputs.targetMarket}
-
-      **Products and Services:**
-      ${inputs.productsServices}
-
-      **Revenue Model:**
-      ${inputs.revenueModel}
-
-      **Marketing Strategy:**
-      ${inputs.marketingStrategy}
-
-      **Financial Plan:**
-      ${inputs.financialPlan}
+  const generateFlowchart = () => {
+    const code = `
+      graph TD;
+        A[Business Plan for ${inputs.businessName}] --> B[Industry: ${inputs.industry}];
+        A --> C[Business Description: ${inputs.businessDescription}];
+        A --> D[Target Market: ${inputs.targetMarket}];
+        A --> E[Products and Services: ${inputs.productsServices}];
+        A --> F[Revenue Model: ${inputs.revenueModel}];
+        A --> G[Marketing Strategy: ${inputs.marketingStrategy}];
+        A --> H[Financial Plan: ${inputs.financialPlan}];
     `;
-
-    setBusinessPlan(plan);
+    setFlowchartCode(code);
+    setIsFlowchartGenerated(true);
   };
+
+  useEffect(() => {
+    if (isFlowchartGenerated && window.mermaid) {
+      window.mermaid.contentLoaded();
+    }
+  }, [isFlowchartGenerated]);
 
   return (
     <div className="business-plan-container">
@@ -117,7 +61,7 @@ const BusinessPlan = () => {
             id="industry"
             name="industry"
             value={inputs.industry}
-            onChange={handleIndustryChange}
+            onChange={handleChange}
             className="business-plan-select"
           >
             <option value="">Select Industry</option>
@@ -223,14 +167,20 @@ const BusinessPlan = () => {
           Generate Business Plan
         </button>
       </form>
-      {businessPlan && (
+      {isFlowchartGenerated && (
         <div className="business-plan-results">
-          <h2>Your Business Plan</h2>
-          <pre>{businessPlan}</pre>
+          <h2>Your Business Plan Flowchart</h2>
+          <div className="mermaid">{flowchartCode}</div>
         </div>
       )}
+      <Script
+        src="https://unpkg.com/mermaid/dist/mermaid.min.js"
+        strategy="lazyOnload"
+      />
     </div>
   );
 };
 
 export default BusinessPlan;
+
+//https://youtu.be/iU2KLIaxPPQ?si=aQAjzsliLXXlPn2e

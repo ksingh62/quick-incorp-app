@@ -20,6 +20,8 @@ export default function LandingPage() {
             <Link href="/prototype/solutions/item3"></Link>
             <Link href="/prototype/solutions/item4"></Link>
             <Link href="/prototype/solutions/item5"></Link>
+            <Link href="/prototype/solutions/item6"></Link>
+            <Link href="/prototype/solutions/item7"></Link>
           </div>
         </div>
         <div>
