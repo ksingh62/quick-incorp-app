@@ -1,8 +1,11 @@
 'use client'
 import Layout from '@/components/Layout';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Resource3 = () => {
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speechInstance, setSpeechInstance] = useState(null);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -17,11 +20,34 @@ const Resource3 = () => {
     };
   }, []);
 
+  const handleReadAloud = () => {
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    } else {
+      const text = document.querySelector('.resource-section').innerText;
+      const speech = new SpeechSynthesisUtterance(text);
+      speech.lang = 'en-US';
+      speech.onend = () => {
+        setIsSpeaking(false);
+      };
+      window.speechSynthesis.speak(speech);
+      setIsSpeaking(true);
+      setSpeechInstance(speech);
+    }
+  };
+
   return (
     <Layout>
       <section className="resource-section bg-gray-900 text-gray-100 py-12">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-semibold mb-6 text-center">How to Incorporate in British Columbia: The Definitive Guide</h2>
+          <button
+            onClick={handleReadAloud}
+            className={`mb-6 px-4 py-2 ${isSpeaking ? 'bg-red-600' : 'bg-blue-600'} text-white font-semibold rounded`}
+          >
+            {isSpeaking ? 'Stop Reading' : 'Read Aloud'}
+          </button>
           <p className="text-lg mb-12">
             Incorporating a sole proprietorship business is a big decision for any entrepreneur, and not one to take lightly. There are a lot of things to consider, and the process can feel overwhelming, confusing, and daunting. If you’re a business owner contemplating incorporating your business in British Columbia, this is the definitive guide for you.
           </p>
@@ -272,7 +298,6 @@ const Resource3 = () => {
 };
 
 export default Resource3;
-
 
 //https://www.ownr.co/blog/how-to-incorporate-in-british-columbia/
 //https://www.youtube.com/watch?v=MUpVNTGVIPE

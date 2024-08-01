@@ -1,16 +1,17 @@
-const functions = require("firebase-functions");
-const admin = require("firebase-admin");
-const nodemailer = require("nodemailer");
-const mg = require("nodemailer-mailgun-transport");
+const functions = require("firebase-functions"); 
+const admin = require("firebase-admin"); 
+const nodemailer = require("nodemailer"); 
+const mg = require("nodemailer-mailgun-transport"); 
 
-admin.initializeApp();
+admin.initializeApp(); 
 
-const db = admin.firestore();
+const db = admin.firestore(); // Get a reference to Firestore database
+
 
 const auth = {
   auth: {
-    api_key: functions.config().mailgun.api_key,
-    domain: functions.config().mailgun.domain,
+    api_key: functions.config().mailgun.api_key, 
+    domain: functions.config().mailgun.domain, 
   },
 };
 
@@ -18,13 +19,17 @@ const transporter = nodemailer.createTransport(mg(auth));
 
 const sendWeeklyEmails = async () => {
   try {
+    // Get all advisor documents from Firestore collection 'advisors'
     const advisorsSnapshot = await db.collection("advisors").get();
+
+    // Map the advisor documents to an array of advisor data
     const advisors = advisorsSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
 
     for (const advisor of advisors) {
+
       if (!advisor.id) {
         console.error(
             `Advisor ID is missing for advisor: ${JSON.stringify(advisor)}`,
@@ -60,7 +65,6 @@ const sendWeeklyEmails = async () => {
       try {
         await transporter.sendMail(mailOptions);
         console.log(`Email sent to ${name} (${email})`);
-
         await db.collection("advisors").doc(advisor.id).update({
           impressions: 0,
           calendlyClicks: 0,
