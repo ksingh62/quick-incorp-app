@@ -15,7 +15,7 @@
   padding-block: 2rem;
   padding-right: 3rem;
   background-color: hsl(235, 12%, 19%);
-  border-right: 1px solid hsl(0, 0%, 50%, 0.25);
+  border-right: 1px solid hsla(0, 0%, 50%, 0.25);
 }
 
 .sidebar-logo-container {
@@ -49,9 +49,19 @@
   padding-right: 1rem;
 }
 
-.active-sidebar-option {
+.sidebar-option a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.sidebar-option.active-sidebar-option {
   color: white;
   background-color: hsl(242, 48%, 58%);
+}
+
+.sidebar-option:hover {
+  color: white;
+  background-color: hsl(242, 48%, 48%);
 }
 
 .sidebar .unread-count {
