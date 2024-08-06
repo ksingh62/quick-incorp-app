@@ -50,16 +50,19 @@ export default function LandingPage() {
             Start your Business today with QuickIncorp
           </h1>
           <p className="landing-page-para-1">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Earum
-            eligendi eveniet nulla assumenda molestiae enim impedit,
-            consequuntur quae voluptas fugiat. Nam voluptatum enim dolorem
-            doloremque vero rem veniam. Harum, cumque!
+            QuickIncorp offers seamless business incorporation services,
+            ensuring a smooth start for your venture. Our expert team handles
+            all legal formalities, saving you time and effort. With a
+            user-friendly platform, we provide ongoing support for compliance
+            and growth. Trust QuickIncorp to turn your business vision into
+            reality with efficiency and professionalism.
           </p>
           <p className="landing-page-para-2">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Earum
-            eligendi eveniet nulla assumenda molestiae enim impedit,
-            consequuntur quae voluptas fugiat. Nam voluptatum enim dolorem
-            doloremque vero rem veniam. Harum, cumque!
+            We go beyond incorporation with tax management, legal compliance,
+            and financial planning. Our technology and expertise guarantee a
+            superior experience. Join thousands of entrepreneurs who have
+            successfully launched their businesses with QuickIncorp. Let us help
+            you focus on growing your business.
           </p>
         </div>
         <div className="landing-page-image-container">
