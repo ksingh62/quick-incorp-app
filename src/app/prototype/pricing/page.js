@@ -13,7 +13,7 @@ const Pricing = () => {
   return (
     <Layout>
       <div className="container mx-auto text-center">
-        <h2 className="text-4xl font-semibold mb-6">
+        <h2 className="text-4xl font-semibold mb-6 mt-4">
           Fair and Transparent Pricing
         </h2>
         <p className="text-lg mb-12">

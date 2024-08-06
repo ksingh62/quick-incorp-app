@@ -10,13 +10,10 @@ export default function Page() {
   const { user, gitHubSignIn, googleSignIn, firebaseSignOut } = useUserAuth();
   const router = useRouter();
 
-  console.log(user);
-
   useEffect(() => {
     if (user) {
       router.push("/prototype/homepage");
     }
-    // If there is a user, stay on this page or manage other routes as needed
   }, [user, router]);
 
   if (user) {
@@ -24,58 +21,63 @@ export default function Page() {
   }
 
   return (
-    <div className="mt-4 flex justify-center flex-col items-center gap-5">
-      <h1 className="text-4xl font-bold mb-5">QuickIncorp App</h1>
-      <p className="font-bold text-2xl mb-2 ">Login to get stated!</p>
-      {user ? (
-        <p className="text-lg">
-          Signed In as {user.displayName} ({user.email}).
-        </p>
-      ) : (
-        ""
-      )}
+    <div className="flex justify-center items-center min-h-screen bg-gray-900">
+      <div className="bg-gray-800 p-10 rounded-xl shadow-lg text-center text-gray-100">
+        <h1 className="text-4xl font-bold mb-5">QuickIncorp App</h1>
+        <p className="font-bold text-2xl mb-6">Login to get started!</p>
 
-      {user ? (
-        <div className="text-lg">
-          <button className="hover:underline" onClick={firebaseSignOut}>
-            Sign out
-          </button>
-        </div>
-      ) : (
-        <div className="text-lg">
+        <div className="space-y-4">
           <button
             onClick={googleSignIn}
-            className="hover:underline ml-4 flex flex-direction items-center justify-center gap-5 border p-2 rounded-xl px-4 my-2"
+            className="w-full flex items-center justify-center gap-4 border p-3 rounded-xl bg-white text-gray-800 hover:bg-gray-100"
           >
             <Image
               src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
-              alt="GitHub logo"
+              alt="Google logo"
               width={25}
               height={25}
-            />{" "}
+            />
             Sign in with Google
           </button>
 
           <button
             onClick={gitHubSignIn}
-            className="hover:underline ml-4 flex flex-direction items-center justify-center gap-5 border p-2 rounded-xl px-4"
+            className="w-full flex items-center justify-center gap-4 border p-3 rounded-xl bg-gray-700 hover:bg-gray-600"
           >
             <Image
               src="/github-mark-white.png"
               alt="GitHub logo"
               width={25}
               height={25}
-            />{" "}
+            />
             Sign in with GitHub
           </button>
         </div>
-      )}
 
-      {user !== null && (
-        <Link className="text-lg hover:underline" href={`prototype/homepage`}>
-          Continue to Homepage
-        </Link>
-      )}
+        {user && (
+          <div className="mt-6">
+            <button
+              className="text-red-400 hover:underline"
+              onClick={firebaseSignOut}
+            >
+              Sign out
+            </button>
+          </div>
+        )}
+
+        <div className="mt-6">
+          {user ? (
+            <Link
+              className="text-blue-400 hover:underline"
+              href="/prototype/homepage"
+            >
+              Continue to Homepage
+            </Link>
+          ) : (
+            ""
+          )}
+        </div>
+      </div>
     </div>
   );
 }
