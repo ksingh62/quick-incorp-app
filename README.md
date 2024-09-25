@@ -55,14 +55,15 @@ QuickIncorp is built to assist entrepreneurs and businesses in incorporating the
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/quickincorp.git
-   cd quickincorp
+   git clone https://github.com/ksingh62/quick-incorp-app.git
+   cd quick-incorp-app
    ```
 2. **Install dependencies**
 
   ```bash
   npm install
   ```
+
 3. **Create an .env.local file and add the following environment variables**
    ```bash
   *Firebase environment variables*
@@ -72,14 +73,11 @@ QuickIncorp is built to assist entrepreneurs and businesses in incorporating the
   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=""
   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=""
   NEXT_PUBLIC_FIREBASE_APP_ID=""
-  
   *Mailgun environment variables*
   MAILGUN_API_KEY=""
   MAILGUN_DOMAIN=""
-  
   *OpenAI environment variable*
   OPENAI_API_KEY=""
-    
   *Stripe*
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=""
   STRIPE_SECRET_KEY=""
