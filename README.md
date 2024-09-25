@@ -8,7 +8,6 @@ QuickIncorp is a web application designed to simplify the business incorporation
 - [Features](#features)
 - [Technologies](#technologies)
 - [Setup](#setup)
-- [Deployment](#deployment)
 - [Contributing](#contributing)
 
 ## Project Overview
@@ -61,6 +60,63 @@ QuickIncorp is built to assist entrepreneurs and businesses in incorporating the
    ```
 2. **Install dependencies**
 
-```bash
-npm install
+  ```bash
+  npm install
+  ```
+3. **Create an .env.local file and add the following environment variables**
+   ```bash
+  *Firebase environment variables*
+  NEXT_PUBLIC_FIREBASE_API_KEY=""
+  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=""
+  NEXT_PUBLIC_FIREBASE_PROJECT_ID=""
+  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=""
+  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=""
+  NEXT_PUBLIC_FIREBASE_APP_ID=""
+  
+  *Mailgun environment variables*
+  MAILGUN_API_KEY=""
+  MAILGUN_DOMAIN=""
+  
+  *OpenAI environment variable*
+  OPENAI_API_KEY=""
+    
+  *Stripe*
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=""
+  STRIPE_SECRET_KEY=""
+  ```
+
+5. **Run the development server**
+  ```bash
+  npm run dev
+  ```
+Open http://localhost:3000 in your browser to see the app.
+
+## Contributing
+
+We welcome contributions from the community! If you'd like to contribute, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch:
+
+    ```bash
+    git checkout -b feature/your-feature-name
+    ```
+
+3. Make your changes.
+4. Commit your changes:
+
+    ```bash
+    git commit -m 'Add some feature'
+    ```
+
+5. Push to the branch:
+
+    ```bash
+    git push origin feature/your-feature-name
+    ```
+
+6. Open a pull request.
+
+Please ensure that your code adheres to our coding standards and passes all tests.
+
 
