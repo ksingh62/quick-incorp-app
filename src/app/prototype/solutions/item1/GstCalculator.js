@@ -88,3 +88,4 @@ const GstCalculator = () => {
 export default GstCalculator;
 
 //https://chatgpt.com/share/b5e73201-ea2a-4a1c-95b8-0367ec2276a9
+//https://stackoverflow.com/questions/59423332/how-to-calculate-gst-value
